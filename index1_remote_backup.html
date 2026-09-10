@@ -1,0 +1,104 @@
+<!--英文叹号回车  -->
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我的第一个网页</title>
+    <link rel="stylesheet" href="./html_bass.css">
+</head>
+<body>
+    <h2 class="title-demo">1.标题</h2>
+    <!-- 一共6级标题h1-h6 -->
+    <h1>一级标题</h1>
+    <h2>二级标题</h2>
+    <h3>三级标题</h3>
+    <h4>四级标题</h4>
+    <h5>五级标题</h5>
+    <h6>六级标题，最小的标题</h6>
+
+    <h2 class="title-demo">自我介绍</h2>
+    <p>大家好，我叫王子涵，是一名热爱学习、喜欢探索新技术的学生。我性格比较开朗，平时喜欢和同学交流问题，也喜欢自己安静地研究一些有趣的知识。在学习上，我比较认真，遇到不懂的问题会主动查找资料，也会尝试通过实践来加深理解。</p>
+    <p>我最近正在学习网页制作，第一次接触 HTML 的时候，我觉得网页看起来很神秘，但真正开始学习之后，我发现它其实是有规律的。HTML 就像是网页的骨架，负责把文字、图片、列表、表格和表单组织起来。通过学习，我已经能够写出一个简单的网页，虽然还不够美观，但我已经能感受到编程带来的乐趣。</p>
+    <p>除了学习编程，我还有很多其他爱好。比如我喜欢看书，因为书能让我学到很多课堂之外的知识；我也喜欢看电影，因为电影可以带给我不同的视角和启发；我还喜欢打游戏，不过我会合理安排时间，不会让它影响学习。我认为兴趣是最好的老师，只要保持好奇心，就能够持续进步。</p>
+    <p>在班级里，我愿意帮助同学，也愿意和大家一起讨论问题。我觉得学习不是一个人的事情，互相交流、互相分享，才能让大家都变得更好。如果同学有需要，我也会把自己整理的学习笔记和练习代码分享出来。</p>
+    <p>这就是我的自我介绍。未来我希望自己能够继续努力，不仅学好专业知识，也能培养自己的逻辑思维和动手能力。我相信，只要坚持学习，就一定能取得进步。谢谢大家！</p>
+
+    <p class="text-cont">段落的特点：段落内容自动换行，有自带的间距。</p>
+    <p>
+        <!-- 常用的强调的两种方式：斜体em和加粗strong,下划线u,删除线s -->
+        段落的<em>特点</em>：段落内容<strong>自动换行</strong>，<br>
+        有<u>自带</u>的间距。<s>需要删除的</s>
+    </p>
+
+    <hr>
+
+    <h2 class="title-demo">3.超链接和图片</h2>
+    <a href="http://baidu.com" target="_blank">百度</a>
+    <img src="./img/1.jpg" alt="百度logo">
+
+    <h2 class="title-demo">4.列表</h2>
+    <h3>我喜欢做的事情</h3>
+    <ul class="list-demo">
+        <li>打游戏</li>
+        <li>看电影</li>
+        <li>看书</li>
+    </ul>
+    <ol type="A">
+        <li>数学</li>
+        <li>英语</li>
+        <li>语文</li>
+    </ol>
+
+    <h2 class="title-demo">5.表格</h2>
+    <!-- cellspacing是单元格之间的距离，cellpadding="3"是单元格内容与边框之间的距离 -->
+    <table id="user-table" border="2" cellspacing="0" cellpadding="3">
+        <caption>用户信息表</caption>
+        <!-- （tr>td*3）*4回车 实现的是三行四列的表格 -->
+        <tr>
+            <th>姓名</th>
+            <th>年龄</th>
+            <th>性别</th>
+            <th>城市</th>
+        </tr>
+        <tr>
+            <td>张三</td>
+            <td>18</td>
+            <td>男</td>
+            <td>北京</td>
+        </tr>
+        <tr>
+            <td>李四</td>
+            <td>20</td>
+            <td>女</td>
+            <td>上海</td>
+        </tr>
+    </table>
+
+    <h2 class="title-demo">6.div块级元素</h2>
+    <div>
+        <p>div特点1：独占一整行，自动前后换行，是块级元素</p>
+        <p>div特点2：可以嵌套任意标签（标题、段落、图片、列表都能放）</p>
+    </div>
+    <div>
+        <p>div特点1：独占一整行，自动前后换行，是块级元素</p>
+        <p>div特点2：可以嵌套任意标签（标题、段落、图片、列表都能放）</p>
+    </div>
+
+    <h2 class="title-demo">H5语义</h2>
+    <!-- header、nav、section、article、footer、aside本质上都是div -->
+    <header>头部</header>
+    <nav>导航条</nav>
+    <section>内容区域</section>
+    <article>文章区域</article>
+    <footer>页脚</footer>
+    <aside>侧边栏</aside>
+
+    <!-- 跳转到表单子页面 -->
+    <h2 class="title-demo">7.表单页面</h2>
+    <p>
+        <a href="form.html">👉 点击前往信息表单页面</a>
+    </p>
+
+    <button>
+        表单外的按钮
+    </button>

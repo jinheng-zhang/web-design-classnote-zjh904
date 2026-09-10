@@ -13,6 +13,7 @@ build/
 *.tmp
 *.log
 .cache/
+.git-commit-msg.tmp
 
 # opencode 本地状态
 .opencode/
