@@ -15,5 +15,9 @@ build/
 .cache/
 .git-commit-msg.tmp
 
+# 本地预览与校验脚本（不随作业提交）
+.preview-server.js
+.link-check.js
+
 # opencode 本地状态
 .opencode/
