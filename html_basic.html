@@ -1,60 +1,70 @@
-<style>
-           /* CSS选择器：
-           （1）标签选择器（一般全局CSS用）
-           （2）类选择器
-           （3）id选择器
-           （4）后代选择器
-           （5）群组选择器  */
-   /* 全局css*/
-   *{
-       margin: 0;
-       padding: 0;
-   }
-   ul{
-       list-style: none;
-   }
-   a{
-       text-decoration: none;
-       color: black;
-   }
-   /* img比较特殊是行内块元素，可以设置宽高，边框等属性 */
-   img{
-       border: none;
-       display: block;
-   }
-   /* 类选择器 */
-   .title-demo{
-       color: red;
-       background: yellow;
-       padding: 10px 20px ;
-       border: 1px solid black;
-   }
-   /* id选择器 */
-   #user-table{
-       width: 500px;
-       border: 1px solid blue;
-       /* margin和padding两个值分别是上下和左右 */
-       margin: 0 auto;
-   }
-   /* 后代选择器 */
-   #user-table caption{
-       color: yellow;
-       font-size: 50px;
-       font-weight: bold;
-   }
-   /* 群组选择器 */
-   ol,ul,.text-cont{
-       margin: 10px 0;
-    padding: 10px;
-    color: purple;
-   }
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTML 基础标签演示</title>
+    <style>
+        /* CSS选择器：标签选择器 / 类选择器 / id选择器 / 后代选择器 / 群组选择器 */
+        * {
+            margin: 0;
+            padding: 0;
+        }
 
+        ul {
+            list-style: none;
+        }
 
+        a {
+            text-decoration: none;
+            color: black;
+        }
+
+        /* img比较特殊是行内块元素，可以设置宽高，边框等属性 */
+        img {
+            border: none;
+            display: block;
+        }
+
+        .title-demo {
+            color: red;
+            background: yellow;
+            padding: 10px 20px;
+            border: 1px solid black;
+        }
+
+        #user-table {
+            width: 500px;
+            border: 1px solid blue;
+            /* margin和padding两个值分别是上下和左右 */
+            margin: 0 auto;
+        }
+
+        #user-table caption {
+            color: yellow;
+            font-size: 50px;
+            font-weight: bold;
+        }
+
+        ol, ul, .text-cont {
+            margin: 10px 0;
+            padding: 10px;
+            color: purple;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin: 16px 0 0 16px;
+            padding: 6px 14px;
+            border: 1px solid #333;
+            border-radius: 4px;
+        }
     </style>
-     
 </head>
 
 <body>
+    <p><a class="back-link" href="index.html">← 返回课堂实践目录</a></p>
+
     <h2 class="title-demo">1.标题</h2>
     <!-- 一共6级标题h1-h6 -->
     <h1>一级标题</h1>
@@ -63,19 +73,24 @@
     <h4>四级标题</h4>
     <h5>五级标题</h5>
     <h6>六级标题，最小的标题</h6>
+
     <h2 class="title-demo">2.段落</h2>
     <p class="text-cont">段落的特点：段落内容自动换行，有自带的间距。</p>
-        <!-- 常用的强调的两种方式：斜体em和加粗strong,下划线u,删除线s -->
+    <p>
+        <!-- 常用的强调的两种方式：斜体em和加粗strong，下划线u，删除线s -->
         段落的<em>特点</em>：段落内容<strong>自动换行</strong>，<br>
         有<u>自带</u>的间距。<s>需要删除的</s>
     </p>
+
     <hr>
+
     <h2 class="title-demo">3.超链接和图片</h2>
     <a href="http://baidu.com" target="_blank">百度</a>
-    <img src="./img/1.jpg" alt="百度logo">
+    <img src="image/1.jpg" alt="示例图片">
+
     <h2 class="title-demo">4.列表</h2>
     <h3>我喜欢做的事情</h3>
-    <ul class="list-demo" >
+    <ul class="list-demo">
         <li>打游戏</li>
         <li>看电影</li>
         <li>看书</li>
@@ -85,12 +100,11 @@
         <li>英语</li>
         <li>语文</li>
     </ol>
+
     <h2 class="title-demo">5.表格</h2>
-    <!-- cellspacing是单元格之间的距离，
-     cellpadding="3"是单元格内容与边框之间的距离 -->
+    <!-- cellspacing是单元格之间的距离，cellpadding="3"是单元格内容与边框之间的距离 -->
     <table id="user-table" border="2" cellspacing="0" cellpadding="3">
         <caption>用户信息表</caption>
-        <!-- （tr>td*3）*4回车 实现的是三行四列的表格 -->
         <tr>
             <th>姓名</th>
             <th>年龄</th>
@@ -110,9 +124,9 @@
             <td>上海</td>
         </tr>
     </table>
+
     <h2 class="title-demo">6.div块级元素</h2>
     <div>
-
         <p>div特点1：独占一整行，自动前后换行，是块级元素</p>
         <p>div特点2：可以嵌套任意标签（标题、段落、图片、列表都能放）</p>
     </div>
@@ -120,6 +134,7 @@
         <p>div特点1：独占一整行，自动前后换行，是块级元素</p>
         <p>div特点2：可以嵌套任意标签（标题、段落、图片、列表都能放）</p>
     </div>
+
     <h2 class="title-demo">H5语义</h2>
     <!-- header、nav、section、article、footer、aside本质上都是div -->
     <header>头部</header>
@@ -128,16 +143,15 @@
     <article>文章区域</article>
     <footer>页脚</footer>
     <aside>侧边栏</aside>
-    <h2 class="title-demo"  >基础表单+H5表单</h2>
 
+    <h2 class="title-demo">基础表单 + H5表单</h2>
     <form action="http://baidu.com" name="fm" method="post">
         <p>用户名：
             <input type="text" placeholder="请输入用户名" required>
         </p>
         <p>
             <label for="pwd">密码：</label>
-            <!-- label的for属性对应input的id属性，
-             点击label标签，会自动聚焦到input输入框 -->
+            <!-- label的for属性对应input的id属性，点击label标签会自动聚焦到input输入框 -->
             <input type="password" name="pwd" id="pwd">
         </p>
         <!-- h5出现的内容 -->
@@ -147,7 +161,6 @@
         <p>
             请上传文件：
             <input type="file" name="file" id="file" multiple>
-            </input>
         </p>
         <p>
             性别：
@@ -156,10 +169,9 @@
         </p>
         <p>
             爱好：
-            <input type="checkbox" name="hobby" value="c"> croding </input>
-            <input type="checkbox" name="hobby" value="s"> playing</input>
-             <input type="checkbox" name="hobby" value="r"> reading</input>
-           
+            <input type="checkbox" name="hobby" value="c"> coding
+            <input type="checkbox" name="hobby" value="s"> playing
+            <input type="checkbox" name="hobby" value="r"> reading
         </p>
         <p>
             自我介绍：
@@ -172,22 +184,15 @@
                 <option value="shanghai">上海</option>
                 <option value="guangzhou">广州</option>
             </select>
-
         </p>
         <p>
             <input type="submit" value="提交">
             <input type="reset" value="重置">
-            <input type="button" value="取消"></input>
+            <input type="button" value="取消">
         </p>
-            </input>
-        </p>
-
     </form>
-    <button>
-        表单外的按钮 
-    </button>
 
+    <button>表单外的按钮</button>
 
 </body>
-
 </html>
