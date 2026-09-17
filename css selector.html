@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-page-node-id="K2e2h4ogggNmTTk3fd64Iy">
+<head data-page-node-id="wtBGCl4tlYQpEQepMjnXIl">
+    <meta charset="UTF-8" data-page-node-id="D2lN5whB3SfSXbMVTI1RsN">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" data-page-node-id="1limdhHj5ppBMwIWOxNmz7">
+    <title>层叠与继承 + 盒模型</title>
+    <link rel="stylesheet" href="./css selector.css" data-page-node-id="isAWxMsndFXpn3HJGKjFuR">
+</head>
+<body data-page-node-id="Y9nph9TAeIwQDeEo1pOXDE">
+    <!-- Emmet: div.container + Enter -->
+    <div class="container" data-page-node-id="O1MQc9c7iyupk2YMkBu9Bg">
+        <h2 class="container-title" data-page-node-id="90Gmy8eFk6cZ9AsPvpQVtN">层叠与继承 + 盒模型</h2>
+
+        <!-- 卡片区：id 与 class 同名，用于演示优先级 -->
+        <div class="card-wrap" id="card-wrap" data-page-node-id="im0VHp4nsscOHmPOncYBpI">
+            <div class="card" data-page-node-id="APG6FPUuciVYUgTLu2l0xc">
+                <h3 data-page-node-id="YQbjepjnPXhyn99ADjsYcn">盒模型</h3>
+                <p class="card-desc" data-page-node-id="Ea25gVHQEf8dhgM5bAEwOw">盒模型：padding, border, margin</p>
+            </div>
+        </div>
+
+        <!-- Emmet: ol>li*10 + Enter -->
+        <!-- CSS Diner 前 10 关通关答案 -->
+        <h2 data-page-node-id="YcbzaXHFQ2qY1Ld9CUx4hk">通关游戏答案</h2>
+        <ol class="answer-list" data-page-node-id="JbV5QCkljruHVjsvdFlGQI">
+            <li data-page-node-id="HzOLM94tyKATbyig6ZGUU9"><code data-page-node-id="3Q4BItV8xrEQ9EvPjgvmN7">plate</code><span data-page-node-id="lFWjjjdJfZGAWNppYlAoF0">类型选择器：选中所有 plate 标签</span></li>
+            <li data-page-node-id="P2ho6p22SgzC03jY7Q64zJ"><code data-page-node-id="4BGIquThsbYV8nDHSE8YBZ">bento</code><span data-page-node-id="AZS6hDBpLgNnVzmbme7uy7">类型选择器：选中所有 bento 标签</span></li>
+            <li data-page-node-id="1irUIviVQP8Lk2bUWBW4zb"><code data-page-node-id="sAGybCQCy2h8woKjMz6Rsi">#fancy</code><span data-page-node-id="mBEb8iFiF7WV2gbQUWRmsf">ID 选择器：选中 id="fancy" 的唯一元素</span></li>
+            <li data-page-node-id="7Sws6EEG34DMpm2KEEKRde"><code data-page-node-id="AfUWxeKDL5s7vH8gJ6IHTF">plate apple</code><span data-page-node-id="MK68EAEIdNyA8md30JIsWd">后代选择器：选中盘子里的苹果</span></li>
+            <li data-page-node-id="Uele0qHl6peVj3uwYWQIjh"><code data-page-node-id="46oBalcYQvpN7yY9VjuOOs">#fancy pickle</code><span data-page-node-id="JGoJFoVaZVo74GLHBElo9j">ID + 后代：fancy 盘子里的黄瓜</span></li>
+            <li data-page-node-id="ya6RnJNQ5Z9vDQUhbwzqML"><code data-page-node-id="xUdr3ISc0DzIXvRcHzpjD4">.small</code><span data-page-node-id="AgQyidWw7DJ2cXW3TUDMNE">类选择器：选中所有 class="small" 的元素</span></li>
+            <li data-page-node-id="fOaXTGADq66EQJC40d6EkD"><code data-page-node-id="yEiGQWtMoiHXVUT4emSeKI">orange.small</code><span data-page-node-id="pBpghEa3YfJaZWjlho7pZE">标签 + 类（连写）：既是 orange 又带 small 类</span></li>
+            <li data-page-node-id="AbXEadBUcCv4WiS7E3dqFe"><code data-page-node-id="PZXjHts3CJSWRPIRfmSdlD">bento orange.small</code><span data-page-node-id="49g2ChBibqfE9MIohNWrJ7">组合：便当盒里的小橙子</span></li>
+            <li data-page-node-id="DVvYGcdxf2bfjB5jH3CpfI"><code data-page-node-id="BjXgupI9Iu7wGMJ1GBXS0n">plate, bento</code><span data-page-node-id="WdZh2bI5iok63V91Th24rA">逗号并列：选中所有 plate 或 bento</span></li>
+            <li data-page-node-id="ZASEnBKI2o3r3UVQv3Idq5"><code data-page-node-id="Gs44G9rRzXHcGcrTPsHFxa">*</code><span data-page-node-id="tcPbcuo6A8JVQUZyQPn3Fi">通配选择器：选中页面上所有元素</span></li>
+        </ol>
+    </div>
+</body>
+</html>

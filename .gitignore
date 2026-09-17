@@ -19,5 +19,6 @@ build/
 .preview-server.js
 .link-check.js
 
-# opencode 本地状态
+# 本地工具与状态
 .opencode/
+.workbuddy/

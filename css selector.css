@@ -1,0 +1,123 @@
+/* ==========================================================
+   CSS 层叠 / 继承 / 盒模型 —— 演示样式
+   优先级速记：ID(100) > class(10) > 标签(1)，行内样式(1000)
+   ========================================================== */
+
+/* ---------- 1. 通配重置 + 盒模型 ---------- */
+* {
+    padding: 0;
+    margin: 0;
+    /* width / height 包含 border 和 padding（IE 传统盒模型） */
+    box-sizing: border-box;
+}
+
+/* ---------- 2. 继承 ---------- */
+/* 子元素会继承 font、color 等可继承属性；
+   margin、padding、border 不会被继承 */
+body {
+    background-color: #ffd400;
+    font-family: "微软雅黑", "Microsoft YaHei", sans-serif;
+    color: #0033cc;
+    padding: 20px 0;
+}
+
+/* ---------- 3. 外层容器 ---------- */
+.container {
+    background-color: #d9534f; /* red */
+    width: 1200px;
+    margin: 40px auto;         /* 上下 40px，左右 auto 水平居中 */
+}
+
+/* ---------- 4. 标题：类选择器 vs 标签选择器 ---------- */
+/* .container-title(10) 优先级高于 h2(1)，所以颜色为黑色 */
+.container-title {
+    color: #000;
+    background-color: #fff;
+}
+
+/* h2 与 .container-title 不冲突的属性照常生效 */
+h2 {
+    color: #fff;
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 30px;
+    padding: 10px 20px;
+    border: 2px dotted #fff;
+}
+
+/* ---------- 5. 卡片区：四条规则竞争 background-color ---------- */
+/* 权重计算：ID 永远大于纯 class，无论 class 后代链多长 */
+#card-wrap {                         /* 100 → 最终生效：橙色 */
+    background-color: #f0ad4e;
+}
+
+body .container .card-wrap {         /* 3 个 class/标签 = 21 → 输给上面的 ID */
+    background-color: #9b59b6;       /* purple */
+    padding: 20px;
+}
+
+.container .card-wrap {              /* 20 → 输 */
+    background-color: #5cb85c;       /* green */
+    padding: 20px;
+}
+
+.card-wrap {                         /* 10 → 输 */
+    background-color: #ffc0cb;       /* pink */
+    padding: 20px;
+}
+
+/* ---------- 6. 卡片内部 ---------- */
+.card {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 16px;
+    max-width: 480px;
+    margin: 0 auto;
+}
+
+.card h3 {
+    color: #333;
+    font-size: 22px;
+    text-align: left;
+    border: none;
+    padding: 12px 0 8px;
+    margin-bottom: 0;
+}
+
+.card-desc {
+    color: #666;
+    font-size: 15px;
+    line-height: 1.6;
+}
+
+/* ---------- 7. 通关答案列表 ---------- */
+.answer-list {
+    background-color: #fff;
+    padding: 24px 24px 24px 56px;
+    list-style: decimal;
+}
+
+.answer-list li {
+    color: #0033cc;
+    font-size: 16px;
+    line-height: 1.9;
+    padding: 4px 0;
+    border-bottom: 1px dashed #e0e0e0;
+}
+
+.answer-list li:last-child {
+    border-bottom: none;
+}
+
+.answer-list code {
+    display: inline-block;
+    min-width: 180px;
+    color: #c7254e;
+    font-family: Consolas, Monaco, monospace;
+}
+
+.answer-list span {
+    color: #888;
+    font-size: 14px;
+}
