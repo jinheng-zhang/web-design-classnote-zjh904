@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>网页模板</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
+        }
+
+        /* 头部：logo 在左上角，login 在右上角 */
+        #header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 60px;
+            padding: 0 20px;
+            background-color: rgb(0, 100, 255);
+            color: #fff;
+        }
+
+        #header .logo {
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        #header .login {
+            font-size: 16px;
+        }
+
+        nav {
+            height: 40px;
+            line-height: 40px;
+            text-align: center;
+            background-color: rgb(0, 180, 90);
+            color: #fff;
+        }
+
+        .wrap {
+            width: 1200px;
+            margin: 0 auto;
+        }
+
+        .content-row {
+            display: flex;
+            height: 400px;
+        }
+
+        main {
+            flex: 1;
+            background-color: rgb(255, 0, 0);
+            color: #fff;
+            text-align: center;
+            line-height: 400px;
+            font-size: 20px;
+        }
+
+        aside {
+            width: 300px;
+            background-color: rgb(0, 255, 255);
+            text-align: center;
+            line-height: 400px;
+            font-size: 20px;
+        }
+
+        footer {
+            height: 50px;
+            line-height: 50px;
+            text-align: center;
+            background-color: rgb(255, 255, 0);
+        }
+
+        .fixed-ad {
+            position: fixed;
+            right: 0;
+            bottom: 0;
+            width: 200px;
+            height: 200px;
+            border: 2px solid black;
+            z-index: 5;
+            background-color: rgb(255, 0, 255);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
+</head>
+
+<body>
+    <header id="header">
+        <div class="logo">logo</div>
+        <div class="login">login</div>
+    </header>
+    <nav>导航</nav>
+    <div class="wrap">
+        <div class="content-row">
+            <main>主要内容</main>
+            <aside>侧栏</aside>
+        </div>
+    </div>
+    <footer>904 张敬恒</footer>
+    <div class="fixed-ad">固定定位广告</div>
+</body>
+
+</html>

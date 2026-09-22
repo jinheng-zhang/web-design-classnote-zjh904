@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-page-node-id="PDu9RKws6XVMACjk8Hoevh">
+<head data-page-node-id="I2K7yx0kq3BeAW7rMDObVZ">
+    <meta charset="UTF-8" data-page-node-id="2eboX5KUr0DKCb2bSWPiHH">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" data-page-node-id="XrhTLINmILhlgjOrDX1vas">
+    <title>网页整体布局课后作业 · H5语义布局 + 溢出/隐藏过渡动画</title>
+    <style>
+        /* ===== 全局初始化：清除默认内外边距，统一盒模型 ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Microsoft YaHei", "Segoe UI", sans-serif;
+            background: #f4f6fb;
+            color: #222;
+            line-height: 1.8;
+        }
+
+        /* ===== 页面顶部头部区域：H5 语义标签 header ===== */
+        .hero {
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            color: #fff;
+            text-align: center;
+            padding: 56px 20px 44px;
+        }
+
+        .hero h1 {
+            font-size: 1.9rem;
+            letter-spacing: 2px;
+        }
+
+        .hero p {
+            margin-top: 10px;
+            opacity: 0.85;
+            font-size: 1rem;
+        }
+
+        /* ===== 导航条：H5 语义标签 nav，flex 排列（禁止 float） ===== */
+        .site-nav {
+            background: #fff;
+            box-shadow: 0 2px 6px rgba(30, 60, 114, 0.08);
+        }
+
+        .site-nav ul {
+            max-width: 1200px;              /* 版心 1200px */
+            margin: 0 auto;                 /* 版心水平居中 */
+            display: flex;                  /* 导航项横向排列 */
+            gap: 8px;                       /* 项与项之间间隙 */
+            list-style: none;
+            padding: 10px 20px;
+        }
+
+        .site-nav a {
+            display: block;
+            padding: 6px 16px;
+            border-radius: 6px;
+            color: #1e3c72;
+            text-decoration: none;
+            font-size: 0.95rem;
+            transition: all 0.3s;           /* 移入移出都有过渡 */
+        }
+
+        .site-nav a:hover {
+            background: #1e3c72;
+            color: #fff;
+        }
+
+        /* ===== 页面主体：H5 语义标签 main，版心 1200px ===== */
+        main {
+            max-width: 1200px;
+            margin: 0 auto;                 /* 版心居中 */
+            padding: 32px 20px 40px;
+        }
+
+        /* ===== 通用标题与题块样式 ===== */
+        h2 {
+            font-size: 1.25rem;
+            margin: 34px 0 14px;
+            border-left: 5px solid #2a5298;
+            padding-left: 10px;
+        }
+
+        h2:first-child {
+            margin-top: 0;
+        }
+
+        .block {
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(30, 60, 114, 0.08);
+            padding: 18px 22px;
+            margin-bottom: 16px;
+        }
+
+        .block h3 {
+            font-size: 1.05rem;
+            font-weight: normal;            /* 小标题不用加粗，跟随页面默认字重 */
+            margin-bottom: 8px;
+        }
+
+        /* 代码展示框：等宽字体 + 浅灰底，pre 内保留空格换行 */
+        pre {
+            background: #f0f3f9;
+            border: 1px solid #dbe3f0;
+            border-radius: 8px;
+            padding: 12px 14px;
+            font-family: Consolas, "Courier New", monospace;
+            font-size: 0.88rem;
+            line-height: 1.7;
+            overflow-x: auto;
+            margin: 10px 0;
+        }
+
+        /* 行内代码：只改等宽字体，颜色跟随正文 */
+        code {
+            font-family: Consolas, "Courier New", monospace;
+        }
+
+        /* ============================================================
+           演示区：6 张图文卡片（上图下文 + 悬浮图片放大 + 文字展开）
+           这是作业第二部分 2.2 要求实现的效果
+           ============================================================ */
+        .card-list {
+            display: flex;                  /* 卡片横向 flex 排列，禁止 float */
+            flex-wrap: wrap;                /* 放不下自动换行 */
+            gap: 8px;                       /* 卡片间隙 8px */
+            list-style: none;               /* 去掉 li 圆点 */
+        }
+
+        /* 卡片本体：子绝父相中的“父相” + 溢出裁切都在这里 */
+        .card-list li {
+            width: 300px;                   /* 与作业原题一致：卡片宽 300px */
+            position: relative;             /* 【父相】给内部 .txt 绝对定位做参照 */
+            overflow: hidden;               /* 【关键】裁切放大的图片，防止跑出卡片盖住旁边 */
+            border-radius: 8px;
+            background: #000;
+        }
+
+        .card-list img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;              /* 图片按比例裁切填满，不变形 */
+            display: block;                 /* 消除图片底部默认缝隙 */
+            transition: all 0.6s;           /* 【关键】transition 写在默认状态：移入移出都有动画 */
+        }
+
+        /* 悬浮卡片时图片放大：hover 选择器只写 transform，不写 transition */
+        .card-list li:hover img {
+            transform: scale(1.2);
+        }
+
+        /* 文字条：子绝父相中的“子绝”，压在卡片底部 */
+        .card-list .txt {
+            position: absolute;             /* 【子绝】相对 li 定位 */
+            left: 0;
+            bottom: 0;                      /* 贴住卡片底边 */
+            width: 100%;
+            height: 40px;                   /* 默认只露出 40px 标题条 */
+            background: rgba(0, 0, 0, 0.6); /* 半透明黑色遮罩 */
+            color: #fff;
+            padding: 6px 14px;
+            overflow: hidden;               /* 展开前隐藏多余文字 */
+            transition: all 0.6s;           /* 同样写在默认状态，移入移出都平滑 */
+        }
+
+        .card-list .txt h4 {
+            font-size: 1rem;
+            font-weight: normal;
+            line-height: 28px;
+        }
+
+        .card-list .txt p {
+            font-size: 0.82rem;
+            opacity: 0.85;
+        }
+
+        /* 悬浮时文字条向上平滑展开到 110px，露出描述文字 */
+        .card-list li:hover .txt {
+            height: 110px;
+        }
+
+        /* 【奇数卡片】悬浮时文字铺满整张卡片：nth-child(odd) */
+        .card-list li:nth-child(odd):hover .txt {
+            height: 100%;                   /* 高度撑满整张卡片 */
+            background: rgba(0, 0, 0, 0.65);
+            display: flex;                  /* 文字垂直居中显示 */
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        /* 简答题手绘图 */
+        .draw-pic {
+            display: block;
+            max-width: 100%;
+            margin: 10px 0;
+        }
+
+        /* 答案表格 */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 10px 0;
+            font-size: 0.9rem;
+        }
+
+        th, td {
+            border: 1px solid #d8e0ef;
+            padding: 8px 10px;
+            text-align: left;
+            vertical-align: top;
+        }
+
+        /* ===== 第四部分：回到顶部按钮（纯 CSS，不用 JS） ===== */
+        .backtop {
+            position: fixed;                /* 固定定位：相对视口，不随滚动条滚动 */
+            left: 20px;                     /* 固定在视口左下角 */
+            bottom: 24px;
+            width: 52px;
+            height: 52px;
+            background: #1e3c72;
+            color: #fff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            font-size: 0.8rem;
+            opacity: 0.5;                   /* 初始半透明 */
+            z-index: 999;                   /* 层级拉高，浮于页面内容之上 */
+            transition: all 0.3s;           /* 移入移出都有过渡 */
+        }
+
+        .backtop:hover {
+            opacity: 1;                     /* 悬浮完全不透明 */
+            transform: scale(1.1);          /* 同时轻微放大 */
+        }
+
+        /* ===== 页面底部版权页脚：H5 语义标签 footer ===== */
+        footer {
+            text-align: center;
+            padding: 24px 0 32px;
+            color: #888;
+            font-size: 0.85rem;
+        }
+    </style>
+</head>
+<body id="top" data-page-node-id="hLDNn2rZFJwQDBF5cABXKv">
+
+    <!-- 页面顶部头部区域 -->
+    <header class="hero" data-page-node-id="bBlvCgwBmIPW0bKLKvlQst">
+        <h1 data-page-node-id="TGe1s2pHnGxC3eyjUihHSn">网页整体布局课后作业</h1>
+        <p data-page-node-id="TG4YcAbQKJ51xH7KOGGwp0">H5 语义布局 + 溢出 / 隐藏过渡动画 · 实践作业答案</p>
+    </header>
+
+    <!-- 导航条 -->
+    <nav class="site-nav" data-page-node-id="mOmPnEtJyLaySPKihxCXi9">
+        <ul data-page-node-id="BwXTsCvX156oQ67LQnZJiG">
+            <li data-page-node-id="PGpkJMbRrDpBqvzR31obPy"><a href="index.html" data-page-node-id="0HEWOb08yD0nblyfUXN6G2">« 返回课堂实践首页</a></li>
+            <li data-page-node-id="iqNEs8dbiIrt0ykAdV2JXn"><a href="#demo" data-page-node-id="MAHiFFQhWz3OHsPFRBM3SB">卡片效果演示</a></li>
+            <li data-page-node-id="5maR7c76zC1bwMdutfKDmg"><a href="#q1" data-page-node-id="gaJ3h3GCJEr7Y6Ty1pSKcV">第一部分 · 找错</a></li>
+            <li data-page-node-id="ctuYzYoBYRRjPKX8dFe1j9"><a href="#q2" data-page-node-id="LpCDH1xvI41Swlq8L5wGMs">第二部分 · 补全</a></li>
+            <li data-page-node-id="nDCY1URAKvFxcKcsbcClGG"><a href="#q3" data-page-node-id="GlA3qlmHDHsRqotNspVz4L">第三部分 · 简答</a></li>
+            <li data-page-node-id="4GQnd7JxhEZAUxFePbUXfD"><a href="#q4" data-page-node-id="yAr3JHqfRnUc1eEUDHs0Hd">第四部分 · 回到顶部</a></li>
+        </ul>
+    </nav>
+
+    <!-- 主体内容区 -->
+    <main data-page-node-id="4tBsHzzbACT8tiscgm60ZD">
+
+        <!-- ============ 第一部分：看代码找错 ============ -->
+        <h2 id="q1" data-page-node-id="F2w8V2fdTgxK7nUZ9sQXj5">第一部分 · 看代码找错（20分）</h2>
+        <div class="block" data-page-node-id="GgMBYOB6LpYi694dmbFYgG">
+            <h3 data-page-node-id="6yH97mOwzXi7lBgeIIiQvs">三处 bug 与现象对照</h3>
+            <table data-page-node-id="Bwi4fBLqYG1G0Bkuq5jn9K">
+                <tr data-page-node-id="ru6YeSD3JUchDQNWdWHlNp">
+                    <th data-page-node-id="y1C0kiQ2fSGLMj2VXLfsiy">#</th>
+                    <th data-page-node-id="7irfFqlSjDldN1gAQC1WKi">错误位置</th>
+                    <th data-page-node-id="FycalDR6v1ZpwHWomSk7Jd">错误原因</th>
+                    <th data-page-node-id="Lr4nFCRmSlxTxyT0yOZUaU">对应现象</th>
+                </tr>
+                <tr data-page-node-id="3OSTZu8ecB9iBPeOF7Qolk">
+                    <td data-page-node-id="XaTfa2Hvy8rAJpUvyhUVvH">1</td>
+                    <td data-page-node-id="xKCnvriG8KqEJeXjwogiD6">.box li 缺少 position:relative 和 overflow:hidden</td>
+                    <td data-page-node-id="ZUwGvZsDvxFhR9otKnn6Xq">图片放大后没有裁切约束，溢出部分直接显示在卡片外</td>
+                    <td data-page-node-id="Qaw68aJfgo3HRcp1cwsJjj">图片放大跑出卡片，盖住旁边卡片</td>
+                </tr>
+                <tr data-page-node-id="5qNl1nqeXctwDSR8NTCIzs">
+                    <td data-page-node-id="lr5WZxeL6OOOxpV3vNJa3L">2</td>
+                    <td data-page-node-id="W29YtwTpRblQ9axpZ0EAJw">transition: all .6s 写在了 :hover 里</td>
+                    <td data-page-node-id="vJPo8sFkyy7KPaGYmtcmzV">过渡只存在于悬浮状态，移出后规则失效，样式瞬间跳回</td>
+                    <td data-page-node-id="mVTDQnOTklNh6UIumX4WGL">文字展开只有移入有动画，移出无过渡</td>
+                </tr>
+                <tr data-page-node-id="W19uyYIJMuOAYkXcTOfMLX">
+                    <td data-page-node-id="R6IAbkWMyUaAU9HWikrp0s">3</td>
+                    <td data-page-node-id="RpC2FoSCLmoOPDNsrqScRw">.txt 用了 position:absolute，但父级 li 没有 position:relative</td>
+                    <td data-page-node-id="n1wCcnzfjxpMcQ6uOMPCOj">“子绝父相”缺了“父相”，文字条以更外层元素为定位基准</td>
+                    <td data-page-node-id="BFxgVSeEPbtr0EeZtdMGNl">卡片布局排版错乱</td>
+                </tr>
+            </table>
+
+            <h3 data-page-node-id="Rk5wCX8aceibUQobuKTLIJ">修改后的完整代码</h3>
+            <pre data-page-node-id="EuxQdzqUffeDcrfplGPKqW">&lt;style&gt;
+  .box li{
+    width: 300px;
+    position: relative;      /* 修复bug3：父相，给绝对定位的文字条做参照 */
+    overflow: hidden;        /* 修复bug1：裁切溢出，图片放大不会跑出卡片 */
+    list-style: none;
+  }
+  .box img{
+    width: 100%;
+    transition: all .6s;     /* 修复bug2：transition移到默认状态，移入移出都有动画 */
+  }
+  .box li:hover img{
+    transform: scale(1.2);   /* hover里只写transform */
+  }
+  .txt{
+    position: absolute;
+    left: 0;                 /* 补充：贴住卡片左侧 */
+    bottom: 0;
+    width: 100%;             /* 补充：宽度撑满卡片，否则文字条宽度塌陷 */
+    height: 40px;
+    background: rgba(0,0,0,.6);
+    transition: all .6s;     /* 文字条同样在默认状态写transition */
+  }
+  .box li:hover .txt{        /* 补充：悬浮时文字条展开的触发规则 */
+    height: 110px;
+  }
+  .box{
+    display: flex;
+  }
+&lt;/style&gt;</pre>
+        </div>
+
+        <!-- ============ 第二部分：补全代码 ============ -->
+        <h2 id="q2" data-page-node-id="WIXSDgoRtA9ntHyD256Oke">第二部分 · 补全代码（40分）</h2>
+
+        <div class="block" data-page-node-id="E4YO8jJ6BYlBUM1pFfke8Y">
+            <h3 data-page-node-id="xloswq3IuvaAkoWlPwsXyL">2.1 语义标签填空</h3>
+            <table data-page-node-id="U6qfqsUtEEdnmD7wBtE9uY">
+                <tr data-page-node-id="4r0YxeqptpDHS7s7H8tCia">
+                    <th data-page-node-id="1CUqDtvgoWQ2TzRKsQuvLP">页面区域</th>
+                    <th data-page-node-id="eb8MRjwQPZgWh0dYy2K8VX">应填语义标签</th>
+                </tr>
+                <tr data-page-node-id="IaBFOossLDd08Qt1SAQ8zi"><td data-page-node-id="i9vFaJ57iF1pky6Mjb7MD1">页面顶部头部区域</td><td data-page-node-id="GHoRz2SKA9mQdDPjQEOtmK"><code data-page-node-id="J3S0gvkDInBo5kCwgQJFXs">&lt;header&gt;</code></td></tr>
+                <tr data-page-node-id="A4Ne3YvRkwHAcujBQ1B2o4"><td data-page-node-id="7VbHbVC1swonZiuXxPLay8">导航条</td><td data-page-node-id="zJydjjhRZVxClbjl89tlCR"><code data-page-node-id="51q4lXQy6uc0Qwd17nJAyo">&lt;nav&gt;</code></td></tr>
+                <tr data-page-node-id="NXpXbWDbHAxPM8ISZHGC6K"><td data-page-node-id="bvaL8wCog9a0EncI2nMg07">页面唯一主要内容区</td><td data-page-node-id="wMph4FIjET4t0RM9iGq3XF"><code data-page-node-id="x9IJ9w3dyBM193AWrc48Ft">&lt;main&gt;</code></td></tr>
+                <tr data-page-node-id="Jj78RArHAX4AkTRd8KGV3l"><td data-page-node-id="tCHGolAa3QHrexno54FVkF">侧边栏附属内容</td><td data-page-node-id="qYAOJjcxmoaO8OAqcfMKFe"><code data-page-node-id="tBvvKb7Sdg6UuMMYvGzR15">&lt;aside&gt;</code></td></tr>
+                <tr data-page-node-id="BNPpWTbAIyUBDbsQFjP8GB"><td data-page-node-id="HGkB4ANTOScGcWWWI90knK">页面底部版权页脚</td><td data-page-node-id="cPZR0kFlzgVaE2LoxvIHLG"><code data-page-node-id="cACD0hYuHkvEp4daJHgPIB">&lt;footer&gt;</code></td></tr>
+            </table>
+        </div>
+
+        <div class="block" data-page-node-id="qdckeH88qrB4PiANp3YoBT">
+            <h3 data-page-node-id="AQE0Q69VexVq4r9cIZ0J1h">2.2 卡片动画补全</h3>
+            <table data-page-node-id="X3kQxX2hpxdGL97P4huGAq">
+                <tr data-page-node-id="GSHBIezCDcgM2w1TDTGaNc">
+                    <th data-page-node-id="SvQmo5Mggcvxp654C6B47i">需要实现效果 / 问题</th>
+                    <th data-page-node-id="9Z1dvvDArbp3lsBOGlVx0H">答案</th>
+                </tr>
+                <tr data-page-node-id="R8pQkBCGEnhTKUE2Hr7Em6">
+                    <td data-page-node-id="HplSGu6OF9p89qCQi5PYsu">防止放大图片溢出 li 容器</td>
+                    <td data-page-node-id="TRgUUpgIcOd9ShMGZDm0sf">li 添加属性：overflow: hidden;</td>
+                </tr>
+                <tr data-page-node-id="VAtz4COAHtRZBENEG73Dkd">
+                    <td data-page-node-id="xZT6QZKO6pIcklbzxNpeFE">子绝父相，让文字条定位在卡片底部</td>
+                    <td data-page-node-id="wytAWSUIWlCMBxQ38fGtXN">li 添加属性：position: relative;（文字条写 position: absolute）</td>
+                </tr>
+                <tr data-page-node-id="pxIvLZSTQ9ffTiHahTANrp">
+                    <td data-page-node-id="OJdqMfUm3PcP1w6GZP671R">hover 图片从原始大小放大到 scale(1.2)，需要写哪两个选择器</td>
+                    <td data-page-node-id="aMN2vWndDCWGAPXpwhHLC9">.box img{ transition: all .6s; } 与 .box li:hover img{ transform: scale(1.2); }</td>
+                </tr>
+                <tr data-page-node-id="hmn1nB2y6sWGdJHJA3FhTG">
+                    <td data-page-node-id="74Bh35liUbYerPqiNqj65g">文字高度平滑展开，移入移出都有动画，transition 写在默认还是 hover？为什么？</td>
+                    <td data-page-node-id="jPkaUCmA8wqNWT2uYGsTDm">写在默认（普通选择器）上。因为移出鼠标后 :hover 规则立即失效，浏览器按默认状态的 transition 计算回退动画；若只写在 hover 上，移出瞬间没有过渡定义，元素会直接跳变回原样。</td>
+                </tr>
+                <tr data-page-node-id="BKUEHqKDuurzNLREagDbgQ">
+                    <td data-page-node-id="jwJskpeYiEuFgTGDG0g03H">奇数卡片悬浮，文字铺满整张卡片，使用什么伪类选择器</td>
+                    <td data-page-node-id="hnRWDjpXRDjTmx0wkdXm46">:nth-child(odd)（即 .box li:nth-child(odd):hover .txt{ height: 100%; }）</td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- 作业 2.2 要求实现的效果演示，按作业顺序放在 2.2 卡片动画补全下方 -->
+        <h2 id="demo" data-page-node-id="seXdSWbkjpLxCi4wXVF5kx">作业效果演示 · 六张图文卡片</h2>
+        <div class="block" data-page-node-id="6kcP9w8foawnafUnN5OtAQ">
+            <p data-page-node-id="TkRSnJtZ2FCuzwiYmPL14V">下方六张卡片即作业 2.2 要求实现的效果：上图下文，悬浮时图片放大、文字条平滑展开，奇数卡片文字铺满整张卡片。</p>
+
+            <!-- 卡片演示：ul.card-list > li > img + .txt，使用本地图片，不使用 CDN -->
+            <ul class="card-list" data-page-node-id="fd9QyTgdve5YvAiUz1bhmM">
+                <li data-page-node-id="kprGgPKzOHVABMIY4RDXPK">
+                    <img src="image/1.jpg" alt="校园风景1" data-page-node-id="wLbwxr94tOFJfVVknvExUj">
+                    <div class="txt" data-page-node-id="s7A6uE2QB1DKHREyIbw3an">
+                        <h4 data-page-node-id="I5b29DYe2NEwSfrU9FMQJK">卡片一</h4>
+                        <p data-page-node-id="1fJQfDIrOb3tJa5hdClVgx">悬浮时文字条铺满整张卡片，图片同时放大 1.2 倍。</p>
+                    </div>
+                </li>
+                <li data-page-node-id="ut3biwGjXHZOGA8ubZkwyw">
+                    <img src="image/2.jpg" alt="校园风景2" data-page-node-id="n8Xfo08qGFcYlhoYeAE4Qx">
+                    <div class="txt" data-page-node-id="YmLuDGZ7zAweHqZNuXTBvt">
+                        <h4 data-page-node-id="sJb8iHb2I0d61vvXNc3Pmz">卡片二</h4>
+                        <p data-page-node-id="nxdUi7oYggnpHVJHSxzFpr">悬浮时文字条向上展开到 110px。</p>
+                    </div>
+                </li>
+                <li data-page-node-id="CNffSA8prCSHuoT6Nh4oDz">
+                    <img src="image/3.jpg" alt="校园风景3" data-page-node-id="0zsGQ3LsILwvKugwnhXFAA">
+                    <div class="txt" data-page-node-id="3P4aRgM7hF5ObsqHe1YXHD">
+                        <h4 data-page-node-id="biYfGqt1p73COlHHHqiJQi">卡片三</h4>
+                        <p data-page-node-id="a22Qu4F7XkjQeLv1w9uUpV">nth-child(odd) 选中奇数卡片。</p>
+                    </div>
+                </li>
+                <li data-page-node-id="GABe2Xru5JHe3lQzLEHtP9">
+                    <img src="image/4.jpg" alt="校园风景4" data-page-node-id="ikZKOoXoxBrAjPhaBfrNb4">
+                    <div class="txt" data-page-node-id="BRMEo6A8NukcMTqRr8e8pd">
+                        <h4 data-page-node-id="OFTzQRwmQej5lWu7YAYsGT">卡片四</h4>
+                        <p data-page-node-id="VXj3DyunENwaDQrQlSR25K">transition 写在默认状态，移入移出都有动画。</p>
+                    </div>
+                </li>
+                <li data-page-node-id="ejECBAGTAqqbNDXDcf8NQG">
+                    <img src="image/5.jpg" alt="校园风景5" data-page-node-id="bdrIsX540xhmHu1w1HsCqV">
+                    <div class="txt" data-page-node-id="coalLDQa63IhRZQUyXmzcA">
+                        <h4 data-page-node-id="qXhzu6Lnra1q4DOO8K6wWH">卡片五</h4>
+                        <p data-page-node-id="z4MEAH5YXjPjiv3ldCo7By">overflow:hidden 裁切放大的图片。</p>
+                    </div>
+                </li>
+                <li data-page-node-id="4VNTUIWcSiuBilzHVnH4We">
+                    <img src="image/6.jpg" alt="校园风景6" data-page-node-id="xVcButTnhFgV1EneXeujC3">
+                    <div class="txt" data-page-node-id="iB8YB2QXteTI5EALt1AAIP">
+                        <h4 data-page-node-id="6phyIEoBKonXWczGbejWay">卡片六</h4>
+                        <p data-page-node-id="HVmnLGRtPUNMYJ1PcfsQEF">子绝父相：li 相对定位，文字条绝对定位。</p>
+                    </div>
+                </li>
+            </ul>
+        </div>
+
+        <div class="block" data-page-node-id="SxNafq1A3lV7x5CtPR3jFd">
+            <h3 data-page-node-id="N4uYPhFrOyDWKRQo6pcjqi">2.3 flex 两栏布局填空</h3>
+            <p data-page-node-id="rfV0YyRHnMQdxIpCScHSzy">版心 1200px；主内容 792px，侧边栏 400px；两栏间隔 8px。</p>
+            <ul style="padding-left:20px;" data-page-node-id="8JRzqnCSnuC9Fvxn0xJilj">
+                <li data-page-node-id="HpgzsIWQ3RGng3LFqsqfoI">父容器开启 flex：display: flex;</li>
+                <li data-page-node-id="dd09aGeHDp2tQ4IJGPBVE8">设置两栏间隙 8px 的属性：gap: 8px;（禁止 margin，gap 不会产生多余的边距叠加问题）</li>
+            </ul>
+            <pre data-page-node-id="zfmpYIaLD1MkAt5b1yPWux">.container{
+  max-width: 1200px;   /* 版心 */
+  margin: 0 auto;      /* 版心水平居中 */
+  display: flex;       /* 开启 flex 布局 */
+  gap: 8px;            /* 两栏间隔 8px */
+}
+.content{ width: 792px; }  /* 主内容 792px，792+8+400=1200 */</pre>
+        </div>
+
+        <!-- ============ 第三部分：手写原理简答 ============ -->
+        <h2 id="q3" data-page-node-id="h5Sm7GQt7RIxVBuNPyGg1F">第三部分 · 手写原理简答（25分）</h2>
+
+        <div class="block" data-page-node-id="4xnOiOeelplUagKpASLpCx">
+            <h3 data-page-node-id="7w2rgZGIOOxECvA03B1mtU">1. 画图：父相子绝的盒子位置关系</h3>
+            <!-- 手绘图：使用 image 文件夹中的 handpainted1.jpg -->
+            <img class="draw-pic" src="image/handpainted1.jpg" alt="父相子绝盒子位置关系手绘图" data-page-node-id="fizk5ZCCpqPcYE9f9zSnDF">
+        </div>
+
+        <div class="block" data-page-node-id="C34eIZ7hWWrbOt7TKfzVSd">
+            <h3 data-page-node-id="ec6F2vVzlkAGjSDTAfBHjG">2. overflow:hidden 本节课两个作用</h3>
+            <ul style="padding-left:20px;" data-page-node-id="wQtFGaPYsAuL1fE2E7DFJG">
+                <li data-page-node-id="zR2vl77lljAnnlaqnUcGt9">作用1：溢出裁切。把超出容器边界的内容裁掉——图片 scale(1.2) 放大后超出卡片的部分被裁切，不会盖住旁边的卡片。</li>
+                <li data-page-node-id="iEG37hKIJieiDCYVD45NXr">作用2：隐藏容器内超出的部分，实现“先藏后展”的动画。文字条默认高度只有 40px，超出的描述文字被 overflow:hidden 隐藏，悬浮时高度变大，文字随高度变化逐渐“露出来”，形成平滑展开效果。（补充：它还能触发 BFC，用来清除浮动。）</li>
+            </ul>
+        </div>
+
+        <div class="block" data-page-node-id="HXsV27lIUecEBXxqVkw8zl">
+            <h3 data-page-node-id="5tKJyXwyhaNO8rS1zA88Kp">3. transform:scale(1.2) 会不会把盒子实际占位变大，挤压旁边卡片？</h3>
+            <p data-page-node-id="1PvPM2t41gQBTXqHRgVUtJ">不会。transform 是视觉层面的变换（类似“photoshop 缩放”），不改变盒子在文档流中的布局：盒子原本占的位置、宽高完全不变，旁边的卡片不会被挤压，页面也不会重排。所以放大的图片会溢出到原来的占位之外，这才需要配合 overflow: hidden 把溢出部分裁掉。</p>
+        </div>
+
+        <div class="block" data-page-node-id="SHccSb2I7BTMH2KtwqbcD7">
+            <h3 data-page-node-id="SD65Xu0mXwWPiGy8ztH5N8">4. transition 写在 hover 上和写在普通选择器上，鼠标移出动画的区别</h3>
+            <table data-page-node-id="bac4UpIqrWZNVs2EwVX9Gl">
+                <tr data-page-node-id="36iIiWrdxR0Wo703diWrpo">
+                    <th data-page-node-id="v3OkpI0GpCClBEdkBiFnry">写法</th>
+                    <th data-page-node-id="2v3pvd3UaDhctrNDnpC5rF">移入时</th>
+                    <th data-page-node-id="RZqph2K2yEcFdE5Uz998LB">移出时</th>
+                </tr>
+                <tr data-page-node-id="zigUuAWz25SY1zNgjemuBz">
+                    <td data-page-node-id="h7FHLIJ6dZiXflgMgeCgeX">写在 :hover 上</td>
+                    <td data-page-node-id="OCTm2vI6rMxOk2jaNyjDEi">有过渡动画</td>
+                    <td data-page-node-id="fiOK1pze6OiTCOO2wGcdnc">无动画，瞬间跳回（hover 规则失效，默认状态没有 transition）</td>
+                </tr>
+                <tr data-page-node-id="j8FJLfJwbnlHUSk7kZA1q6">
+                    <td data-page-node-id="2SBrvHULV9m5kzQcBYYVYB">写在普通选择器（默认状态）上</td>
+                    <td data-page-node-id="gi4s1rMzCAEqmDlJFtmhFd">有过渡动画</td>
+                    <td data-page-node-id="mBOdENxZ3suOucjwAeeVD5">也有过渡动画（默认状态始终带着 transition，回退过程同样被过渡）</td>
+                </tr>
+            </table>
+            <p data-page-node-id="3HvkZu16fnHmC3X5qUrZZG">结论：谁发生变化的两个状态都要有 transition，所以写在默认（普通）选择器上，移入移出才都有动画。</p>
+        </div>
+
+        <div class="block" data-page-node-id="J4poX1umunHL25MtvqMhAH">
+            <h3 data-page-node-id="VlQmXeMeqMR38XTeiQVFDU">5. bug 记录（现象 → 排查 → 修复）</h3>
+            <p data-page-node-id="lRHehobXJyqxKbuE3ImfYL">现象：导航栏 a 标签 hover 悬浮不变色，其余 hover 样式正常。</p>
+            <p data-page-node-id="2clGJrcldhEWpEcBcl0BHW">排查：打开开发者工具，发现别的选择器优先级更高覆盖了 hover。</p>
+            <p data-page-node-id="r5NR2QAG3dZhGnAx6VgwH8">修复：提高 hover 选择器优先级，删掉冲突样式后悬浮变色恢复正常。</p>
+        </div>
+
+        <!-- ============ 第四部分：扩展挑战 ============ -->
+        <h2 id="q4" data-page-node-id="7DHypEGeieE4DsySzuWqyk">第四部分 · 扩展挑战（选做，15分加分）</h2>
+        <div class="block" data-page-node-id="wT2TKVFIsh5Ejl59I9b53b">
+            <p data-page-node-id="vgZzHPKrSDpsF8ikwMd8m7">左下角的圆形按钮就是本挑战的实现（纯 CSS，无任何 JS）：点击可回到本页顶部。</p>
+            <pre data-page-node-id="olm55BZeDeWNCbpg0tstaA">/* 回到顶部按钮：纯 CSS 实现 */
+.backtop{
+  position: fixed;        /* 固定定位：相对视口，不随页面滚动 */
+  left: 20px;             /* 视口左下角 */
+  bottom: 24px;
+  opacity: 0.5;           /* 初始半透明 */
+  z-index: 999;           /* 浮于页面内容之上 */
+  transition: all .3s;
+}
+.backtop:hover{
+  opacity: 1;             /* 悬浮完全不透明 */
+  transform: scale(1.1);  /* 同时轻微放大 */
+}</pre>
+            <p data-page-node-id="3MUFAfJ74YDPBKALzugPdd">结构上用锚点 &lt;a href="#top"&gt; 跳回页面顶部（body 上设置了 id="top"），全程不需要 JavaScript。</p>
+        </div>
+
+    </main>
+
+    <!-- 回到顶部按钮：纯 CSS + 锚点，fixed 固定在视口左下角 -->
+    <a class="backtop" href="#top" data-page-node-id="FXIAnRMDxWqn2JUn7EUJds">顶部</a>
+
+    <!-- 页面底部版权页脚 -->
+    <footer data-page-node-id="zMzYAeb69jFJ5fTmLrPYfo">
+        <p data-page-node-id="x6OYkT9jwQSUiHuKhkIijN">&copy; 2026 张敬恒 · 《高级网页设计》网页整体布局课后作业</p>
+        <p data-page-node-id="t8oMpYSymXBfqLAlYuofTX">学生：张敬恒　学号：24001010904</p>
+    </footer>
+
+</body>
+</html>

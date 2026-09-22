@@ -22,3 +22,6 @@ build/
 # 本地工具与状态
 .opencode/
 .workbuddy/
+
+# 本地预览截图（不随作业提交）
+_shots/
