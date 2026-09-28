@@ -1,0 +1,37 @@
+{
+  "id": "5238928",
+  "name": "travel_904",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "583726",
+      "name": "旅行",
+      "font_class": "78lvxing",
+      "unicode": "e653",
+      "unicode_decimal": 58963
+    },
+    {
+      "icon_id": "2076313",
+      "name": " 行程",
+      "font_class": "hangcheng",
+      "unicode": "e8a1",
+      "unicode_decimal": 59553
+    },
+    {
+      "icon_id": "19949534",
+      "name": "我的",
+      "font_class": "wode",
+      "unicode": "e60b",
+      "unicode_decimal": 58891
+    },
+    {
+      "icon_id": "38960975",
+      "name": "购票",
+      "font_class": "goupiao",
+      "unicode": "e66e",
+      "unicode_decimal": 58990
+    }
+  ]
+}
