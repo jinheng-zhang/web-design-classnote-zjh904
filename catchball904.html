@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>抓小球游戏</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Microsoft YaHei", "Segoe UI", sans-serif;
+            background: #fffde7;
+            color: #222;
+            height: 100vh;
+            overflow: hidden;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        /* ==================== 顶部计分栏 ==================== */
+        #hud {
+            position: fixed;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 20;
+            display: flex;
+            gap: 40px;
+            padding: 12px 32px;
+            background: #fff;
+            border-radius: 0 0 12px 12px;
+            box-shadow: 0 2px 8px rgba(30, 60, 114, 0.12);
+            font-weight: 700;
+            color: #1e3c72;
+            white-space: nowrap;
+        }
+
+        #hud .hud-num {
+            color: #2a5298;
+        }
+
+        /* ==================== 开始按钮 ==================== */
+        #startBtn {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 15;
+            padding: 14px 46px;
+            font-family: inherit;
+            font-size: 20px;
+            font-weight: 700;
+            color: #fff;
+            background: #2a5298;
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(30, 60, 114, 0.3);
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        #startBtn:hover {
+            background: #1e3c72;
+        }
+
+        /* ==================== 小球 ==================== */
+        #ball {
+            position: fixed;
+            z-index: 10;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: #2a5298;
+            box-shadow: 0 4px 10px rgba(30, 60, 114, 0.35);
+            cursor: pointer;
+            display: none;
+            transition: transform 0.15s;
+        }
+
+        #ball:hover {
+            transform: scale(1.1);
+        }
+
+        #ball.pop {
+            animation: pop 0.25s ease-out;
+        }
+
+        @keyframes pop {
+            from {
+                transform: scale(0.3);
+                opacity: 0.2;
+            }
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        /* ==================== 飘分文字 ==================== */
+        #floatLayer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 30;
+            pointer-events: none;
+        }
+
+        .float {
+            position: fixed;
+            font-size: 20px;
+            font-weight: 700;
+            animation: floatUp 1s ease-out forwards;
+        }
+
+        .float.plus {
+            color: #16a34a;
+        }
+
+        .float.minus {
+            color: #dc2626;
+        }
+
+        @keyframes floatUp {
+            from {
+                opacity: 1;
+                transform: translateY(0);
+            }
+            to {
+                opacity: 0;
+                transform: translateY(-40px);
+            }
+        }
+
+        /* ==================== 结算层 ==================== */
+        #overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 40;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0, 0, 0, 0.35);
+        }
+
+        #overlay.show {
+            display: flex;
+        }
+
+        .result-card {
+            background: #fff;
+            border-radius: 14px;
+            padding: 28px 44px;
+            text-align: center;
+            box-shadow: 0 8px 24px rgba(30, 60, 114, 0.25);
+        }
+
+        .result-card h2 {
+            font-size: 24px;
+            color: #1e3c72;
+            margin-bottom: 12px;
+        }
+
+        .result-card p {
+            font-size: 16px;
+            color: #444;
+            margin-bottom: 22px;
+        }
+
+        .result-card p span {
+            font-size: 22px;
+            font-weight: 700;
+            color: #2a5298;
+        }
+
+        #restartBtn {
+            padding: 10px 32px;
+            font-family: inherit;
+            font-size: 16px;
+            font-weight: 700;
+            color: #fff;
+            background: #2a5298;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        #restartBtn:hover {
+            background: #1e3c72;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ==================== 页面结构 ==================== -->
+    <header id="hud">
+        <div>得分：<span class="hud-num" id="score">0</span></div>
+        <div>剩余 <span class="hud-num" id="timer">02:00</span></div>
+    </header>
+
+    <button id="startBtn">开始游戏</button>
+
+    <div id="ball"></div>
+
+    <div id="floatLayer"></div>
+
+    <div id="overlay">
+        <div class="result-card">
+            <h2>时间到！</h2>
+            <p>最终得分：<span id="finalScore">0</span></p>
+            <button id="restartBtn">再玩一局</button>
+        </div>
+    </div>
+
+<script>
+    // ==================== 一、游戏参数与状态 ====================
+    var GAME_TIME = 120;      // 每局时长（秒）
+    var BALL_SIZE = 60;       // 小球直径（px），与 CSS 保持一致
+    var EDGE = 5;             // 小球与屏幕边缘/计算栏之间的安全边距（px）
+
+    var score = 0;            // 当前分数
+    var timeLeft = GAME_TIME; // 剩余秒数
+    var timerId = null;       // 倒计时定时器
+    var playing = false;      // 是否进行中：只有 true 时点击才计分
+
+    // 页面元素
+    var hudEl = document.getElementById('hud');
+    var scoreEl = document.getElementById('score');
+    var timerEl = document.getElementById('timer');
+    var ballEl = document.getElementById('ball');
+    var startBtn = document.getElementById('startBtn');
+    var overlayEl = document.getElementById('overlay');
+    var finalScoreEl = document.getElementById('finalScore');
+    var restartBtn = document.getElementById('restartBtn');
+    var floatLayer = document.getElementById('floatLayer');
+
+    // ==================== 二、界面刷新 ====================
+    // 把剩余秒数格式化成 mm:ss
+    function formatTime(sec) {
+        var m = Math.floor(sec / 60);
+        var s = sec % 60;
+        return (m < 10 ? '0' + m : m) + ':' + (s < 10 ? '0' + s : s);
+    }
+
+    // 刷新顶部的分数与倒计时
+    function renderHud() {
+        scoreEl.textContent = score;
+        timerEl.textContent = formatTime(timeLeft);
+    }
+
+    // ==================== 三、小球定位 ====================
+    // 取当前可用的安全区：顶部计分栏下方 → 窗口底部
+    function getSafeArea() {
+        return {
+            top: hudEl.getBoundingClientRect().bottom + EDGE,
+            bottom: window.innerHeight - EDGE,
+            left: EDGE,
+            right: window.innerWidth - EDGE
+        };
+    }
+
+    // 在安全区内随机一个位置显示小球
+    function spawnBall() {
+        var area = getSafeArea();
+        // 窗口极小时可放置区间会变成负数，用 Math.max 兜底，避免取到负值
+        var maxX = Math.max(area.left, area.right - BALL_SIZE);
+        var maxY = Math.max(area.top, area.bottom - BALL_SIZE);
+        var x = area.left + Math.random() * (maxX - area.left);
+        var y = area.top + Math.random() * (maxY - area.top);
+
+        ballEl.style.left = x + 'px';
+        ballEl.style.top = y + 'px';
+        ballEl.style.display = 'block';
+
+        // 重新播放一次重生缩放动画（先移除类、强制回流，再加回类）
+        ballEl.classList.remove('pop');
+        void ballEl.offsetWidth;
+        ballEl.classList.add('pop');
+    }
+
+    // ==================== 四、飘分文字 ====================
+    function showFloat(x, y, text, type) {
+        var span = document.createElement('span');
+        span.className = 'float ' + type;
+        span.textContent = text;
+        // 每次生成时加一个随机水平偏移，避免连点时文字完全重叠
+        span.style.left = (x + Math.round((Math.random() - 0.5) * 40)) + 'px';
+        span.style.top = y + 'px';
+        floatLayer.appendChild(span);
+
+        // 动画播放完（1s）后从页面上移除
+        setTimeout(function () {
+            if (span.parentNode) span.parentNode.removeChild(span);
+        }, 1000);
+    }
+
+    // ==================== 五、游戏流程 ====================
+    // 倒计时每秒递减，归零则结算
+    function tick() {
+        if (!playing) return;         // 结算后不再执行，避免竞态误扣分
+        timeLeft--;
+
+        if (timeLeft <= 0) {
+            timeLeft = 0;
+            renderHud();
+            endGame();
+            return;
+        }
+        renderHud();
+    }
+
+    // 开始游戏
+    function startGame() {
+        if (playing) return;          // 防止重复启动产生多个定时器
+
+        score = 0;
+        timeLeft = GAME_TIME;
+        playing = true;
+        renderHud();
+
+        startBtn.style.display = 'none';
+        overlayEl.classList.remove('show');
+        spawnBall();
+
+        timerId = setInterval(tick, 1000);
+    }
+
+    // 时间到：停表、收球、弹出结算层
+    function endGame() {
+        playing = false;
+        clearInterval(timerId);
+        timerId = null;
+
+        ballEl.style.display = 'none';
+        finalScoreEl.textContent = score;
+        overlayEl.classList.add('show');
+    }
+
+    // 回到初始状态，等待玩家再次点击开始
+    function resetGame() {
+        playing = false;
+        clearInterval(timerId);
+        timerId = null;
+
+        score = 0;
+        timeLeft = GAME_TIME;
+        renderHud();
+
+        ballEl.style.display = 'none';
+        overlayEl.classList.remove('show');
+        startBtn.style.display = '';
+    }
+
+    // ==================== 六、点击结算 ====================
+    // 判断这次点击落在的是不是"空白区域"
+    // 计分栏、按钮、结算层都不算空白区域，点它们不扣分
+    function isBlankTarget(target) {
+        if (target === ballEl) return false;
+        if (hudEl.contains(target)) return false;
+        if (target === startBtn || target === restartBtn) return false;
+        if (overlayEl.contains(target)) return false;
+        return true;
+    }
+
+    document.addEventListener('click', function (e) {
+        if (!playing) return;         // 未开始或已结束时，点击不计分
+
+        // 点中小球：+2 分，小球消失并在新随机位置重生
+        if (e.target === ballEl) {
+            var rect = ballEl.getBoundingClientRect();
+            score += 2;
+            renderHud();
+            spawnBall();
+            showFloat(rect.left + rect.width / 2, rect.top + rect.height / 2, '+2', 'plus');
+            return;
+        }
+
+        // 点中空白：-1 分（最低 0 分），小球留在原处不动
+        if (isBlankTarget(e.target)) {
+            score = Math.max(0, score - 1);
+            renderHud();
+            showFloat(e.clientX, e.clientY, '-1', 'minus');
+        }
+    });
+
+    // ==================== 七、事件绑定 ====================
+    startBtn.addEventListener('click', startGame);
+    restartBtn.addEventListener('click', resetGame);
+
+    // 窗口尺寸变化后重新随机定位，保证小球始终完整可见
+    window.addEventListener('resize', function () {
+        if (playing) spawnBall();
+    });
+
+    // 初始状态：0 分、02:00、无球
+    renderHud();
+</script>
+</body>
+</html>

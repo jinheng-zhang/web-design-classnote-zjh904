@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-page-node-id="kyVdH9c7NAVfG10dBAfo1q">
+
+<head data-page-node-id="79bDvw8yhmEB8l0cxpTD7H">
+    <meta charset="UTF-8" data-page-node-id="TYlBQCsSTh2Kv1rUVaWEyx">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" data-page-node-id="rFeEHgDlD45XFk0NIz4Hcv">
+    <title>上图下文与图上文字</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        img {
+            display: block;
+            width: 100%;
+            border: none;
+        }
+
+        .container {
+            width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* 并集选择器 */
+        .list1,
+        .list2 {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            list-style: none;
+            /* li之间的间隔 */
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        /* 绝对定位的父元素设置相对定位 */
+        .list2 li {
+            position: relative;
+        }
+
+        .list1 li,
+        .list2 li {
+            /* flex参数不缩放，
+            每项占一行中的三分之一，基础间距是10px */
+            flex: 0 0 calc(33.33% - 10px);
+        }
+
+        .list1 li a,
+        .list2 li a {
+            text-decoration: none;
+            color: black;
+            display: block;
+        }
+
+        .list1 li a p {
+            /* 文字水平居中 */
+            text-align: center;
+            /* 当文字的height和line-height一致时
+            文字垂直居中 */
+            height: 36px;
+            line-height: 36px;
+            font-size: 16px;
+            font-weight: bold;
+            /* 文字间距 */
+            letter-spacing: 2px;
+        }
+
+        .list2 p {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            background-color: rgba(99, 100, 255, 0.8);
+            color: white;
+            text-align: center;
+            width: 100%;
+            font-size: 16px;
+            font-weight: bold;
+            /* 垂直居中 */
+            line-height: 36px;
+            height: 36px;
+        }
+    </style>
+</head>
+
+<body data-page-node-id="JhfeUe3YGSRoh8HLm9gdWL">
+    <div class="container" data-page-node-id="rjcXmmIpGz8f9EMTGiOZgP">
+        <h2 data-page-node-id="B8noZldUmMcjil9NOHsDQl">上图下文</h2>
+        <ul class="list1" data-page-node-id="Vmu7VQXLjjeupfEnc6bQyV">
+            <li data-page-node-id="8xfMDqGnBUPQegnHzEQ7RN"><a href="#" data-page-node-id="RdHwCQrqB3h4cULG8wLTTC"><img src="./image/1.jpg" alt="pic1" data-page-node-id="2W7RkLforuXdYcG11p7aAf">
+                    <p data-page-node-id="uRPBvhguownckRUYw2Wz6i">图片1文字描述</p>
+                </a></li>
+            <li data-page-node-id="nwL5AVDmk95fsDhDaK2HPD"><a href="#" data-page-node-id="1HOs9i2Ic0m4dhhkKEx0f6"><img src="./image/2.jpg" alt="pic2" data-page-node-id="E0BUEPwFubOqru90Y8tMnR">
+                    <p data-page-node-id="mTkrQQKgUCPwxCbP7mGPWn">图片2文字描述</p>
+                </a></li>
+            <li data-page-node-id="Oka90KjUHW7NosKSuEuJAU"><a href="#" data-page-node-id="gb3gvTCzInULlut6knJLGX"><img src="./image/3.jpg" alt="pic3" data-page-node-id="z3NbyF6TTMqgHq6vNMu8St">
+                    <p data-page-node-id="BVT8DVny1u4PGCrzeLKtl0">图片3文字描述</p>
+                </a></li>
+            <li data-page-node-id="cR6ZHB1ZPBZZb4yoxq6u1O"><a href="#" data-page-node-id="rAP1KJI5JN310wvANfb04z"><img src="./image/4.jpg" alt="pic4" data-page-node-id="DOMGToUfBnGTV8vRhAH26n">
+                    <p data-page-node-id="BDdHvhHRZkUzunmXYKHiAr">图片4文字描述</p>
+                </a></li>
+            <li data-page-node-id="GC71o4xg1RU7Ov9J3fhcZ0"><a href="#" data-page-node-id="YjBWiWiSv7OLp2WFj0xx3I"><img src="./image/5.jpg" alt="pic5" data-page-node-id="z0O6dw860AhKJ93yHaUDlT">
+                    <p data-page-node-id="xrvNFHOwBkIxeBGJr7dKgF">图片5文字描述</p>
+                </a></li>
+            <li data-page-node-id="HuBesMSBHT4uo8rEtfQaD8"><a href="#" data-page-node-id="seG7PEDSeWN0N5vbPBIB5A"><img src="./image/6.jpg" alt="pic6" data-page-node-id="SOnxfj7R4ON7lLqvA1ilKB">
+                    <p data-page-node-id="5dyXMtVBtTOCwpsjErdvz0">图片6文字描述</p>
+                </a></li>
+        </ul>
+
+        <h2 data-page-node-id="3Puz8MMXnBo7yDgUBHhdw3">图上文字</h2>
+        <ul class="list2" data-page-node-id="ICkRweuGUUF97HseB8FgsM">
+            <li data-page-node-id="yejAQhWCi6YBp3oQVsOLsG"><a href="#" data-page-node-id="Ck7dt0gJvSNxQkLRe3PWzq"><img src="./image/1.jpg" alt="pic1" data-page-node-id="GYN8lDuL1BwQL5yiFX7oDC">
+                    <p data-page-node-id="ByssrT8LtDuCRJb8TQ53dB">图片1文字描述</p>
+                </a></li>
+            <li data-page-node-id="GS86Rif0DJOLSVbfDdt90D"><a href="#" data-page-node-id="48hdoNHcwq5Vu48siqmbKq"><img src="./image/2.jpg" alt="pic2" data-page-node-id="CkHww2nHNECUGCVpDqx8cB">
+                    <p data-page-node-id="hAGyFCZF7RbZgqHohdx0c9">图片2文字描述</p>
+                </a></li>
+            <li data-page-node-id="0YnZjdsVrzOnYmyFyL8ZMU"><a href="#" data-page-node-id="CYV9sNHPE1RDyHQ2Wu1a6F"><img src="./image/3.jpg" alt="pic3" data-page-node-id="nmzZYwmdHgBdVlvTVUovoZ">
+                    <p data-page-node-id="tQT1Dqs2YijLwwUPKSKNKn">图片3文字描述</p>
+                </a></li>
+            <li data-page-node-id="YC0Sg2aqPwLBc2Py6tQaJs"><a href="#" data-page-node-id="iUDPSvDI2FOGrSqIreBY79"><img src="./image/4.jpg" alt="pic4" data-page-node-id="1GVTMxZV388XFQqAXFurx5">
+                    <p data-page-node-id="9p7PXP4VXuzZFeUUMZxTEt">图片4文字描述</p>
+                </a></li>
+            <li data-page-node-id="UdDo32ZCzWrNLB6P0MiZOu"><a href="#" data-page-node-id="CXjkBgqXoHZx1wCKNAkFpr"><img src="./image/5.jpg" alt="pic5" data-page-node-id="X7QtaGLsabTjv4fdah9N4L">
+                    <p data-page-node-id="Eud1UAJo452COo5RSYBYW6">图片5文字描述</p>
+                </a></li>
+            <li data-page-node-id="OLFLBbQt5DHS9UHm9aIru7"><a href="#" data-page-node-id="4QuMG6GWx1fndbm3f1zgGI"><img src="./image/6.jpg" alt="pic6" data-page-node-id="zSCciWrN25cevt7iwLtx64">
+                    <p data-page-node-id="loG1QSx44BOTyS53Qpg1GM">图片6文字描述</p>
+                </a></li>
+        </ul>
+    </div>
+</body>
+
+</html>

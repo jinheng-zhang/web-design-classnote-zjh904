@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>旅行 APP · 底部导航（字体图标）</title>
+    <link rel="stylesheet" href="font/iconfont.css">
+    <style>
+        /* ============ 基础重置 ============ */
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+        :root {
+            --zjh_accent: #E8743B;        /* 旅行落日橙 */
+            --zjh_accent_soft: #FFF1E8;
+            --zjh_ink: #1F2937;
+            --zjh_ink_soft: #6B7280;
+            --zjh_ink_lighter: #9CA3AF;
+            --zjh_surface: #FFFFFF;
+            --zjh_bg: #F4F5F7;
+            --zjh_badge: #EF4444;
+            --zjh_dot: #EF4444;
+            --zjh_nav_h: 64px;
+        }
+
+        html, body { height: 100%; }
+        body {
+            font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+            background: #2A2D34;
+            color: var(--zjh_ink);
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        /* ============ 手机外壳 ============ */
+        .zjh_phone {
+            width: 100%;
+            max-width: 414px;
+            min-height: 100vh;
+            background: var(--zjh_bg);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 0 60px rgba(0,0,0,0.4);
+        }
+
+        /* 状态栏 */
+        .zjh_status {
+            height: 28px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 18px;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--zjh_ink);
+            background: transparent;
+            flex-shrink: 0;
+        }
+        .zjh_status .zjh_status_right { display: flex; gap: 5px; align-items: center; font-size: 12px; }
+
+        /* 返回首页 */
+        .zjh_back {
+            position: absolute;
+            top: 6px;
+            left: 14px;
+            z-index: 50;
+            font-size: 12px;
+            color: var(--zjh_ink_soft);
+            text-decoration: none;
+            background: rgba(255,255,255,0.7);
+            padding: 3px 10px;
+            border-radius: 10px;
+            backdrop-filter: blur(6px);
+        }
+
+        /* ============ 内容区 ============ */
+        .zjh_content {
+            flex: 1;
+            overflow-y: auto;
+            padding-bottom: calc(var(--zjh_nav_h) + 20px);
+        }
+
+        /* 头部横幅 */
+        .zjh_banner {
+            background: linear-gradient(135deg, #FFB37A 0%, #E8743B 55%, #C2410C 100%);
+            color: #fff;
+            padding: 14px 20px 70px;
+            border-radius: 0 0 28px 28px;
+            position: relative;
+        }
+        .zjh_banner h2 { font-size: 20px; font-weight: 700; margin-top: 14px; }
+        .zjh_banner p { font-size: 13px; opacity: 0.9; margin-top: 4px; }
+
+        /* 搜索框 */
+        .zjh_search {
+            margin: -48px 20px 0;
+            background: #fff;
+            border-radius: 14px;
+            padding: 14px 18px;
+            box-shadow: 0 8px 24px rgba(232,116,59,0.18);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 14px;
+            color: var(--zjh_ink_lighter);
+            position: relative;
+            z-index: 2;
+        }
+        .zjh_search .iconfont { font-size: 16px; color: var(--zjh_accent); }
+
+        /* 功能宫格 */
+        .zjh_grid_bar {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            padding: 22px 18px 8px;
+        }
+        .zjh_grid_item {
+            text-align: center;
+            padding: 10px 4px;
+        }
+        .zjh_grid_item .zjh_gi_icon {
+            width: 44px;
+            height: 44px;
+            margin: 0 auto 6px;
+            background: var(--zjh_accent_soft);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            color: var(--zjh_accent);
+        }
+        .zjh_grid_item span { font-size: 11px; color: var(--zjh_ink_soft); }
+
+        /* 推荐标题 */
+        .zjh_section_title {
+            padding: 18px 20px 10px;
+            font-size: 16px;
+            font-weight: 700;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .zjh_section_title a { font-size: 12px; color: var(--zjh_accent); font-weight: 400; text-decoration: none; }
+
+        /* 推荐卡片 */
+        .zjh_card_list { padding: 0 16px; display: flex; flex-direction: column; gap: 12px; }
+        .zjh_card {
+            background: #fff;
+            border-radius: 16px;
+            overflow: hidden;
+            display: flex;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+        }
+        .zjh_card_img {
+            width: 110px;
+            height: 90px;
+            flex-shrink: 0;
+            background: linear-gradient(135deg, #FFD8A8, #E8743B);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 36px;
+        }
+        .zjh_card:nth-child(2) .zjh_card_img { background: linear-gradient(135deg, #A8D5FF, #3B82F6); }
+        .zjh_card:nth-child(3) .zjh_card_img { background: linear-gradient(135deg, #B8E6B8, #10B981); }
+        .zjh_card_body { padding: 12px 14px; flex: 1; }
+        .zjh_card_body h4 { font-size: 15px; font-weight: 600; margin-bottom: 4px; }
+        .zjh_card_body p { font-size: 12px; color: var(--zjh_ink_lighter); }
+        .zjh_card_body .zjh_price { color: var(--zjh_accent); font-weight: 700; font-size: 15px; margin-top: 8px; }
+        .zjh_card_body .zjh_price small { font-size: 11px; font-weight: 400; color: var(--zjh_ink_lighter); }
+
+        /* ============ 底部导航 ============ */
+        .zjh_tabbar {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 414px;
+            height: var(--zjh_nav_h);
+            background: rgba(255,255,255,0.96);
+            backdrop-filter: blur(20px);
+            border-top: 1px solid rgba(0,0,0,0.06);
+            display: flex;
+            padding-bottom: env(safe-area-inset-bottom, 0);
+            z-index: 100;
+        }
+        .zjh_tab_item {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 3px;
+            position: relative;
+            cursor: pointer;
+            color: var(--zjh_ink_lighter);
+            transition: color .2s;
+        }
+        .zjh_tab_item .zjh_tab_icon {
+            font-size: 22px;
+            line-height: 1;
+            transition: transform .2s;
+        }
+        .zjh_tab_item .zjh_tab_label {
+            font-size: 11px;
+            font-weight: 500;
+        }
+        .zjh_tab_item.zjh_active { color: var(--zjh_accent); }
+        .zjh_tab_item.zjh_active .zjh_tab_icon { transform: translateY(-1px); }
+
+        /* 数字徽章 */
+        .zjh_badge {
+            position: absolute;
+            top: 6px;
+            right: calc(50% - 22px);
+            min-width: 16px;
+            height: 16px;
+            padding: 0 4px;
+            background: var(--zjh_badge);
+            color: #fff;
+            font-size: 10px;
+            font-weight: 700;
+            line-height: 16px;
+            text-align: center;
+            border-radius: 8px;
+            border: 2px solid #fff;
+            box-sizing: content-box;
+        }
+        /* 红点 */
+        .zjh_dot {
+            position: absolute;
+            top: 8px;
+            right: calc(50% - 18px);
+            width: 8px;
+            height: 8px;
+            background: var(--zjh_dot);
+            border-radius: 50%;
+            border: 2px solid #fff;
+            box-sizing: content-box;
+        }
+    </style>
+</head>
+<body>
+
+<div class="zjh_phone">
+    <!-- 状态栏 -->
+    <div class="zjh_status">
+        <span>9:41</span>
+        <span class="zjh_status_right">
+            <i class="iconfont icon-hangcheng" style="font-size:11px"></i>
+            <span>100%</span>
+        </span>
+    </div>
+
+    <a class="zjh_back" href="index.html">返回首页</a>
+
+    <!-- ============ 滚动内容 ============ -->
+    <div class="zjh_content">
+        <!-- 头部横幅 -->
+        <div class="zjh_banner">
+            <h2>你好，旅行者</h2>
+            <p>想去哪里？开启一段新旅程</p>
+        </div>
+
+        <!-- 搜索框 -->
+        <div class="zjh_search">
+            <span class="iconfont">🔍</span>
+            <span>搜索目的地、航班、酒店</span>
+        </div>
+
+        <!-- 功能宫格 -->
+        <div class="zjh_grid_bar">
+            <div class="zjh_grid_item">
+                <div class="zjh_gi_icon"><span class="iconfont icon-78lvxing"></span></div>
+                <span>机票</span>
+            </div>
+            <div class="zjh_grid_item">
+                <div class="zjh_gi_icon"><span class="iconfont icon-hangcheng"></span></div>
+                <span>行程</span>
+            </div>
+            <div class="zjh_grid_item">
+                <div class="zjh_gi_icon"><span class="iconfont icon-goupiao"></span></div>
+                <span>购票</span>
+            </div>
+            <div class="zjh_grid_item">
+                <div class="zjh_gi_icon"><span class="iconfont icon-wode"></span></div>
+                <span>我的</span>
+            </div>
+        </div>
+
+        <!-- 推荐目的地 -->
+        <div class="zjh_section_title">
+            <span>热门目的地</span>
+            <a href="#">更多 ›</a>
+        </div>
+
+        <div class="zjh_card_list">
+            <div class="zjh_card">
+                <div class="zjh_card_img"><span class="iconfont icon-78lvxing" style="font-size:38px"></span></div>
+                <div class="zjh_card_body">
+                    <h4>海岛度假</h4>
+                    <p>阳光沙滩 · 5天4晚</p>
+                    <div class="zjh_price">¥1,288 <small>起</small></div>
+                </div>
+            </div>
+            <div class="zjh_card">
+                <div class="zjh_card_img"><span class="iconfont icon-hangcheng" style="font-size:38px"></span></div>
+                <div class="zjh_card_body">
+                    <h4>城市漫游</h4>
+                    <p>深度人文 · 3天2晚</p>
+                    <div class="zjh_price">¥688 <small>起</small></div>
+                </div>
+            </div>
+            <div class="zjh_card">
+                <div class="zjh_card_img"><span class="iconfont icon-goupiao" style="font-size:38px"></span></div>
+                <div class="zjh_card_body">
+                    <h4>景区门票</h4>
+                    <p>免排队 · 即时出票</p>
+                    <div class="zjh_price">¥58 <small>起</small></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============ 底部导航（字体图标方式） ============ -->
+    <nav class="zjh_tabbar">
+        <div class="zjh_tab_item zjh_active" data-tab="home">
+            <span class="iconfont icon-78lvxing zjh_tab_icon"></span>
+            <span class="zjh_tab_label">旅行</span>
+        </div>
+        <div class="zjh_tab_item" data-tab="trip">
+            <span class="iconfont icon-hangcheng zjh_tab_icon"></span>
+            <span class="zjh_tab_label">行程</span>
+            <span class="zjh_badge">3</span>
+        </div>
+        <div class="zjh_tab_item" data-tab="ticket">
+            <span class="iconfont icon-goupiao zjh_tab_icon"></span>
+            <span class="zjh_tab_label">购票</span>
+            <span class="zjh_dot"></span>
+        </div>
+        <div class="zjh_tab_item" data-tab="me">
+            <span class="iconfont icon-wode zjh_tab_icon"></span>
+            <span class="zjh_tab_label">我的</span>
+        </div>
+    </nav>
+</div>
+
+<script>
+    /* ============ 底部导航切换 ============ */
+    function zjh_bindTabbar() {
+        var zjh_items = document.querySelectorAll('.zjh_tab_item');
+        for (var i = 0; i < zjh_items.length; i++) {
+            zjh_items[i].addEventListener('click', function () {
+                for (var j = 0; j < zjh_items.length; j++) {
+                    zjh_items[j].classList.remove('zjh_active');
+                }
+                this.classList.add('zjh_active');
+            });
+        }
+    }
+    zjh_bindTabbar();
+</script>
+</body>
+</html>

@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lucide · SVG 图标标本</title>
+    <style>
+        /* ============ 基础重置 ============ */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --zjh_canvas: #EEF2F6;        /* 冷雾灰底 */
+            --zjh_ink: #16202B;           /* 墨蓝 */
+            --zjh_ink-soft: #5B6B7A;      /* 次要文字 */
+            --zjh_accent: #4338CA;        /* 靛蓝主色 */
+            --zjh_accent-soft: #DDDBF5;
+            --zjh_surface: #F7F9FB;       /* 卡片底 */
+            --zjh_rule: #D4DCE4;          /* 细线 */
+        }
+
+        body {
+            font-family: "PingFang SC", "Microsoft YaHei", "Segoe UI", sans-serif;
+            background: var(--zjh_canvas);
+            color: var(--zjh_ink);
+            line-height: 1.7;
+            background-image:
+                linear-gradient(var(--zjh_rule) 1px, transparent 1px),
+                linear-gradient(90deg, var(--zjh_rule) 1px, transparent 1px);
+            background-size: 40px 40px;
+            background-position: -1px -1px;
+        }
+
+        .zjh_back {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--zjh_ink-soft);
+            text-decoration: none;
+            font-size: 0.9rem;
+            padding: 10px 4px;
+            transition: color .2s;
+        }
+        .zjh_back:hover { color: var(--zjh_accent); }
+
+        .zjh_wrap {
+            max-width: 1080px;
+            margin: 0 auto;
+            padding: 24px 32px 80px;
+        }
+
+        .zjh_hero {
+            padding: 56px 0 40px;
+            border-bottom: 1px solid var(--zjh_rule);
+        }
+        .zjh_hero .zjh_eyebrow {
+            font-size: 0.78rem;
+            letter-spacing: 0.18em;
+            color: var(--zjh_accent);
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+        .zjh_hero h1 {
+            font-size: clamp(2.2rem, 5vw, 3.6rem);
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            margin-top: 12px;
+            line-height: 1.1;
+        }
+        .zjh_hero h1 .zjh_amp { color: var(--zjh_accent); }
+        .zjh_hero p {
+            margin-top: 18px;
+            max-width: 620px;
+            color: var(--zjh_ink-soft);
+            font-size: 1.02rem;
+        }
+        .zjh_hero code {
+            font-family: "SFMono-Regular", Consolas, monospace;
+            font-size: 0.85em;
+            background: var(--zjh_accent-soft);
+            color: var(--zjh_accent);
+            padding: 1px 7px;
+            border-radius: 4px;
+        }
+
+        /* SVG 大型标本 */
+        .zjh_specimen {
+            margin-top: 36px;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 0;
+            background: var(--zjh_surface);
+            border: 1px solid var(--zjh_rule);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        .zjh_specimen_row {
+            display: flex;
+            align-items: center;
+            padding: 22px 28px;
+            border-bottom: 1px solid var(--zjh_rule);
+            gap: 24px;
+        }
+        .zjh_specimen_row:last-child { border-bottom: none; }
+        .zjh_specimen_row .zjh_glyph {
+            width: 64px;
+            text-align: center;
+            flex-shrink: 0;
+            color: var(--zjh_accent);
+        }
+        .zjh_specimen_row .zjh_meta {
+            font-family: "SFMono-Regular", Consolas, monospace;
+            font-size: 0.82rem;
+            color: var(--zjh_ink-soft);
+            line-height: 1.8;
+        }
+        .zjh_specimen_row .zjh_meta code {
+            color: var(--zjh_ink);
+            background: rgba(67,56,202,0.08);
+            padding: 1px 6px;
+            border-radius: 3px;
+        }
+
+        .zjh_section { margin-top: 56px; }
+        .zjh_section h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+        .zjh_section .zjh_sub {
+            color: var(--zjh_ink-soft);
+            font-size: 0.92rem;
+            margin-bottom: 24px;
+        }
+
+        /* 图标网格 */
+        .zjh_grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 1px;
+            background: var(--zjh_rule);
+            border: 1px solid var(--zjh_rule);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        .zjh_cell {
+            background: var(--zjh_surface);
+            padding: 22px 10px 16px;
+            text-align: center;
+            transition: background .15s;
+        }
+        .zjh_cell:hover { background: #fff; }
+        .zjh_cell .zjh_ic {
+            display: inline-flex;
+            margin-bottom: 10px;
+            color: var(--zjh_ink);
+        }
+        .zjh_cell .zjh_nm {
+            font-family: "SFMono-Regular", Consolas, monospace;
+            font-size: 0.7rem;
+            color: var(--zjh_ink-soft);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* 特性演示 */
+        .zjh_demos {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 16px;
+        }
+        .zjh_demo {
+            background: var(--zjh_surface);
+            border: 1px solid var(--zjh_rule);
+            border-radius: 4px;
+            padding: 24px;
+        }
+        .zjh_demo h3 {
+            font-size: 0.85rem;
+            color: var(--zjh_accent);
+            margin-bottom: 18px;
+            font-weight: 600;
+        }
+        .zjh_demo_row {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            flex-wrap: wrap;
+        }
+
+        .zjh_prompt {
+            margin-top: 56px;
+            background: var(--zjh_surface);
+            border-left: 3px solid var(--zjh_accent);
+            border-radius: 4px;
+            padding: 20px 24px;
+            font-size: 0.88rem;
+            color: var(--zjh_ink-soft);
+        }
+        .zjh_prompt strong { color: var(--zjh_ink); }
+
+        footer {
+            margin-top: 64px;
+            padding-top: 24px;
+            border-top: 1px solid var(--zjh_rule);
+            color: var(--zjh_ink-soft);
+            font-size: 0.82rem;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+<div class="zjh_wrap">
+    <a class="zjh_back" href="index.html">
+        <i data-lucide="arrow-left" style="width:16px;height:16px"></i> 返回首页
+    </a>
+
+    <!-- ============ 头部标本 ============ -->
+    <header class="zjh_hero">
+        <div class="zjh_eyebrow">Lucide · SVG Icon Method</div>
+        <h1>矢量图标 <span class="zjh_amp">·</span> 标本</h1>
+        <p>Lucide 通过脚本将 <code>&lt;i data-lucide="name"&gt;</code> 替换为内联 <code>&lt;svg&gt;</code>。每个图标都是可缩放矢量，可用 <code>stroke-width</code>、<code>width/height</code> 与 CSS 颜色精细控制。</p>
+
+        <div class="zjh_specimen">
+            <div class="zjh_specimen_row">
+                <div class="zjh_glyph"><i data-lucide="plane" style="width:40px;height:40px"></i></div>
+                <div class="zjh_meta">
+                    <code>data-lucide="plane"</code><br>
+                    24×24 viewBox · 1.5px 默认描边 · currentColor 填充
+                </div>
+            </div>
+            <div class="zjh_specimen_row">
+                <div class="zjh_glyph"><i data-lucide="heart" style="width:40px;height:40px"></i></div>
+                <div class="zjh_meta">
+                    <code>data-lucide="heart"</code><br>
+                    内联 SVG · 描边可随 CSS 颜色变化
+                </div>
+            </div>
+            <div class="zjh_specimen_row">
+                <div class="zjh_glyph"><i data-lucide="github" style="width:40px;height:40px"></i></div>
+                <div class="zjh_meta">
+                    <code>data-lucide="github"</code><br>
+                    品牌图标 · 单 path 矢量描边
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- ============ 图标库 ============ -->
+    <section class="zjh_section">
+        <h2>图标集合</h2>
+        <p class="zjh_sub">Lucide 提供 1400+ 免费开源图标，以下为常用示例。</p>
+        <div class="zjh_grid">
+            <div class="zjh_cell"><div class="zjh_ic"><i data-lucide="house" style="width:30px;height:30px"></i></div><span class="zjh_nm">house</span></div>
+            <div class="zjh_cell"><div class="zjh_ic"><i data-lucide="heart" style="width:30px;height:30px"></i></div><span class="zjh_nm">heart</span></div>
+            <div class="zjh_cell"><div class="zjh_ic"><i data-lucide="star" style="width:30px;height:30px"></i></div><span class="zjh_nm">star</span></div>
+            <div class="zjh_cell"><div class="zjh_ic"><i data-lucide="user" style="width:30px;height:30px"></i></div><span class="zjh_nm">user</span></div>
+            <div class="zjh_cell"><div class="zjh_ic"><i data-lucide="camera" style="width:30px;height:30px"></i></div><span class="zjh_nm">camera</span></div>
+            <div class="zjh_cell"><div class="zjh_ic"><i data-lucide="music" style="width:30px;height:30px"></i></div><span class="zjh_nm">music</span></div>
+            <div class="zjh_cell"><div class="zjh_ic"><i data-lucide="mail" style="width:30px;height:30px"></i></div><span class="zjh_nm">mail</span></div>
+            <div class="zjh_cell"><div class="zjh_ic"><i data-lucide="phone" style="width:30px;height:30px"></i></div><span class="zjh_nm">phone</span></div>
+            <div class="zjh_cell"><div class="zjh_ic"><i data-lucide="search" style="width:30px;height:30px"></i></div><span class="zjh_nm">search</span></div>
+            <div class="zjh_cell"><div class="zjh_ic"><i data-lucide="settings" style="width:30px;height:30px"></i></div><span class="zjh_nm">settings</span></div>
+            <div class="zjh_cell"><div class="zjh_ic"><i data-lucide="bell" style="width:30px;height:30px"></i></div><span class="zjh_nm">bell</span></div>
+            <div class="zjh_cell"><div class="zjh_ic"><i data-lucide="cloud" style="width:30px;height:30px"></i></div><span class="zjh_nm">cloud</span></div>
+            <div class="zjh_cell"><div class="zjh_ic"><i data-lucide="zap" style="width:30px;height:30px"></i></div><span class="zjh_nm">zap</span></div>
+            <div class="zjh_cell"><div class="zjh_ic"><i data-lucide="compass" style="width:30px;height:30px"></i></div><span class="zjh_nm">compass</span></div>
+            <div class="zjh_cell"><div class="zjh_ic"><i data-lucide="map-pin" style="width:30px;height:30px"></i></div><span class="zjh_nm">map-pin</span></div>
+            <div class="zjh_cell"><div class="zjh_ic"><i data-lucide="calendar" style="width:30px;height:30px"></i></div><span class="zjh_nm">calendar</span></div>
+            <div class="zjh_cell"><div class="zjh_ic"><i data-lucide="download" style="width:30px;height:30px"></i></div><span class="zjh_nm">download</span></div>
+            <div class="zjh_cell"><div class="zjh_ic"><i data-lucide="share-2" style="width:30px;height:30px"></i></div><span class="zjh_nm">share-2</span></div>
+            <div class="zjh_cell"><div class="zjh_ic"><i data-lucide="shopping-bag" style="width:30px;height:30px"></i></div><span class="zjh_nm">shopping-bag</span></div>
+            <div class="zjh_cell"><div class="zjh_ic"><i data-lucide="umbrella" style="width:30px;height:30px"></i></div><span class="zjh_nm">umbrella</span></div>
+            <div class="zjh_cell"><div class="zjh_ic"><i data-lucide="coffee" style="width:30px;height:30px"></i></div><span class="zjh_nm">coffee</span></div>
+            <div class="zjh_cell"><div class="zjh_ic"><i data-lucide="smile" style="width:30px;height:30px"></i></div><span class="zjh_nm">smile</span></div>
+            <div class="zjh_cell"><div class="zjh_ic"><i data-lucide="sun" style="width:30px;height:30px"></i></div><span class="zjh_nm">sun</span></div>
+            <div class="zjh_cell"><div class="zjh_ic"><i data-lucide="moon" style="width:30px;height:30px"></i></div><span class="zjh_nm">moon</span></div>
+        </div>
+    </section>
+
+    <!-- ============ SVG 特性演示 ============ -->
+    <section class="zjh_section">
+        <h2>矢量属性 · 演示</h2>
+        <p class="zjh_sub">内联 SVG 的优势：可独立控制描边宽度、尺寸与颜色，且不依赖字体加载。</p>
+        <div class="zjh_demos">
+            <div class="zjh_demo">
+                <h3>描边宽度 / stroke-width</h3>
+                <div class="zjh_demo_row">
+                    <i data-lucide="anchor" style="width:34px;height:34px;stroke-width:1"></i>
+                    <i data-lucide="anchor" style="width:34px;height:34px;stroke-width:2"></i>
+                    <i data-lucide="anchor" style="width:34px;height:34px;stroke-width:3.5"></i>
+                </div>
+            </div>
+            <div class="zjh_demo">
+                <h3>尺寸 / width·height</h3>
+                <div class="zjh_demo_row">
+                    <i data-lucide="feather" style="width:18px;height:18px"></i>
+                    <i data-lucide="feather" style="width:30px;height:30px"></i>
+                    <i data-lucide="feather" style="width:46px;height:46px;color:var(--zjh_accent)"></i>
+                </div>
+            </div>
+            <div class="zjh_demo">
+                <h3>颜色 / stroke color</h3>
+                <div class="zjh_demo_row">
+                    <i data-lucide="moon" style="width:30px;height:30px;color:var(--zjh_accent)"></i>
+                    <i data-lucide="moon" style="width:30px;height:30px;color:#0F766E"></i>
+                    <i data-lucide="moon" style="width:30px;height:30px;color:#BE123C"></i>
+                    <i data-lucide="moon" style="width:30px;height:30px;color:#CA8A04"></i>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ 生成提示词 ============ -->
+    <div class="zjh_prompt">
+        <strong>本页生成提示词：</strong>做两个html网页iconfont-1.html,iconfont-2.html，分别显示font awesome图标和lucide图标，前者使用字体图标的方式，后者使用svg的方式，相关的cdn文件下载到本目录下的cdn目录。
+    </div>
+
+    <footer>
+        &copy; 2026 张敬恒 · Lucide SVG 图标标本页
+    </footer>
+</div>
+
+<script src="cdn/lucide/lucide.min.js"></script>
+<script>
+    /* ============ 将所有 data-lucide 元素替换为内联 SVG ============ */
+    function zjh_initLucide() {
+        if (window.lucide && typeof window.lucide.createIcons === 'function') {
+            window.lucide.createIcons();
+        }
+    }
+    zjh_initLucide();
+</script>
+</body>
+</html>

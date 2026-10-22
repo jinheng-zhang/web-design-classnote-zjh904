@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<!-- This site is hosted on Netlify. Anyone can build and deploy a site
+     like this one for free: https://netlify.new/?utm_campaign=loops&utm_source=ai-legible&utm_medium=owned&utm_content=comment&utm_id=4f0827e5-524f-402d-bd52-cf760fca3408
+     Netlify hosting facts for this site: static/SSR served via Netlify Edge. -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Superpowers 给 Trae IDE 安装工作规范 · 课堂操作流程</title>
+<style>
+  :root{
+    --ac:#8b5cf6;
+    --ac-dark:#6d28d9;
+    --ac-soft:#ede9fe;
+    --code-bg:#1e293b;
+    --warn-bg:#fff7ed;
+    --warn-border:#fdba74;
+    --danger:#ef4444;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{
+    font-family:"Microsoft YaHei","PingFang SC",system-ui,sans-serif;
+    background:linear-gradient(160deg,#f5f3ff 0%,#ede9fe 40%,#faf5ff 100%);
+    min-height:100vh;color:#1f2937;line-height:1.75;
+  }
+  a{color:var(--ac-dark)}
+  .wrap{max-width:960px;margin:0 auto;padding:56px 20px 72px}
+
+  /* ── 返回按钮 ── */
+  .back{
+    display:inline-flex;align-items:center;gap:6px;
+    text-decoration:none;color:#6b7280;font-size:14px;margin-bottom:24px;
+    transition:color .2s;
+  }
+  .back:hover{color:var(--ac-dark)}
+  .back::before{content:"←"}
+
+  /* ── Hero ── */
+  .hero{
+    text-align:center;margin-bottom:52px;padding:40px 24px;border-radius:24px;
+    background:linear-gradient(135deg,#8b5cf6 0%,#6366f1 50%,#3b82f6 100%);
+    color:#fff;box-shadow:0 20px 50px rgba(139,92,246,.25);
+    position:relative;overflow:hidden;
+  }
+  .hero::after{
+    content:"";position:absolute;right:-40px;bottom:-60px;width:260px;height:260px;
+    border-radius:50%;background:rgba(255,255,255,.08);
+  }
+  .hero .tag{
+    display:inline-block;padding:5px 14px;border-radius:999px;
+    background:rgba(255,255,255,.2);font-size:13px;letter-spacing:2px;margin-bottom:16px;
+    backdrop-filter:blur(6px);
+  }
+  .hero h1{font-size:34px;margin-bottom:12px;letter-spacing:1px}
+  .hero p{font-size:15px;opacity:.92;max-width:620px;margin:0 auto}
+  .hero .sub{margin-top:18px;font-size:13px;opacity:.8}
+  .hero .sub code{
+    background:rgba(255,255,255,.2);padding:2px 8px;border-radius:4px;font-size:12px;
+  }
+
+  /* ── 区块标题 ── */
+  .sec-title{
+    display:flex;align-items:center;gap:10px;margin:44px 0 22px;
+  }
+  .sec-title .bar{width:6px;height:26px;border-radius:3px;background:linear-gradient(180deg,var(--ac),#6366f1)}
+  .sec-title h2{font-size:22px;color:#111827}
+  .sec-title small{display:block;font-weight:normal;color:#9ca3af;font-size:13px}
+
+  /* ── 准备工作 ── */
+  .prep-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px}
+  .prep-card{
+    background:#fff;border-radius:16px;padding:22px 24px;border:1px solid #e8ecf5;
+    transition:transform .2s,box-shadow .2s;
+  }
+  .prep-card:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(31,41,55,.08)}
+  .prep-card .h{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+  .prep-card .icon{font-size:24px}
+  .prep-card h3{font-size:16px;color:#111827}
+  .prep-card p{font-size:13.5px;color:#6b7280;margin-bottom:10px}
+  .prep-card code{
+    display:block;background:#f3f4f6;color:#374151;font-size:12.5px;
+    padding:10px 14px;border-radius:8px;font-family:"JetBrains Mono","Consolas",monospace;
+    border-left:3px solid var(--ac);word-break:break-all;
+  }
+
+  /* ── 安装时间线 ── */
+  .timeline{position:relative;padding-left:30px}
+  .timeline::before{
+    content:"";position:absolute;left:11px;top:20px;bottom:20px;width:2px;
+    background:linear-gradient(180deg,var(--ac),#c4b5fd);
+  }
+  .step{
+    position:relative;margin-bottom:28px;
+  }
+  .step .num{
+    position:absolute;left:-30px;top:18px;transform:translateX(-50%);
+    width:34px;height:34px;border-radius:50%;
+    background:linear-gradient(135deg,var(--ac),#6366f1);
+    color:#fff;font-weight:bold;font-size:14px;
+    display:flex;align-items:center;justify-content:center;
+    box-shadow:0 4px 12px rgba(139,92,246,.4);
+    z-index:2;
+  }
+  .step .card{
+    background:#fff;border-radius:16px;padding:22px 24px;border:1px solid #e8ecf5;
+    box-shadow:0 2px 8px rgba(31,41,55,.04);
+  }
+  .step .card h3{
+    font-size:16.5px;color:#111827;margin-bottom:8px;display:flex;align-items:center;gap:8px;
+  }
+  .step .card h3 .badge{
+    font-size:11px;font-weight:normal;padding:3px 10px;border-radius:999px;
+    background:var(--ac-soft);color:var(--ac-dark);border:1px solid #ddd6fe;
+  }
+  .step .card p{font-size:14px;color:#4b5563;margin-bottom:12px}
+  .step .card .hint{
+    background:#f9fafb;border-left:3px solid #d1d5db;padding:10px 14px;
+    border-radius:0 8px 8px 0;font-size:13px;color:#6b7280;margin-bottom:12px;
+  }
+  .step .card .hint code{background:#e5e7eb;padding:1px 6px;border-radius:3px;font-size:12px}
+
+  /* 代码块 */
+  .code-wrap{position:relative;margin-top:10px;border-radius:10px;overflow:hidden}
+  .code-wrap pre{
+    background:var(--code-bg);color:#e2e8f0;padding:16px 18px;
+    font-family:"JetBrains Mono","Consolas",monospace;font-size:13px;
+    line-height:1.7;overflow-x:auto;margin:0;white-space:pre-wrap;word-break:break-all;
+  }
+  .code-wrap pre .com{color:#64748b}
+  .code-wrap pre .cmd{color:#67e8f9}
+  .code-wrap pre .str{color:#fca5a5}
+  .code-wrap pre .ok{color:#86efac}
+  .code-wrap pre .warn{color:#fbbf24}
+  .code-wrap .copy-btn{
+    position:absolute;top:8px;right:8px;background:rgba(255,255,255,.12);
+    color:#e2e8f0;border:none;padding:5px 12px;border-radius:6px;cursor:pointer;
+    font-size:12px;font-family:inherit;backdrop-filter:blur(4px);
+    transition:background .2s;
+  }
+  .code-wrap .copy-btn:hover{background:rgba(255,255,255,.25)}
+  .code-wrap .copy-btn.copied{background:#22c55e;color:#fff}
+
+  /* 验证提示 */
+  .verify{
+    margin-top:12px;padding:12px 16px;border-radius:8px;
+    background:#ecfdf5;border:1px solid #a7f3d0;color:#047857;font-size:13px;
+    display:flex;align-items:flex-start;gap:8px;
+  }
+  .verify::before{content:"✅";flex:none}
+
+  /* ── 常见坑 ── */
+  .warn-panel{
+    background:linear-gradient(135deg,#fef2f2,#fff7ed);
+    border:1px solid #fecaca;border-radius:16px;padding:24px 26px;
+    margin-top:28px;
+  }
+  .warn-panel .title{
+    display:flex;align-items:center;gap:8px;color:#b91c1c;font-weight:bold;font-size:16px;margin-bottom:14px;
+  }
+  .warn-panel ul{list-style:none}
+  .warn-panel li{
+    padding:10px 14px;background:rgba(255,255,255,.7);border-radius:8px;margin-bottom:8px;
+    font-size:13.5px;color:#7f1d1d;line-height:1.6;
+  }
+  .warn-panel li .key{font-weight:bold;color:#dc2626}
+
+  /* ── 底部 ── */
+  footer{text-align:center;margin-top:48px;color:#9ca3af;font-size:13px;line-height:2}
+  footer b{color:#6b7280}
+
+  @media(max-width:560px){
+    .hero h1{font-size:24px}
+    .wrap{padding-top:32px}
+    .timeline{padding-left:24px}
+    .timeline::before{left:9px}
+    .step .num{left:-24px;width:28px;height:28px;font-size:12px}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <a class='back' href='/'>返回课堂实践中心</a>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="tag">课 堂 · 操 作 流 程</div>
+    <h1>Superpowers 给 Trae IDE 安装工作规范</h1>
+    <p>一套软件工程规范技能集（Skills），给 AI 编码加上强制开发流程：需求澄清 → 方案设计 → 任务拆解 → TDD 编码 → 代码评审 → 分支收尾</p>
+    <div class="sub">约 10 分钟 · <code>5 步安装</code> + <code>6 阶段工作规范</code></div>
+  </section>
+
+  <!-- ── 准备工作 ── -->
+  <div class="sec-title">
+    <span class="bar"></span>
+    <h2>准备工作 <small>开始前请确认这两项已就绪</small></h2>
+  </div>
+
+  <div class="prep-grid">
+    <div class="prep-card">
+      <div class="h"><span class="icon">🖥️</span><h3>Trae IDE</h3></div>
+      <p>电脑安装好 Trae IDE，能正常打开并联网。</p>
+    </div>
+    <div class="prep-card">
+      <div class="h"><span class="icon">🔧</span><h3>Git 已配置</h3></div>
+      <p>已安装 Git，并配置好用户名邮箱。在终端运行以下命令检查：</p>
+      <code>git config --global --list</code>
+    </div>
+    <div class="prep-card">
+      <div class="h"><span class="icon">📁</span><h3>创建项目文件夹</h3></div>
+      <p>新建一个 <b>纯英文、无空格、无中文</b> 的空文件夹，用 Trae 打开它，并打开内置终端。</p>
+    </div>
+  </div>
+
+  <!-- ── 五步安装流程 ── -->
+  <div class="sec-title">
+    <span class="bar"></span>
+    <h2>五步安装流程 <small>跟着下面的步骤，一行一行敲</small></h2>
+  </div>
+
+  <div class="timeline">
+
+    <!-- Step 1 -->
+    <div class="step">
+      <div class="num">1</div>
+      <div class="card">
+        <h3>拉取 Superpowers 源码仓库 <span class="badge">GitHub Clone</span></h3>
+        <p>创建本地 superpowers 存放目录，并克隆官方仓库。</p>
+        <div class="code-wrap">
+          <button class="copy-btn" onclick="copyCode(this)">复制</button>
+<pre><span class="com"># 1. 创建本地目录（已存在则跳过不报错）</span>
+<span class="cmd">mkdir</span> ~/.trae/superpowers -Force
+<span class="cmd">cd</span> ~/.trae/superpowers
+
+<span class="com"># 2. 克隆官方仓库</span>
+<span class="cmd">git</span> clone https://github.com/ice-zjchen/superpowers.git .</pre>
+        </div>
+        <div class="verify">终端无红色报错，提示 clone 成功即通过。</div>
+      </div>
+    </div>
+
+    <!-- Step 2 -->
+    <div class="step">
+      <div class="num">2</div>
+      <div class="card">
+        <h3>创建 Trae 技能目录</h3>
+        <p>为 Trae 预留存放 Skills 的目录。</p>
+        <div class="code-wrap">
+          <button class="copy-btn" onclick="copyCode(this)">复制</button>
+<pre><span class="cmd">mkdir</span> ~/.trae/skills -Force</pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 3 -->
+    <div class="step">
+      <div class="num">3</div>
+      <div class="card">
+        <h3>在<b>项目内</b>创建工作规范配置文件 <span class="badge">核心！</span></h3>
+        <p>这是关键的一步，让你的项目加载 Superpowers 规范。</p>
+        <div class="hint">
+          在你自己的 <b>项目根目录</b> 中操作（不是 <code>~/.trae</code>）：<br>
+          ① 新建文件夹：<code>.trae/rules/</code><br>
+          ② 在 <code>.trae/rules/</code> 里新建文件：<code>superpowers.md</code><br>
+          ③ 把下面内容整段粘贴进去保存
+        </div>
+        <div class="code-wrap">
+          <button class="copy-btn" onclick="copyCode(this)">复制</button>
+<pre><span class="com">## Superpowers System</span>
+<span class="com">&lt;EXTREMELY_IMPORTANT&gt;</span>
+You have superpowers. Superpowers teach you new skills
+and capabilities. RIGHT NOW run:
+<span class="str">`~/.trae/superpowers/.trae/superpowers-trae bootstrap`</span>
+and follow the instructions it returns.
+<span class="com">&lt;/EXTREMELY_IMPORTANT&gt;</span></pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 4 -->
+    <div class="step">
+      <div class="num">4</div>
+      <div class="card">
+        <h3>Bootstrap 引导加载技能 <span class="badge">激活</span></h3>
+        <p>运行 bootstrap 脚本，让整套开发工作规范生效。</p>
+        <div class="code-wrap">
+          <button class="copy-btn" onclick="copyCode(this)">复制</button>
+<pre><span class="cmd">cd</span> ~/.trae/superpowers
+<span class="cmd">node</span> .trae/superpowers-trae bootstrap</pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 5 -->
+    <div class="step">
+      <div class="num">5</div>
+      <div class="card">
+        <h3>重启 Trae 会话，测试是否生效 <span class="badge">验证</span></h3>
+        <p>关掉所有旧的对话窗口，新建一个聊天会话，输入以下测试指令：</p>
+        <div class="code-wrap">
+          <button class="copy-btn" onclick="copyCode(this)">复制</button>
+<pre>你是否加载了 Superpowers？
+请列出你启用的工作规范技能。</pre>
+        </div>
+        <div class="verify">AI 回复已加载 Superpowers，并列出 <b>14 个软件工程技能</b> → 安装成功！</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ── 六阶段工作规范 ── -->
+  <div class="sec-title">
+    <span class="bar"></span>
+    <h2>六阶段前端工程规范 <small>整段复制，在 Trae 新会话里粘贴即可启用</small></h2>
+  </div>
+
+  <div class="code-wrap">
+    <button class="copy-btn" onclick="copyCode(this)">复制</button>
+<pre>从现在启用适配《高级网页设计》课程的 Superpowers 前端工程规范，全程严格遵守，禁止跳过阶段：
+
+1. Brainstorming 需求研讨：在编写任何 HTML/CSS/JS 代码前，先和我沟通需求，主动提问确认功能边界、交互细节、页面样式、浏览器兼容范围；输出 spec.md 需求规格文档。必须等待我确认需求文档，才可以进入任务拆解阶段，禁止直接生成代码。
+
+2. writing-plans 任务拆解：基于 spec.md，把项目拆分成多个小型、可独立验证的开发任务，每个任务附带清晰验收标准。任务粒度要适合前端网页开发，一次只推进一个任务，等待我确认任务清单后再开始编码。
+
+3. TDD 前端测试先行：每个开发任务，先写出人工功能验收清单（前端网页以手动测试为主，不强制复杂单元测试），再编写 HTML/CSS/JS 实现功能。验收清单要写清楚：如何在浏览器验证该任务是否完成。
+
+4. Code-review 前端代码评审：单个任务代码完成后，执行前端专项代码审查：变量命名、代码可读性、JS 事件机制、事件冒泡、绑定合理性、CSS 冗余、Flex/Grid 布局规范性、代码可维护性；输出评审报告，存在问题需要修改完善。
+
+5. Manual Verification 人工页面验证：代码生成后，提醒我把代码保存到本地文件，在浏览器打开网页，按照验收清单手动测试功能，测试通过后再进入下一个任务。
+
+6. Git 版本管理与项目收尾：全部任务开发完成后，指导我执行 Git 分阶段提交，最后输出 retrospective.md 项目复盘文档。
+
+请回复：课程版 Superpowers 前端工程规范已启用，请输入项目需求。</pre>
+  </div>
+
+  <!-- ── 常见坑 ── -->
+  <div class="warn-panel">
+    <div class="title">⚠️ 三个致命坑，务必避开</div>
+    <ul>
+      <li><span class="key">❌ 不新建会话</span>：安装完 Superpowers，旧对话<b>不会</b>加载规范，必须<b>新建 Trae 会话</b>！</li>
+      <li><span class="key">❌ 跳过 brainstorming</span>：直接让 AI 写代码，Superpowers 会<b>拒绝执行</b>，强制先完成需求文档。</li>
+      <li><span class="key">❌ 项目目录带中文/空格</span>：会导致 bootstrap 脚本<b>路径报错</b>，请用纯英文路径。</li>
+    </ul>
+  </div>
+
+  <footer>
+    <b>使用提示</b>：课堂演示时建议同步终端操作，让同学跟着逐行敲。<br>
+    高级网页设计 · Superpowers 工程规范 · 2026-2027-1
+  </footer>
+
+</div>
+
+<script>
+  function copyCode(btn){
+    var pre = btn.parentElement.querySelector('pre');
+    // 去掉 span 标签，取纯文本
+    var text = pre.innerText || pre.textContent;
+    navigator.clipboard.writeText(text).then(function(){
+      var old = btn.textContent;
+      btn.textContent = '已复制 ✓';
+      btn.classList.add('copied');
+      setTimeout(function(){
+        btn.textContent = old;
+        btn.classList.remove('copied');
+      }, 1500);
+    }).catch(function(){
+      // 降级方案
+      var ta = document.createElement('textarea');
+      ta.value = text; document.body.appendChild(ta); ta.select();
+      document.execCommand('copy'); document.body.removeChild(ta);
+      var old = btn.textContent;
+      btn.textContent = '已复制 ✓';
+      setTimeout(function(){ btn.textContent = old; }, 1500);
+    });
+  }
+</script>
+</body>
+</html>

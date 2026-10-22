@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Font Awesome · 字体图标标本</title>
+    <link rel="stylesheet" href="cdn/fontawesome/css/all.min.css">
+    <style>
+        /* ============ 基础重置 ============ */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --zjh_canvas: #EFE9DD;        /* 暖骨纸底 */
+            --zjh_ink: #1A1613;           /* 深墨色 */
+            --zjh_ink-soft: #5C534A;      /* 次要文字 */
+            --zjh_accent: #C2410C;        /* 焦赭红主色 */
+            --zjh_accent-soft: #F5D6C4;
+            --zjh_surface: #F7F3EA;       /* 卡片底 */
+            --zjh_rule: #D9CFBE;          /* 细线 */
+        }
+
+        body {
+            font-family: "PingFang SC", "Microsoft YaHei", "Segoe UI", sans-serif;
+            background: var(--zjh_canvas);
+            color: var(--zjh_ink);
+            line-height: 1.7;
+            background-image:
+                radial-gradient(circle at 1px 1px, rgba(26,22,19,0.06) 1px, transparent 0);
+            background-size: 28px 28px;
+        }
+
+        .zjh_back {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--zjh_ink-soft);
+            text-decoration: none;
+            font-size: 0.9rem;
+            padding: 10px 4px;
+            transition: color .2s;
+        }
+        .zjh_back:hover { color: var(--zjh_accent); }
+
+        /* ============ 标本主区 ============ */
+        .zjh_wrap {
+            max-width: 1080px;
+            margin: 0 auto;
+            padding: 24px 32px 80px;
+        }
+
+        .zjh_hero {
+            padding: 56px 0 40px;
+            border-bottom: 1px solid var(--zjh_rule);
+        }
+        .zjh_hero .zjh_eyebrow {
+            font-size: 0.78rem;
+            letter-spacing: 0.18em;
+            color: var(--zjh_accent);
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+        .zjh_hero h1 {
+            font-size: clamp(2.2rem, 5vw, 3.6rem);
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            margin-top: 12px;
+            line-height: 1.1;
+        }
+        .zjh_hero h1 .zjh_amp { color: var(--zjh_accent); }
+        .zjh_hero p {
+            margin-top: 18px;
+            max-width: 620px;
+            color: var(--zjh_ink-soft);
+            font-size: 1.02rem;
+        }
+
+        /* 大型标本展示 */
+        .zjh_specimen {
+            margin-top: 36px;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 0;
+            background: var(--zjh_surface);
+            border: 1px solid var(--zjh_rule);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        .zjh_specimen_row {
+            display: flex;
+            align-items: center;
+            padding: 22px 28px;
+            border-bottom: 1px solid var(--zjh_rule);
+            gap: 24px;
+        }
+        .zjh_specimen_row:last-child { border-bottom: none; }
+        .zjh_specimen_row .zjh_glyph {
+            font-size: 2.4rem;
+            color: var(--zjh_accent);
+            width: 64px;
+            text-align: center;
+            flex-shrink: 0;
+        }
+        .zjh_specimen_row .zjh_meta {
+            font-family: "SFMono-Regular", Consolas, monospace;
+            font-size: 0.82rem;
+            color: var(--zjh_ink-soft);
+            line-height: 1.8;
+        }
+        .zjh_specimen_row .zjh_meta code {
+            color: var(--zjh_ink);
+            background: rgba(194,65,12,0.08);
+            padding: 1px 6px;
+            border-radius: 3px;
+        }
+
+        /* ============ 章节通用 ============ */
+        .zjh_section {
+            margin-top: 56px;
+        }
+        .zjh_section h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+        .zjh_section .zjh_sub {
+            color: var(--zjh_ink-soft);
+            font-size: 0.92rem;
+            margin-bottom: 24px;
+        }
+
+        /* 图标网格 */
+        .zjh_grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 1px;
+            background: var(--zjh_rule);
+            border: 1px solid var(--zjh_rule);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        .zjh_cell {
+            background: var(--zjh_surface);
+            padding: 22px 10px 16px;
+            text-align: center;
+            transition: background .15s;
+        }
+        .zjh_cell:hover { background: #fff; }
+        .zjh_cell .zjh_ic {
+            font-size: 1.9rem;
+            color: var(--zjh_ink);
+            display: block;
+            margin-bottom: 10px;
+        }
+        .zjh_cell .zjh_nm {
+            font-family: "SFMono-Regular", Consolas, monospace;
+            font-size: 0.7rem;
+            color: var(--zjh_ink-soft);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* 特性演示 */
+        .zjh_demos {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 16px;
+        }
+        .zjh_demo {
+            background: var(--zjh_surface);
+            border: 1px solid var(--zjh_rule);
+            border-radius: 4px;
+            padding: 24px;
+        }
+        .zjh_demo h3 {
+            font-size: 0.85rem;
+            color: var(--zjh_accent);
+            margin-bottom: 18px;
+            font-weight: 600;
+        }
+        .zjh_demo_row {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            flex-wrap: wrap;
+        }
+        .zjh_demo_row i { color: var(--zjh_ink); }
+
+        .zjh_size_sm { font-size: 1rem; }
+        .zjh_size_md { font-size: 1.8rem; }
+        .zjh_size_lg { font-size: 2.8rem; color: var(--zjh_accent); }
+
+        .zjh_color_a { color: var(--zjh_accent); }
+        .zjh_color_b { color: #0F766E; }
+        .zjh_color_c { color: #1D4ED8; }
+        .zjh_color_d { color: #BE123C; }
+
+        /* 提示词框 */
+        .zjh_prompt {
+            margin-top: 56px;
+            background: var(--zjh_surface);
+            border-left: 3px solid var(--zjh_accent);
+            border-radius: 4px;
+            padding: 20px 24px;
+            font-size: 0.88rem;
+            color: var(--zjh_ink-soft);
+        }
+        .zjh_prompt strong { color: var(--zjh_ink); }
+
+        footer {
+            margin-top: 64px;
+            padding-top: 24px;
+            border-top: 1px solid var(--zjh_rule);
+            color: var(--zjh_ink-soft);
+            font-size: 0.82rem;
+            text-align: center;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .fa-spin, .fa-beat, .fa-bounce { animation: none !important; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="zjh_wrap">
+    <a class="zjh_back" href="index.html"><i class="fa-solid fa-arrow-left"></i> 返回首页</a>
+
+    <!-- ============ 头部标本 ============ -->
+    <header class="zjh_hero">
+        <div class="zjh_eyebrow">Font Awesome · Font Icon Method</div>
+        <h1>字体图标 <span class="zjh_amp">·</span> 标本</h1>
+        <p>Font Awesome 通过 <code>@font-face</code> 加载整套字形，以 <code>&lt;i class="fa-solid fa-xxx"&gt;</code> 调用。图标本质是字体字符，因此继承字号、颜色等所有文字属性。</p>
+
+        <div class="zjh_specimen">
+            <div class="zjh_specimen_row">
+                <div class="zjh_glyph"><i class="fa-solid fa-plane"></i></div>
+                <div class="zjh_meta">
+                    <code>fa-solid fa-plane</code><br>
+                    unicode: \f072 · 实心样式（Solid 900）
+                </div>
+            </div>
+            <div class="zjh_specimen_row">
+                <div class="zjh_glyph"><i class="fa-regular fa-heart"></i></div>
+                <div class="zjh_meta">
+                    <code>fa-regular fa-heart</code><br>
+                    unicode: \f004 · 线框样式（Regular 400）
+                </div>
+            </div>
+            <div class="zjh_specimen_row">
+                <div class="zjh_glyph"><i class="fa-brands fa-github"></i></div>
+                <div class="zjh_meta">
+                    <code>fa-brands fa-github</code><br>
+                    unicode: \f09b · 品牌样式（Brands 400）
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- ============ Solid 实心图标 ============ -->
+    <section class="zjh_section">
+        <h2>Solid · 实心</h2>
+        <p class="zjh_sub">最常用的实心样式，`fa-solid` 类加载 900 字重字形。</p>
+        <div class="zjh_grid">
+            <div class="zjh_cell"><i class="fa-solid fa-house zjh_ic"></i><span class="zjh_nm">fa-house</span></div>
+            <div class="zjh_cell"><i class="fa-solid fa-heart zjh_ic"></i><span class="zjh_nm">fa-heart</span></div>
+            <div class="zjh_cell"><i class="fa-solid fa-star zjh_ic"></i><span class="zjh_nm">fa-star</span></div>
+            <div class="zjh_cell"><i class="fa-solid fa-user zjh_ic"></i><span class="zjh_nm">fa-user</span></div>
+            <div class="zjh_cell"><i class="fa-solid fa-camera zjh_ic"></i><span class="zjh_nm">fa-camera</span></div>
+            <div class="zjh_cell"><i class="fa-solid fa-music zjh_ic"></i><span class="zjh_nm">fa-music</span></div>
+            <div class="zjh_cell"><i class="fa-solid fa-envelope zjh_ic"></i><span class="zjh_nm">fa-envelope</span></div>
+            <div class="zjh_cell"><i class="fa-solid fa-phone zjh_ic"></i><span class="zjh_nm">fa-phone</span></div>
+            <div class="zjh_cell"><i class="fa-solid fa-magnifying-glass zjh_ic"></i><span class="zjh_nm">fa-magnifying-glass</span></div>
+            <div class="zjh_cell"><i class="fa-solid fa-gear zjh_ic"></i><span class="zjh_nm">fa-gear</span></div>
+            <div class="zjh_cell"><i class="fa-solid fa-bell zjh_ic"></i><span class="zjh_nm">fa-bell</span></div>
+            <div class="zjh_cell"><i class="fa-solid fa-cloud zjh_ic"></i><span class="zjh_nm">fa-cloud</span></div>
+            <div class="zjh_cell"><i class="fa-solid fa-bolt zjh_ic"></i><span class="zjh_nm">fa-bolt</span></div>
+            <div class="zjh_cell"><i class="fa-solid fa-compass zjh_ic"></i><span class="zjh_nm">fa-compass</span></div>
+            <div class="zjh_cell"><i class="fa-solid fa-location-dot zjh_ic"></i><span class="zjh_nm">fa-location-dot</span></div>
+            <div class="zjh_cell"><i class="fa-solid fa-calendar zjh_ic"></i><span class="zjh_nm">fa-calendar</span></div>
+        </div>
+    </section>
+
+    <!-- ============ Regular 线框图标 ============ -->
+    <section class="zjh_section">
+        <h2>Regular · 线框</h2>
+        <p class="zjh_sub">同一图标的线框版本，`fa-regular` 类加载 400 字重字形。</p>
+        <div class="zjh_grid">
+            <div class="zjh_cell"><i class="fa-regular fa-heart zjh_ic"></i><span class="zjh_nm">fa-heart</span></div>
+            <div class="zjh_cell"><i class="fa-regular fa-star zjh_ic"></i><span class="zjh_nm">fa-star</span></div>
+            <div class="zjh_cell"><i class="fa-regular fa-user zjh_ic"></i><span class="zjh_nm">fa-user</span></div>
+            <div class="zjh_cell"><i class="fa-regular fa-envelope zjh_ic"></i><span class="zjh_nm">fa-envelope</span></div>
+            <div class="zjh_cell"><i class="fa-regular fa-face-smile zjh_ic"></i><span class="zjh_nm">fa-face-smile</span></div>
+            <div class="zjh_cell"><i class="fa-regular fa-bell zjh_ic"></i><span class="zjh_nm">fa-bell</span></div>
+            <div class="zjh_cell"><i class="fa-regular fa-clock zjh_ic"></i><span class="zjh_nm">fa-clock</span></div>
+            <div class="zjh_cell"><i class="fa-regular fa-thumbs-up zjh_ic"></i><span class="zjh_nm">fa-thumbs-up</span></div>
+            <div class="zjh_cell"><i class="fa-regular fa-bookmark zjh_ic"></i><span class="zjh_nm">fa-bookmark</span></div>
+            <div class="zjh_cell"><i class="fa-regular fa-comment zjh_ic"></i><span class="zjh_nm">fa-comment</span></div>
+            <div class="zjh_cell"><i class="fa-regular fa-circle zjh_ic"></i><span class="zjh_nm">fa-circle</span></div>
+            <div class="zjh_cell"><i class="fa-regular fa-moon zjh_ic"></i><span class="zjh_nm">fa-moon</span></div>
+        </div>
+    </section>
+
+    <!-- ============ Brands 品牌图标 ============ -->
+    <section class="zjh_section">
+        <h2>Brands · 品牌</h2>
+        <p class="zjh_sub">品牌商标集合，`fa-brands` 类独立加载品牌字形文件。</p>
+        <div class="zjh_grid">
+            <div class="zjh_cell"><i class="fa-brands fa-github zjh_ic"></i><span class="zjh_nm">fa-github</span></div>
+            <div class="zjh_cell"><i class="fa-brands fa-html5 zjh_ic"></i><span class="zjh_nm">fa-html5</span></div>
+            <div class="zjh_cell"><i class="fa-brands fa-css3-alt zjh_ic"></i><span class="zjh_nm">fa-css3-alt</span></div>
+            <div class="zjh_cell"><i class="fa-brands fa-js zjh_ic"></i><span class="zjh_nm">fa-js</span></div>
+            <div class="zjh_cell"><i class="fa-brands fa-youtube zjh_ic"></i><span class="zjh_nm">fa-youtube</span></div>
+            <div class="zjh_cell"><i class="fa-brands fa-weixin zjh_ic"></i><span class="zjh_nm">fa-weixin</span></div>
+            <div class="zjh_cell"><i class="fa-brands fa-qq zjh_ic"></i><span class="zjh_nm">fa-qq</span></div>
+            <div class="zjh_cell"><i class="fa-brands fa-weibo zjh_ic"></i><span class="zjh_nm">fa-weibo</span></div>
+            <div class="zjh_cell"><i class="fa-brands fa-bilibili zjh_ic"></i><span class="zjh_nm">fa-bilibili</span></div>
+            <div class="zjh_cell"><i class="fa-brands fa-steam zjh_ic"></i><span class="zjh_nm">fa-steam</span></div>
+            <div class="zjh_cell"><i class="fa-brands fa-spotify zjh_ic"></i><span class="zjh_nm">fa-spotify</span></div>
+            <div class="zjh_cell"><i class="fa-brands fa-twitter zjh_ic"></i><span class="zjh_nm">fa-twitter</span></div>
+        </div>
+    </section>
+
+    <!-- ============ 特性演示 ============ -->
+    <section class="zjh_section">
+        <h2>字体属性 · 演示</h2>
+        <p class="zjh_sub">图标是字体字符，可直接用 CSS 控制字号、颜色，并复用 Font Awesome 内置动画类。</p>
+        <div class="zjh_demos">
+            <div class="zjh_demo">
+                <h3>字号 / size</h3>
+                <div class="zjh_demo_row">
+                    <i class="fa-solid fa-umbrella zjh_size_sm"></i>
+                    <i class="fa-solid fa-umbrella zjh_size_md"></i>
+                    <i class="fa-solid fa-umbrella zjh_size_lg"></i>
+                </div>
+            </div>
+            <div class="zjh_demo">
+                <h3>颜色 / color</h3>
+                <div class="zjh_demo_row">
+                    <i class="fa-solid fa-mug-hot zjh_color_a" style="font-size:1.8rem"></i>
+                    <i class="fa-solid fa-mug-hot zjh_color_b" style="font-size:1.8rem"></i>
+                    <i class="fa-solid fa-mug-hot zjh_color_c" style="font-size:1.8rem"></i>
+                    <i class="fa-solid fa-mug-hot zjh_color_d" style="font-size:1.8rem"></i>
+                </div>
+            </div>
+            <div class="zjh_demo">
+                <h3>动画 / animation</h3>
+                <div class="zjh_demo_row">
+                    <i class="fa-solid fa-spinner fa-spin" style="font-size:1.8rem;color:var(--zjh_accent)"></i>
+                    <i class="fa-solid fa-heart fa-beat" style="font-size:1.8rem;color:var(--zjh_accent)"></i>
+                    <i class="fa-solid fa-basketball fa-bounce" style="font-size:1.8rem"></i>
+                    <i class="fa-solid fa-bell fa-shake" style="font-size:1.8rem"></i>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ 生成提示词 ============ -->
+    <div class="zjh_prompt">
+        <strong>本页生成提示词：</strong>做两个html网页iconfont-1.html,iconfont-2.html，分别显示font awesome图标和lucide图标，前者使用字体图标的方式，后者使用svg的方式，相关的cdn文件下载到本目录下的cdn目录。
+    </div>
+
+    <footer>
+        &copy; 2026 张敬恒 · Font Awesome 字体图标标本页
+    </footer>
+</div>
+
+</body>
+</html>
