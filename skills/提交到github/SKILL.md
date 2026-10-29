@@ -46,6 +46,13 @@ ssh -T git@github.com
 首次连接会询问是否信任 `github.com` 的主机指纹，输入 `yes`。
 返回 `Hi <用户名>! You've successfully authenticated...` 说明公钥配置正确。
 
+若提示 `ssh: connect to host github.com port 22: Connection refused`（22 端口被网络阻断），改用 GitHub 的 443 端口，并把远程地址换成对应形式：
+
+```
+ssh -p 443 -T git@ssh.github.com
+git remote set-url github ssh://git@ssh.github.com:443/jinheng-zhang/web-design-classnote-zjh904.git
+```
+
 ### 3. 检查工作区状态
 
 ```
