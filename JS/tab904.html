@@ -1,0 +1,341 @@
+<!--
+  功能名称：新闻频道 Tab 选项卡
+  功能简介：四个新闻分类标签页（国内新闻 / 省内新闻 / 国际新闻 / 最热新闻），
+            默认选中"国内新闻"；选项卡切换逻辑抽离到外部 JS 文件 tab-904.js，
+            通过事件委托与"先清除全部选中再设置当前选中"的方式实现，可复用到其他页面
+  作者：张敬恒
+  时间：2026-11-02
+  使用模型：DeepSeek-V4.1-Flash
+-->
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>新闻频道 · Tab 选项卡</title>
+    <style>
+        /* ============ 基础重置 ============ */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --zjh_paper: #EDEFEA;        /* 纸面：石绿灰 */
+            --zjh_white: #FBFCFA;        /* 内容区白 */
+            --zjh_ink: #16211D;          /* 主墨色 */
+            --zjh_ink_soft: #55645C;     /* 次要文字 */
+            --zjh_seal: #9E2B25;         /* 印泥红，仅作点睛 */
+            --zjh_rule: #C6CEC4;         /* 外框细线 */
+            --zjh_line: #DFE4DD;         /* 列表分隔线 */
+        }
+
+        body {
+            font-family: "PingFang SC", "Microsoft YaHei", "Segoe UI", sans-serif;
+            background: var(--zjh_paper);
+            color: var(--zjh_ink);
+            line-height: 1.7;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* 宋体承担标题与频道的性格，黑体承担正文阅读 */
+        .zjh_serif {
+            font-family: "Songti SC", "SimSun", "Noto Serif SC", serif;
+        }
+
+        .zjh_shell {
+            max-width: 880px;
+            margin: 0 auto;
+            padding: 0 24px 72px;
+        }
+
+        /* ============ 报头 ============ */
+        .zjh_masthead {
+            padding: 22px 0 0;
+            border-top: 3px solid var(--zjh_seal);
+        }
+        .zjh_back {
+            display: inline-block;
+            font-size: 12px;
+            color: var(--zjh_ink_soft);
+            text-decoration: none;
+            letter-spacing: 0.02em;
+            transition: color .18s;
+        }
+        .zjh_back:hover { color: var(--zjh_seal); }
+        .zjh_back:focus-visible {
+            outline: 2px solid var(--zjh_seal);
+            outline-offset: 2px;
+        }
+
+        .zjh_masthead h1 {
+            font-family: "Songti SC", "SimSun", "Noto Serif SC", serif;
+            font-size: clamp(2rem, 5vw, 2.9rem);
+            font-weight: 700;
+            letter-spacing: 0.14em;
+            line-height: 1.2;
+            margin: 18px 0 10px;
+        }
+        .zjh_masthead_note {
+            font-size: 12.5px;
+            color: var(--zjh_ink_soft);
+            letter-spacing: 0.02em;
+            padding-bottom: 20px;
+        }
+
+        /* ============ 选项卡 ============ */
+        .zjh_tabs { margin-top: 6px; }
+
+        .zjh_tablist {
+            display: flex;
+            background: var(--zjh_white);
+            border: 1px solid var(--zjh_rule);
+            border-bottom: none;
+        }
+
+        .zjh_tab {
+            flex: 1 1 0;
+            padding: 15px 6px;
+            background: transparent;
+            border: none;
+            border-right: 1px solid var(--zjh_rule);
+            font-family: "Songti SC", "SimSun", "Noto Serif SC", serif;
+            font-size: 16.5px;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            color: var(--zjh_ink_soft);
+            cursor: pointer;
+            transition: background-color .18s, color .18s;
+        }
+        .zjh_tab:last-child { border-right: none; }
+        .zjh_tab:hover { color: var(--zjh_seal); }
+
+        /* 选中态：整块反白为墨色，取代常见的圆角胶囊或下划线 */
+        .zjh_tab.zjh_active {
+            background: var(--zjh_ink);
+            color: #F2F4EF;
+        }
+        .zjh_tab:focus-visible {
+            outline: 2px solid var(--zjh_seal);
+            outline-offset: -3px;
+        }
+
+        /* ============ 内容面板 ============ */
+        .zjh_panels {
+            background: var(--zjh_white);
+            border: 1px solid var(--zjh_rule);
+        }
+        .zjh_panel { display: none; }
+        .zjh_panel.zjh_show { display: block; }
+
+        .zjh_news { list-style: none; }
+
+        .zjh_news_item {
+            display: grid;
+            grid-template-columns: 58px 1fr;
+            gap: 18px;
+            padding: 22px 24px;
+            border-bottom: 1px solid var(--zjh_line);
+        }
+        .zjh_news_item:last-child { border-bottom: none; }
+
+        .zjh_news_time {
+            display: block;
+            padding-top: 5px;
+            font-size: 11.5px;
+            color: #7C8B82;
+            letter-spacing: 0.06em;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .zjh_news_title {
+            font-family: "Songti SC", "SimSun", "Noto Serif SC", serif;
+            font-size: 18.5px;
+            font-weight: 600;
+            line-height: 1.5;
+            letter-spacing: 0.01em;
+            transition: color .18s;
+        }
+        .zjh_news_item:hover .zjh_news_title { color: var(--zjh_seal); }
+
+        .zjh_news_desc {
+            margin-top: 7px;
+            font-size: 13.5px;
+            line-height: 1.85;
+            color: var(--zjh_ink_soft);
+        }
+
+        /* ============ 页脚说明 ============ */
+        .zjh_footnote {
+            margin-top: 14px;
+            font-size: 12px;
+            color: var(--zjh_ink_soft);
+        }
+
+        /* ============ 响应式 ============ */
+        @media (max-width: 640px) {
+            .zjh_shell { padding: 0 12px 56px; }
+            .zjh_tab {
+                padding: 13px 4px;
+                font-size: 14px;
+                letter-spacing: 0.04em;
+            }
+            .zjh_news_item {
+                grid-template-columns: 1fr;
+                gap: 8px;
+                padding: 17px 16px;
+            }
+            .zjh_news_time { padding-top: 0; }
+            .zjh_news_title { font-size: 17px; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .zjh_tab, .zjh_back, .zjh_news_title { transition: none; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="zjh_shell">
+    <header class="zjh_masthead">
+        <a class="zjh_back" href="../index.html">← 返回首页</a>
+        <h1>新闻频道</h1>
+        <p class="zjh_masthead_note">按分类浏览当日要闻，点击频道名即可切换</p>
+    </header>
+
+    <!-- 选项卡容器：zjh_initTabs 以此作为事件委托的绑定节点 -->
+    <div class="zjh_tabs">
+
+        <!-- ============ 频道条 ============ -->
+        <div class="zjh_tablist" role="tablist" aria-label="新闻分类">
+            <button class="zjh_tab zjh_active" type="button" data-tab="domestic" role="tab" aria-selected="true">国内新闻</button>
+            <button class="zjh_tab" type="button" data-tab="provincial" role="tab" aria-selected="false">省内新闻</button>
+            <button class="zjh_tab" type="button" data-tab="international" role="tab" aria-selected="false">国际新闻</button>
+            <button class="zjh_tab" type="button" data-tab="hottest" role="tab" aria-selected="false">最热新闻</button>
+        </div>
+
+        <div class="zjh_panels">
+
+            <!-- ============ 国内新闻（默认显示） ============ -->
+            <section class="zjh_panel zjh_show" data-panel="domestic" role="tabpanel">
+                <ul class="zjh_news">
+                    <li class="zjh_news_item">
+                        <time class="zjh_news_time">09:41</time>
+                        <div class="zjh_news_body">
+                            <h2 class="zjh_news_title">城市轨道交通新线路进入试运行阶段</h2>
+                            <p class="zjh_news_desc">新线串联三个城区，试运行期间发车间隔约 8 分钟，正式开通后仍将根据客流调整班次。</p>
+                        </div>
+                    </li>
+                    <li class="zjh_news_item">
+                        <time class="zjh_news_time">08:57</time>
+                        <div class="zjh_news_body">
+                            <h2 class="zjh_news_title">多地开展秋季校园食品安全专项检查</h2>
+                            <p class="zjh_news_desc">检查覆盖食堂原料采购、留样记录与从业人员健康证明，发现问题当场下达整改通知。</p>
+                        </div>
+                    </li>
+                    <li class="zjh_news_item">
+                        <time class="zjh_news_time">08:12</time>
+                        <div class="zjh_news_body">
+                            <h2 class="zjh_news_title">高校开设人工智能通识课程供全校选修</h2>
+                            <p class="zjh_news_desc">课程以案例操作为主，不设专业门槛，首期开放名额在报名通道开启当天即被约满。</p>
+                        </div>
+                    </li>
+                </ul>
+            </section>
+
+            <!-- ============ 省内新闻 ============ -->
+            <section class="zjh_panel" data-panel="provincial" role="tabpanel">
+                <ul class="zjh_news">
+                    <li class="zjh_news_item">
+                        <time class="zjh_news_time">10:05</time>
+                        <div class="zjh_news_body">
+                            <h2 class="zjh_news_title">省级图书馆新馆本周起开放预约入馆</h2>
+                            <p class="zjh_news_desc">新馆设置自习区、少儿区与专题阅览室，每日分时段放号，预约后凭身份证入馆。</p>
+                        </div>
+                    </li>
+                    <li class="zjh_news_item">
+                        <time class="zjh_news_time">09:20</time>
+                        <div class="zjh_news_body">
+                            <h2 class="zjh_news_title">省内首个湿地生态观测站投入使用</h2>
+                            <p class="zjh_news_desc">观测站将对水位、鸟类种群与水质的长期变化做连续记录，数据向高校与科研机构开放。</p>
+                        </div>
+                    </li>
+                    <li class="zjh_news_item">
+                        <time class="zjh_news_time">07:48</time>
+                        <div class="zjh_news_body">
+                            <h2 class="zjh_news_title">秋季农产品展销会在省城开幕</h2>
+                            <p class="zjh_news_desc">展销会设田间直供专区，参展合作社现场对接商超与社区团购渠道。</p>
+                        </div>
+                    </li>
+                </ul>
+            </section>
+
+            <!-- ============ 国际新闻 ============ -->
+            <section class="zjh_panel" data-panel="international" role="tabpanel">
+                <ul class="zjh_news">
+                    <li class="zjh_news_item">
+                        <time class="zjh_news_time">11:30</time>
+                        <div class="zjh_news_body">
+                            <h2 class="zjh_news_title">国际航运论坛发布年度行业报告</h2>
+                            <p class="zjh_news_desc">报告指出绿色燃料改装需求上升，港口岸电与替代燃料加注设施成为投资重点。</p>
+                        </div>
+                    </li>
+                    <li class="zjh_news_item">
+                        <time class="zjh_news_time">10:15</time>
+                        <div class="zjh_news_body">
+                            <h2 class="zjh_news_title">多国联合开展海洋塑料垃圾清理行动</h2>
+                            <p class="zjh_news_desc">行动以近岸海域为重点，同步开展漂流路径追踪，为后续源头治理提供数据支撑。</p>
+                        </div>
+                    </li>
+                    <li class="zjh_news_item">
+                        <time class="zjh_news_time">09:02</time>
+                        <div class="zjh_news_body">
+                            <h2 class="zjh_news_title">全球气温连续三个月创下同期新高</h2>
+                            <p class="zjh_news_desc">气象机构提示，高温与强降水并存的风险上升，需关注农业与城市排水系统的应对能力。</p>
+                        </div>
+                    </li>
+                </ul>
+            </section>
+
+            <!-- ============ 最热新闻（榜单为真实序列，故用序号） ============ -->
+            <section class="zjh_panel" data-panel="hottest" role="tabpanel">
+                <ul class="zjh_news">
+                    <li class="zjh_news_item">
+                        <span class="zjh_news_time">01</span>
+                        <div class="zjh_news_body">
+                            <h2 class="zjh_news_title">城市轨道交通新线路进入试运行阶段</h2>
+                            <p class="zjh_news_desc">24 小时内阅读量居首，通勤路线调整相关内容讨论最为集中。</p>
+                        </div>
+                    </li>
+                    <li class="zjh_news_item">
+                        <span class="zjh_news_time">02</span>
+                        <div class="zjh_news_body">
+                            <h2 class="zjh_news_title">省级图书馆新馆本周起开放预约入馆</h2>
+                            <p class="zjh_news_desc">预约攻略类内容转发量明显上升，周末时段名额最受关注。</p>
+                        </div>
+                    </li>
+                    <li class="zjh_news_item">
+                        <span class="zjh_news_time">03</span>
+                        <div class="zjh_news_body">
+                            <h2 class="zjh_news_title">高校开设人工智能通识课程供全校选修</h2>
+                            <p class="zjh_news_desc">课程名额与选课方式成为评论区的两大高频问题。</p>
+                        </div>
+                    </li>
+                </ul>
+            </section>
+
+        </div>
+    </div>
+
+    <p class="zjh_footnote">以上标题与摘要均为课堂示例数据，非真实新闻。</p>
+</div>
+
+<!-- 外部引用：选项卡逻辑单独成文件，其他页面可直接复用 -->
+<script src="tab-904.js"></script>
+<script>
+    /* ============ 页面初始化 ============
+       调用复用组件：不传配置即使用默认选择器，
+       HTML 中带 zjh_active 的"国内新闻"会作为默认选项被激活
+       ============ */
+    zjh_initTabs();
+</script>
+
+</body>
+</html>

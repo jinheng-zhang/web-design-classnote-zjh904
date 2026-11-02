@@ -1,31 +1,85 @@
 # AGENTS.md
 
-## Overview
-Static HTML/CSS/JS classroom practice site (no build tools, no bundlers). Each exercise is a standalone HTML file (mostly single-file or with local CSS/JS). Navigation is `index.html`.
+## 项目概述
+纯静态 HTML/CSS/JS 课堂练习站点（无构建工具、无打包器）。每个练习是一个独立 HTML 文件（多为单文件，或配合本地 CSS/JS）。页面导航入口为 `index.html`。
 
-## Structure
-- Root: exercise pages (`*.html`), shared assets (`css*.css`, `data.js`, `font/`, `image/`, `cdn/`)
-- `introduce/`: multi-page example (uses external `introduce/css/style.css`)
-- `_backup/`: historical snapshots
-- `skills/`, `.opencode/`: local skill configs
-- `spec.md`: detailed spec for `catchball904.html` (shows style/requirements)
+## 目录结构
+- 根目录：练习页面（`*.html`）、公共资源（`css*.css`、`data.js`、`font/`、`image/`、`cdn/`）
+- `introduce/`：多页面示例（引用外部 `introduce/css/style.css`）
+- `_backup/`：历史快照
+- `skills/`、`.opencode/`：本地技能配置
+- `spec.md`：`catchball904.html` 的详细需求说明（可参考其风格与要求）
 
-## Conventions
-- **Language**: Chinese content/UI (class title, comments)
-- **No external deps**: avoid CDN. Check `index.html` states "纯 HTML / CSS 原生实现 · 不使用 CDN"
-- **Style**: matches existing patterns; see `index.html` card layout and `spec.md` for details
-- **Naming**: files often follow patterns like `xxx904.html`, `xxx904.css` (e.g. `catchball904.html`, `css904.html`)
-- **JS style** (from examples like `number7game904.html`, `js_array 904.html`): uses `var`, function declarations, Chinese section comments
+## 编码约定
+- **界面语言**：中文（课堂标题、页面文案、代码注释）
+- **不引入外部依赖**：避免使用 CDN（`index.html` 明确标注"纯 HTML / CSS 原生实现 · 不使用 CDN"）
+- **样式风格**：与既有页面保持一致，参考 `index.html` 卡片布局与 `spec.md`
+- **文件命名**：常见形式为 `xxx904.html`、`xxx904.css`（如 `catchball904.html`、`css904.html`）
+- **JS 风格**（参考 `number7game904.html`、`js_array 904.html`）：使用 `var`、函数声明、中文分节注释
+- **命名前缀**：CSS 类名、id 名、JS 变量统一以 `zjh_` 开头
+- **双向导航**：新建 HTML 文件必须加入指向 `index.html` 的超链接，同时在 `index.html` 课堂目录中添加对应的导航卡片
+- **提示词日志**：所有用户提示词在执行前先以追加方式写入 `zjh_prompt.md`（记录时间、使用的模型、提示词原文，不覆盖旧内容）
 
-## Key files
-- `index.html`: homepage with exercise directory/cards
-- `spec.md`: example of detailed requirements for an exercise
-- `data.js`: shared data
+## 文档与清单语言约定（强制）
+- AGENTS.md 及本项目所有说明文档、检查清单、规范条目，一律使用**简体中文**书写。
+- 文件路径、目录名、HTML/CSS/JS 标识符（类名、id 名、函数名、变量名、属性名、标签名）、命令与代码片段，保留**英文原文**，不做翻译。
+- 技术专有名词（如 HTML、CSS、JS、CDN、SVG、localStorage）保留英文缩写，必要时可在括号内补充中文解释。
+- 后续在本项目内生成任何文档、检查清单、规范说明，均须遵守本约定。
 
-## Working with files
-- Most exercises are self-contained; prefer adding to existing patterns
-- When adding new pages, update `index.html` navigation to follow the card style
-- Preserve Chinese text and naming conventions
+## 新建 HTML 文件注释规范（强制）
+新建任何 HTML 文件时，必须加入文件头注释与 JS 功能注释，注释内容必须包含四项信息：**作者（张敬恒）、时间、使用模型、功能名称及简介**。
+
+### 1. 文件头注释
+放在 `<!DOCTYPE html>` 之前，说明整页功能：
+
+```html
+<!--
+  功能名称：xxx
+  功能简介：xxx
+  作者：张敬恒
+  时间：2026-11-02
+  使用模型：DeepSeek-V4.1-Flash
+-->
+```
+
+### 2. JS 注释（重点）
+JS 部分必须写明主要功能的实现思路，不允许只写"点击事件""循环"这类无信息量的注释：
+
+- 在 `<script>` 起始处写明本段 JS 的整体职责
+- 每个函数（或主要代码块）上方写明：功能名称、作用、关键实现思路（用了什么事件、什么数据结构、什么算法或判断逻辑）
+- 复杂逻辑在代码行内补充行内注释
+
+示例：
+
+```js
+/* ============================================================
+   JS 整体职责：倒计时器的启动、暂停、重置与到时提示
+   作者：张敬恒 | 时间：2026-11-02 | 使用模型：DeepSeek-V4.1-Flash
+   ============================================================ */
+
+/*
+  功能名称：倒计时启动
+  作用：读取输入框剩余秒数，用 setInterval 每秒递减并刷新显示
+  实现思路：全局 timerId 保存定时器句柄，递减到 0 时清除定时器并弹出提示
+*/
+function zjh_startCountdown() { ... }
+```
+
+### 3. 约束
+- 作者固定为「张敬恒」，时间写实际创建日期，使用模型写当前所用模型名称
+- 注释使用中文，分节注释沿用 `/* ==== 分节名 ==== */` 形式，与其他练习保持一致
+- 修改既有文件的主要 JS 功能时，同步更新对应注释说明
+
+## 关键文件
+- `index.html`：首页，含练习目录与导航卡片
+- `spec.md`：练习需求说明范例
+- `data.js`：共享数据
+
+## 文件操作要点
+- 多数练习为自包含文件，优先沿用既有模式，避免重复造轮子
+- 新增页面时，同步更新 `index.html` 导航卡片，保持卡片样式一致
+- 保留中文文案与既有命名习惯
 
 ## Git
-- Repo is tracked (`.git/`). Use `git` directly if committing; project also has `.opencode/skills/commit-to-gitee/` suggesting Gitee remote (see skill description). If asked to commit/push, consider using the repo's skill.
+- 仓库已纳入版本控制（`.git/`），需要提交时可直接使用 `git`
+- 本项目已有推送技能：`skills/提交项目`（推送至 Gitee `web-design-904`）与 `skills/提交到github`（推送至 GitHub，SSH 公钥认证）；需要提交或推送时优先使用对应技能
