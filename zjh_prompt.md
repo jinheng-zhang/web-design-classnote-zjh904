@@ -98,3 +98,12 @@
 - **提示词**:
 
 > 代码要按照之前设定放入规则：所有 CSS 类名、id、JS 变量必须以 zjh_ 开头,js要使用外部引用,提交项目并page发布,这是我的github，`https://github.com/jinheng-zhang/web-design-classnote-zjh904.git`，要上传提交，清晰展示，要有本次实践说明
+
+---
+
+## 2026-11-02
+
+- **模型**: DeepSeek-V4.1-Flash
+- **提示词**:
+
+> 再次按照这个样式一比一还原，提交
