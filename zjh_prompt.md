@@ -107,3 +107,73 @@
 - **提示词**:
 
 > 再次按照这个样式一比一还原，提交
+
+---
+
+## 2026-11-05
+
+- **模型**: Space Bunny
+- **提示词**:
+
+> file:///D:/univercity/web%20design/swiper-task.html，通过这个网页查看我的轮播图怎么动不了
+
+---
+
+## 2026-11-05
+
+- **模型**: Space Bunny
+- **提示词**:
+
+> 查看此所有关于swiper代码中是否出现类似于#wySw1、#wyPag2、#wyPrev2、#wyNext2的字样，将他做更换为#zjhSw1、#zjhPag2，等字样，即个性化为zjh
+
+---
+
+## 2026-11-05
+
+- **模型**: Space Bunny
+- **提示词**:
+
+> https://spontaneous-valkyrie-4e4229.netlify.app/swiper-lesson，再把这个课题任务完成，需写prompt提示词
+
+---
+
+## 2026-11-05（Swiper 讲解版 · 任务二 提示词节选）
+
+- **模型**: Space Bunny
+- **提示词**:
+
+> 我要给 Swiper 轮播加一个课堂没讲的第 7 种效果 `creative`（自定义变换）。请打开官方示例 `swiper/demo/257-effect-creative.html`，读懂 `creativeEffect`，回答我三件事：
+> ① `creativeEffect` 里 `prev` 和 `next` 各自能写哪些参数？分别控制什么？
+> ② `translate` 数组的三个值 `[x, y, z]` 单位分别是什么？百分比是相对哪个元素算的？
+> ③ 怎样实现"上一张缩小左移并带角度、下一张放大右移进场"这种电影墙效果？给我一段可直接用的配置。
+
+---
+
+## 2026-11-05（Swiper 讲解版 · 任务二 追问提示词）
+
+- **模型**: Space Bunny
+- **提示词**:
+
+> 你说 `translate` 用百分比，那这个百分比到底是相对**幻灯片自己**还是相对**外层容器**算的？我本地已经装了 swiper 11.0.3 源码，请直接在 `swiper/modules/effect-creative.mjs` 里找到给 slide 写 transform 的那段代码，用源码回答我；然后按"上一张缩小左移带角度、下一张放大右移进场"给我最终配置。
+
+---
+
+## 2026-11-05（Swiper 讲解版 · 任务三 提示词节选）
+
+- **模型**: Space Bunny
+- **提示词**:
+
+> 帮我生成一张**横版 16:9** 的图片：大型豪华邮轮「爱达·魔都号」航行在蔚蓝海面上的英雄镜头。主体是一艘白色与深蓝涂装的现代大型邮轮……整体为高质感写实摄影风格……无任何文字、logo、水印。
+
+> 在 Swiper 轮播上再加一个**课堂没讲过**的能力，我选 `keyboard` 键盘控制。请告诉我 `keyboard` 参数该怎么写、默认行为是什么、以及有没有什么坑（比如会不会影响我在输入框里打字）。
+
+---
+
+## 2026-11-05（Swiper 任务验收 · 新建 AI 提示词展示入口）
+
+- **模型**: 当前模型
+- **提示词**:
+
+> `https://spontaneous-valkyrie-4e4229.netlify.app/swiper-lesson`，帮我查看这个课堂任务的进度，如果完成了，需写prompt提示词，最后在这个任务中新建个入口去展示prompt的今天任务的AI对话提示词
+
+---

@@ -25,3 +25,6 @@ build/
 
 # 本地预览截图（不随作业提交）
 _shots/
+
+# 本地打包分享产物（不随作业提交）
+.trae-html-share-packages/

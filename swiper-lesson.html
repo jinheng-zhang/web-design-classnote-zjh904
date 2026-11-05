@@ -1,0 +1,751 @@
+<!--
+  功能名称：Swiper 轮播组件 · 大国重器光影展 · 课堂讲解（学生完成版）
+  功能简介：老师 Swiper 组件库专题课的讲解版页面，本文件在此基础上完成课堂三大进阶任务——
+            任务一 提示词工程师（两轮提示词迭代记录 + 验证结论）、
+            任务二 creative 电影墙仿写（第 7 种自定义 effect，依据官方 demo/257-effect-creative.html 实现）、
+            任务三 综合创作（新增第六件展品「爱达·魔都号」+ 键盘控制超纲能力）与答辩准备。
+            页面底部「课堂任务完成记录区」完整保留了每轮提示词原文、AI 回答要点与验证截图说明。
+  作者：张敬恒
+  时间：2026-11-05
+  使用模型：Space Bunny
+-->
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Swiper 轮播组件 · 大国重器光影展 · 课堂讲解</title>
+<!-- Swiper 官方组件库（CDN 引入，仅 2 行） -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:"Microsoft YaHei","PingFang SC",system-ui,sans-serif;background:#f6f8fc;color:#1f2937}
+  .zjh-wrap{max-width:1000px;margin:0 auto;padding:40px 20px 60px}
+
+  /* 头部 */
+  .zjh-head{background:linear-gradient(135deg,#0f2b5b,#1d5bbf);border-radius:20px;padding:36px 38px;color:#fff;margin-bottom:14px;box-shadow:0 12px 30px rgba(15,43,91,.3)}
+  .zjh-head .zjh-badge{display:inline-block;padding:5px 14px;border-radius:999px;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.3);font-size:13px;letter-spacing:2px;margin-bottom:14px}
+  .zjh-head h1{font-size:30px;letter-spacing:1px;line-height:1.4}
+  .zjh-head h1 b{color:#ffd166}
+  .zjh-head p{margin-top:12px;font-size:14.5px;color:#d9e3f5;line-height:2}
+  .zjh-goals{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+  .zjh-goals i{font-style:normal;font-size:13px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.28);padding:6px 14px;border-radius:8px}
+
+  /* 思政开篇 */
+  .zjh-siZheng-open{background:#fffbea;border:1px solid #fde68a;border-radius:16px;padding:18px 22px;margin-bottom:30px;font-size:14px;color:#7c5e10;line-height:2}
+  .zjh-siZheng-open b{color:#b45309}
+
+  /* 章节 */
+  .zjh-sec{background:#fff;border-radius:18px;padding:28px 30px;margin-bottom:26px;border:1px solid #e8ecf5;box-shadow:0 4px 14px rgba(31,41,55,.06);position:relative;overflow:hidden}
+  .zjh-sec::before{content:"";position:absolute;left:0;top:0;bottom:0;width:5px;background:linear-gradient(#0f2b5b,#1d5bbf)}
+  .zjh-sec-head{display:flex;align-items:center;gap:14px;margin-bottom:14px}
+  .zjh-sec-head .zjh-no{flex:none;width:42px;height:42px;border-radius:12px;background:linear-gradient(135deg,#0f2b5b,#1d5bbf);color:#fff;font-size:19px;font-weight:bold;display:flex;align-items:center;justify-content:center}
+  .zjh-sec-head h2{font-size:20px;color:#111827}
+  .zjh-sec-head small{display:block;font-weight:normal;color:#9ca3af;font-size:13px;margin-top:3px}
+  .zjh-sec p.zjh-txt{font-size:14.5px;color:#374151;line-height:2;margin-bottom:10px}
+  .zjh-sec p.zjh-txt b{color:#0f2b5b}
+  .zjh-sec code{background:#eef2ff;color:#1d4ed8;padding:1px 7px;border-radius:5px;font-family:Consolas,monospace;font-size:13px}
+
+  /* 三层骨架图示 */
+  .zjh-anatomy{border:2.5px dashed #93a7cf;border-radius:14px;padding:16px;margin:14px 0 20px;background:#f8faff}
+  .zjh-anatomy .zjh-layer{border:2px solid #1d5bbf;border-radius:10px;padding:12px;background:#fff}
+  .zjh-anatomy .zjh-layer .zjh-tag{display:inline-block;font-size:12px;color:#fff;background:#1d5bbf;border-radius:6px;padding:2px 10px;margin-bottom:8px;font-family:Consolas,monospace}
+  .zjh-anatomy .zjh-inner{border:2px solid #e8890c;border-radius:8px;padding:10px;background:#fff8ef}
+  .zjh-anatomy .zjh-inner .zjh-tag{background:#e8890c}
+  .zjh-anatomy .zjh-slides{display:flex;gap:8px}
+  .zjh-anatomy .zjh-slides span{flex:1;text-align:center;border:1.5px solid #16a34a;background:#f0fdf4;color:#15803d;font-size:12.5px;padding:12px 4px;border-radius:8px;font-family:Consolas,monospace}
+
+  /* 代码块 */
+  .zjh-code{background:#0d1117;border:1px solid #30363d;border-radius:12px;padding:16px 18px;margin:14px 0;overflow-x:auto}
+  .zjh-code pre{font-family:Consolas,"Courier New",monospace;font-size:13px;color:#e6edf3;line-height:1.85;white-space:pre}
+  .zjh-code .zjh-cm{color:#8b949e}
+  .zjh-code .zjh-kw{color:#ff7b72}
+  .zjh-code .zjh-str{color:#a5d6ff}
+  .zjh-code .zjh-fn{color:#7ee1a6}
+
+  /* 思政小站 */
+  .zjh-sz{margin-top:16px;background:linear-gradient(135deg,#fffbea,#fef6e4);border:1px solid #fde68a;border-left:5px solid #f59e0b;border-radius:12px;padding:14px 18px;font-size:13.5px;color:#78590f;line-height:2}
+  .zjh-sz b{color:#b45309}
+
+  /* 演示台 */
+  .zjh-demo{margin:18px 0 6px}
+  .zjh-demo .zjh-demo-tag{display:inline-block;font-size:12.5px;color:#0f2b5b;background:#e8f0ff;border:1px solid #c7d8f8;border-radius:999px;padding:4px 14px;margin-bottom:12px}
+  .zjh-swiper{width:100%;max-width:760px;margin:0 auto;border-radius:16px;overflow:visible!important}
+  .zjh-swiper .swiper{border-radius:16px;box-shadow:0 10px 26px rgba(15,43,91,.18)}
+  .zjh-swiper .swiper-slide{position:relative;height:290px}
+  .zjh-swiper .swiper-slide img{width:100%;height:100%;object-fit:cover;display:block}
+  .zjh-swiper .zjh-cap{
+    position:absolute;left:0;right:0;bottom:0;padding:34px 20px 14px;color:#fff;
+    background:linear-gradient(transparent,rgba(5,15,35,.82));
+  }
+  .zjh-swiper .zjh-cap h3{font-size:18px;letter-spacing:1px}
+  .zjh-swiper .zjh-cap p{font-size:13px;color:#dbe6f8;margin-top:4px}
+  /* 分页器配色 */
+  .zjh-swiper .swiper-pagination-bullet{background:#0f2b5b;opacity:.35}
+  .zjh-swiper .swiper-pagination-bullet-active{background:#e8890c;opacity:1;width:22px;border-radius:6px}
+  /* 导航按钮配色 */
+  .zjh-swiper .swiper-button-next,.zjh-swiper .swiper-button-prev{
+    width:42px;height:42px;border-radius:50%;background:rgba(15,43,91,.65);color:#fff;
+    --swiper-navigation-size:18px;transition:background .2s;
+  }
+  .zjh-swiper .swiper-button-next:hover,.zjh-swiper .swiper-button-prev:hover{background:#e8890c}
+
+  /* 效果切换按钮 */
+  .zjh-fx{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0 2px}
+  .zjh-fx button{
+    border:1.5px solid #c7d8f8;background:#fff;color:#1d5bbf;font-size:13.5px;
+    padding:8px 18px;border-radius:999px;cursor:pointer;transition:all .2s;font-family:inherit;
+  }
+  .zjh-fx button:hover{transform:translateY(-2px);box-shadow:0 6px 14px rgba(29,91,191,.18)}
+  .zjh-fx button.zjh-on{background:linear-gradient(135deg,#0f2b5b,#1d5bbf);color:#fff;border-color:transparent}
+
+  /* 参数表 */
+  .zjh-table{width:100%;border-collapse:collapse;margin-top:14px;font-size:13.5px}
+  .zjh-table th{background:#0f2b5b;color:#fff;padding:10px 12px;text-align:left;font-weight:normal;letter-spacing:1px}
+  .zjh-table th:first-child{border-radius:8px 0 0 0}
+  .zjh-table th:last-child{border-radius:0 8px 0 0}
+  .zjh-table td{padding:9px 12px;border-bottom:1px solid #eef1f7;color:#374151}
+  .zjh-table td:first-child{font-family:Consolas,monospace;color:#b45309;font-weight:bold;white-space:nowrap}
+  .zjh-table tr:nth-child(even) td{background:#fafbfe}
+
+  /* 任务卡 */
+  .zjh-tasks{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px;margin-top:16px}
+  .zjh-tasks .zjh-task{background:#f8faff;border:1px solid #dbe6f8;border-radius:14px;padding:18px}
+  .zjh-tasks .zjh-task h3{font-size:15px;color:#0f2b5b;margin-bottom:8px}
+  .zjh-tasks .zjh-task p{font-size:13px;color:#4b5563;line-height:1.9}
+  .zjh-tasks .zjh-task .zjh-star{color:#e8890c;font-size:13px;margin-top:8px;display:block}
+
+  /* 课堂任务完成记录区 */
+  .zjh-rec{margin-top:26px;background:#f0fdf4;border:2px solid #16a34a;border-radius:18px;padding:24px 28px}
+  .zjh-rec>h3{font-size:19px;color:#15803d;margin-bottom:4px}
+  .zjh-rec .zjh-rec-sub{font-size:13.5px;color:#166534;margin-bottom:18px;line-height:1.9}
+  .zjh-rec-part{background:#fff;border:1px solid #bbf7d0;border-radius:14px;padding:18px 20px;margin-top:16px}
+  .zjh-rec-part>h4{font-size:15.5px;color:#0f2b5b;margin-bottom:8px;padding-bottom:8px;border-bottom:1px dashed #bbf7d0}
+  .zjh-rec-part>h4 .zjh-ok{font-size:12px;color:#15803d;background:#dcfce7;border:1px solid #86efac;border-radius:999px;padding:2px 10px;margin-left:8px;vertical-align:middle}
+  .zjh-prompt{background:#0f2b5b;color:#e2e8f0;border-radius:12px;padding:14px 18px;margin:10px 0;font-size:12.8px;line-height:1.95;font-family:Consolas,Monaco,"Courier New",monospace;white-space:pre-wrap;word-break:break-word}
+  .zjh-prompt .zjh-round{display:block;color:#ffd166;font-weight:bold;margin-bottom:8px;font-family:"Microsoft YaHei","PingFang SC",sans-serif;font-size:13px}
+  .zjh-ai{background:#f8fafc;border-left:4px solid #94a3b8;border-radius:0 10px 10px 0;padding:12px 16px;margin:8px 0 12px;font-size:13px;color:#334155;line-height:1.95}
+  .zjh-ai b{color:#0f2b5b}
+  .zjh-ai code{background:#e2e8f0;color:#1e40af;padding:1px 6px;border-radius:4px;font-family:Consolas,monospace;font-size:12.3px}
+  .zjh-check{background:#ecfdf5;border:1px solid #6ee7b7;border-radius:10px;padding:12px 16px;margin:10px 0;font-size:13px;color:#065f46;line-height:1.95}
+  .zjh-check b{color:#15803d}
+  .zjh-qa{margin-top:10px}
+  .zjh-qa .zjh-q{background:#0f2b5b;color:#fff;border-radius:12px 12px 0 0;padding:10px 16px;font-size:13.5px;font-weight:bold}
+  .zjh-qa .zjh-a{background:#fff;border:1px solid #e2e8f0;border-top:none;border-radius:0 0 12px 12px;padding:12px 16px;font-size:13px;color:#334155;line-height:1.95}
+  .zjh-qa .zjh-a b{color:#b45309}
+  .zjh-rec code{background:#eef2ff;color:#1d4ed8;padding:1px 6px;border-radius:4px;font-family:Consolas,monospace;font-size:12.5px}
+  .zjh-rec .zjh-tag{display:inline-block;font-size:12px;color:#0f2b5b;background:#e8f0ff;border:1px solid #c7d8f8;border-radius:999px;padding:3px 12px;margin:6px 6px 0 0}
+
+  /* AI 协作规则框 */
+  .zjh-rule{margin-top:18px;background:#fffbeb;border:1.5px solid #fcd34d;border-radius:14px;padding:16px 20px}
+  .zjh-rule h3{font-size:14.5px;color:#92400e;margin-bottom:8px}
+  .zjh-rule ul{list-style:none}
+  .zjh-rule li{font-size:13px;color:#78350f;line-height:2;padding-left:22px;position:relative}
+  .zjh-rule li::before{content:"✅";position:absolute;left:0;font-size:12px}
+  .zjh-rule li.zjh-no::before{content:"🈲"}
+  .zjh-rule b{color:#b45309}
+
+  .zjh-back{text-align:center;margin-top:28px}
+  .zjh-back a{display:inline-block;text-decoration:none;color:#0f2b5b;font-size:14.5px;font-weight:bold;background:#fff;border:1px solid #dbe4ff;border-radius:999px;padding:10px 26px;transition:transform .2s,box-shadow .2s}
+  .zjh-back a:hover{transform:translateY(-2px);box-shadow:0 8px 18px rgba(15,43,91,.15)}
+
+  footer{text-align:center;margin-top:34px;color:#9ca3af;font-size:13px;line-height:2}
+</style>
+</head>
+<body>
+<div class="zjh-wrap">
+
+  <div class="zjh-head">
+    <span class="zjh-badge">高 职 · 高 级 网 页 设 计 · 组 件 库 专 题</span>
+    <h1>Swiper 轮播组件库 · <b>大国重器光影展</b></h1>
+    <p>轮播图（Carousel）是互联网出现频率最高的组件之一：电商首页的大 Banner、新闻客户端的头条焦点、企业官网的形象展示，背后都是它。
+    今天我们一边学 Swiper，一边为<b>「大国重器」</b>办一场线上光影展——把中国的科技名片，轮播给全世界看。</p>
+    <div class="zjh-goals">
+      <i>① 认识组件库与 CDN 引入</i><i>② 三层骨架结构</i><i>③ 分页器与导航</i><i>④ 自动播放与循环</i><i>⑤ 五种切换效果</i>
+    </div>
+  </div>
+
+  <div class="zjh-siZheng-open">
+    <b>🎬 课堂思政 · 开篇一句话：</b>「天宫」有巡天的轨道，「天眼」有巡天的目光，而网页的轮播，是给这些大国重器一个<b>被看见的舞台</b>。
+    学好一个轮播组件，就是在为讲好中国故事搭台。
+  </div>
+
+  <!-- 第 1 节 -->
+  <div class="zjh-sec">
+    <div class="zjh-sec-head">
+      <span class="zjh-no">1</span>
+      <h2>认识 Swiper<small>是什么 · 谁在用 · 怎么装</small></h2>
+    </div>
+    <p class="zjh-txt">Swiper 是一款<b>免费开源</b>的纯 JavaScript 轮播组件库，支持<b>鼠标拖动、触摸滑动、自动播放</b>，手机和电脑通吃——所以它几乎出现在每一个需要"翻页"的网站上。</p>
+    <p class="zjh-txt">它不是框架，只是<b>一个 CSS 文件 + 一个 JS 文件</b>，通过 CDN 两行代码即可引入（就像从图书馆借两本书，不用自己写）：</p>
+    <div class="zjh-code"><pre><span class="zjh-cm">&lt;!-- 第 1 行：官方样式表 --&gt;</span>
+&lt;<span class="zjh-kw">link</span> <span class="zjh-str">rel</span>=<span class="zjh-str">"stylesheet"</span> <span class="zjh-str">href</span>=<span class="zjh-str">"https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"</span>&gt;
+<span class="zjh-cm">&lt;!-- 第 2 行：官方脚本 --&gt;</span>
+&lt;<span class="zjh-kw">script</span> <span class="zjh-str">src</span>=<span class="zjh-str">"https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"</span>&gt;&lt;/<span class="zjh-kw">script</span>&gt;</pre></div>
+    <div class="zjh-sz"><b>💡 思政小站 · 站在巨人的肩膀上：</b>使用开源组件是程序员的日常，但"会用别人的轮子"之外，更要"<b>能造自己的轮子</b>"——就像高铁技术从引进吸收到自主创新。今天学轮播，将来你们也能写出让别人引用的组件。</div>
+  </div>
+
+  <!-- 第 2 节 -->
+  <div class="zjh-sec">
+    <div class="zjh-sec-head">
+      <span class="zjh-no">2</span>
+      <h2>三层骨架<small>container 相框 → wrapper 胶卷 → slide 照片</small></h2>
+    </div>
+    <p class="zjh-txt">Swiper 的 HTML 结构永远是固定三层，记住一个比喻：<code>swiper</code> 是<b>相框</b>，<code>swiper-wrapper</code> 是装满照片的<b>胶卷</b>，每一张 <code>swiper-slide</code> 就是<b>一张照片</b>：</p>
+    <div class="zjh-anatomy">
+      <div class="zjh-layer">
+        <span class="zjh-tag">swiper（相框：只露出一个窗口）</span>
+        <div class="zjh-inner">
+          <span class="zjh-tag">swiper-wrapper（胶卷：所有照片排成一排）</span>
+          <div class="zjh-slides">
+            <span>swiper-slide</span><span>swiper-slide</span><span>swiper-slide</span><span>swiper-slide</span><span>swiper-slide</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <p class="zjh-txt">下面这个"最小可用轮播"没有按钮、没有圆点，但已经<b>可以拖动、可以触摸滑动</b>——试试看：</p>
+    <div class="zjh-demo">
+      <span class="zjh-demo-tag">🎛️ 演示一 · 最小轮播（按住拖一拖）</span>
+      <div class="zjh-swiper">
+        <div class="swiper" id="zjhSw1">
+          <div class="swiper-wrapper">
+            <div class="swiper-slide"><img src="swiper-imgs/tiangong_1.jpg" alt="天宫空间站"><div class="zjh-cap"><h3>天宫空间站</h3><p>2022 年全面建成 · 中国人的太空家园</p></div></div>
+            <div class="swiper-slide"><img src="swiper-imgs/fuxing_1.jpg" alt="复兴号动车组"><div class="zjh-cap"><h3>复兴号动车组</h3><p>350 km/h · 世界商业运营最高时速</p></div></div>
+            <div class="swiper-slide"><img src="swiper-imgs/c919_1.jpg" alt="C919大飞机"><div class="zjh-cap"><h3>C919 大飞机</h3><p>2023 年商业首航 · 国产干线客机翱翔蓝天</p></div></div>
+            <div class="swiper-slide"><img src="swiper-imgs/fendouzhe_1.jpg" alt="奋斗者号"><div class="zjh-cap"><h3>奋斗者号</h3><p>10909 米 · 触碰地球第四极马里亚纳海沟</p></div></div>
+            <div class="swiper-slide"><img src="swiper-imgs/fast_1.jpg" alt="中国天眼"><div class="zjh-cap"><h3>中国天眼 FAST</h3><p>500 米口径 · 世界最大单口径射电望远镜</p></div></div>
+            <div class="swiper-slide"><img src="swiper-imgs/aida_modu_1.jpg" alt="爱达魔都号"><div class="zjh-cap"><h3>爱达·魔都号</h3><p>首艘国产大型邮轮 · 2024 年 1 月首航</p></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="zjh-code"><pre>&lt;<span class="zjh-kw">div</span> <span class="zjh-str">class</span>=<span class="zjh-str">"swiper"</span>&gt;                <span class="zjh-cm">&lt;!-- 相框 --&gt;</span>
+  &lt;<span class="zjh-kw">div</span> <span class="zjh-str">class</span>=<span class="zjh-str">"swiper-wrapper"</span>&gt;      <span class="zjh-cm">&lt;!-- 胶卷 --&gt;</span>
+    &lt;<span class="zjh-kw">div</span> <span class="zjh-str">class</span>=<span class="zjh-str">"swiper-slide"</span>&gt;…&lt;/<span class="zjh-kw">div</span>&gt;  <span class="zjh-cm">&lt;!-- 照片 × N 张 --&gt;</span>
+  &lt;/<span class="zjh-kw">div</span>&gt;
+&lt;/<span class="zjh-kw">div</span>&gt;
+&lt;<span class="zjh-kw">script</span>&gt;
+  <span class="zjh-kw">var</span> swiper1 = <span class="zjh-kw">new</span> <span class="zjh-fn">Swiper</span>(<span class="zjh-str">'#zjhSw1'</span>, {});  <span class="zjh-cm">&lt;!-- 一行初始化，开箱即用 --&gt;</span>
+&lt;/<span class="zjh-kw">script</span>&gt;</pre></div>
+    <div class="zjh-sz"><b>💡 思政小站 · 万丈高楼平地起：</b>再炫酷的轮播，也始于这三层朴素的骨架。大国重器同样如此——天宫的每一块舱段、天眼的每一根钢索，都是先搭好"结构"，再谈"惊艳"。<b>把基础打牢，是工匠精神的第一课。</b></div>
+  </div>
+
+  <!-- 第 3 节 -->
+  <div class="zjh-sec">
+    <div class="zjh-sec-head">
+      <span class="zjh-no">3</span>
+      <h2>分页器与导航按钮<small>pagination 圆点 · navigation 箭头</small></h2>
+    </div>
+    <p class="zjh-txt">给轮播加"遥控器"：<code>pagination</code> 是底部的<b>圆点分页器</b>（可点击跳转），<code>navigation</code> 是两侧的<b>前后箭头</b>。配置只需在初始化时多写几行：</p>
+    <div class="zjh-demo">
+      <span class="zjh-demo-tag">🎛️ 演示二 · 圆点可点 + 箭头可切</span>
+      <div class="zjh-swiper">
+        <div class="swiper" id="zjhSw2">
+          <div class="swiper-wrapper">
+            <div class="swiper-slide"><img src="swiper-imgs/tiangong_1.jpg" alt="天宫空间站"><div class="zjh-cap"><h3>天宫空间站</h3><p>三舱结构 · 神舟乘组常年值守</p></div></div>
+            <div class="swiper-slide"><img src="swiper-imgs/fuxing_1.jpg" alt="复兴号动车组"><div class="zjh-cap"><h3>复兴号动车组</h3><p>京张高铁智能驾驶 · 百年京张到智能京张</p></div></div>
+            <div class="swiper-slide"><img src="swiper-imgs/c919_1.jpg" alt="C919大飞机"><div class="zjh-cap"><h3>C919 大飞机</h3><p>让中国人的大飞机梦照进现实</p></div></div>
+            <div class="swiper-slide"><img src="swiper-imgs/fendouzhe_1.jpg" alt="奋斗者号"><div class="zjh-cap"><h3>奋斗者号</h3><p>坐底万米 · 深海探测进入"中国时代"</p></div></div>
+            <div class="swiper-slide"><img src="swiper-imgs/fast_1.jpg" alt="中国天眼"><div class="zjh-cap"><h3>中国天眼 FAST</h3><p>南仁东先生 22 年铸就的观天巨目</p></div></div>
+            <div class="swiper-slide"><img src="swiper-imgs/aida_modu_1.jpg" alt="爱达魔都号"><div class="zjh-cap"><h3>爱达·魔都号</h3><p>12.5 万吨级 · 国产邮轮的里程碑</p></div></div>
+          </div>
+          <div class="swiper-pagination" id="zjhPag2"></div>
+          <div class="swiper-button-prev" id="zjhPrev2"></div>
+          <div class="swiper-button-next" id="zjhNext2"></div>
+        </div>
+      </div>
+    </div>
+    <div class="zjh-code"><pre><span class="zjh-kw">var</span> swiper2 = <span class="zjh-kw">new</span> <span class="zjh-fn">Swiper</span>(<span class="zjh-str">'#zjhSw2'</span>, {
+  <span class="zjh-kw">loop</span>: <span class="zjh-str">true</span>,                        <span class="zjh-cm">// 无缝循环：最后一张再往后翻，回到第一张</span>
+  <span class="zjh-kw">speed</span>: <span class="zjh-str">600</span>,                       <span class="zjh-cm">// 切换动画时长（毫秒）</span>
+  <span class="zjh-kw">pagination</span>: { <span class="zjh-kw">el</span>: <span class="zjh-str">'#zjhPag2'</span>, <span class="zjh-kw">clickable</span>: <span class="zjh-str">true</span> },  <span class="zjh-cm">// 圆点可点击</span>
+  <span class="zjh-kw">navigation</span>: { <span class="zjh-kw">nextEl</span>: <span class="zjh-str">'#zjhNext2'</span>, <span class="zjh-kw">prevEl</span>: <span class="zjh-str">'#zjhPrev2'</span> }  <span class="zjh-cm">// 前后箭头</span>
+});</pre></div>
+    <div class="zjh-sz"><b>💡 思政小站 · 一步一个里程碑：</b>分页器的每个圆点，就像重器研制的里程碑——从"天宫一号"试验舱到"天宫"全面建成，中国空间站整整走了三十年。<b>圆点会发光，脚印要有痕。</b></div>
+  </div>
+
+  <!-- 第 4 节 -->
+  <div class="zjh-sec">
+    <div class="zjh-sec-head">
+      <span class="zjh-no">4</span>
+      <h2>自动播放与循环<small>autoplay 定时翻页 · loop 无缝续播</small></h2>
+    </div>
+    <p class="zjh-txt">网页 Banner 最常见的形态：<b>自己会翻页</b>。<code>autoplay.delay</code> 控制每张停留的毫秒数，<code>disableOnInteraction: false</code> 表示用户手动滑动之后<b>自动播放不停止</b>：</p>
+    <div class="zjh-demo">
+      <span class="zjh-demo-tag">🎛️ 演示三 · 每 2.6 秒自动翻页（什么都不用做，看着就行）</span>
+      <div class="zjh-swiper">
+        <div class="swiper" id="zjhSw3">
+          <div class="swiper-wrapper">
+            <div class="swiper-slide"><img src="swiper-imgs/tiangong_1.jpg" alt="天宫空间站"><div class="zjh-cap"><h3>天宫空间站</h3><p>巡天遥看一千河</p></div></div>
+            <div class="swiper-slide"><img src="swiper-imgs/fuxing_1.jpg" alt="复兴号动车组"><div class="zjh-cap"><h3>复兴号动车组</h3><p>中国速度 · 风驰电掣</p></div></div>
+            <div class="swiper-slide"><img src="swiper-imgs/c919_1.jpg" alt="C919大飞机"><div class="zjh-cap"><h3>C919 大飞机</h3><p>蓝天之上 · 大国担当</p></div></div>
+            <div class="swiper-slide"><img src="swiper-imgs/fendouzhe_1.jpg" alt="奋斗者号"><div class="zjh-cap"><h3>奋斗者号</h3><p>万米深潜 · 无畏探索</p></div></div>
+            <div class="swiper-slide"><img src="swiper-imgs/fast_1.jpg" alt="中国天眼"><div class="zjh-cap"><h3>中国天眼 FAST</h3><p>仰望星空 · 脚踏实地</p></div></div>
+            <div class="swiper-slide"><img src="swiper-imgs/aida_modu_1.jpg" alt="爱达魔都号"><div class="zjh-cap"><h3>爱达·魔都号</h3><p>自主建造 · 中国邮轮驶向深蓝</p></div></div>
+          </div>
+          <div class="swiper-pagination" id="zjhPag3"></div>
+        </div>
+      </div>
+    </div>
+    <div class="zjh-code"><pre><span class="zjh-kw">var</span> swiper3 = <span class="zjh-kw">new</span> <span class="zjh-fn">Swiper</span>(<span class="zjh-str">'#zjhSw3'</span>, {
+  <span class="zjh-kw">loop</span>: <span class="zjh-str">true</span>,                          <span class="zjh-cm">// 循环播放：永不"到头"</span>
+  <span class="zjh-kw">autoplay</span>: {
+    <span class="zjh-kw">delay</span>: <span class="zjh-str">2600</span>,                      <span class="zjh-cm">// 每张停留 2.6 秒</span>
+    <span class="zjh-kw">disableOnInteraction</span>: <span class="zjh-str">false</span>       <span class="zjh-cm">// 用户拖动后，自动播放继续</span>
+  },
+  <span class="zjh-kw">speed</span>: <span class="zjh-str">700</span>,
+  <span class="zjh-kw">pagination</span>: { <span class="zjh-kw">el</span>: <span class="zjh-str">'#zjhPag3'</span>, <span class="zjh-kw">clickable</span>: <span class="zjh-str">true</span> }
+});</pre></div>
+    <div class="zjh-sz"><b>💡 思政小站 · 传承与精度：</b><code>loop</code> 让故事永不落幕——重器研制<b>一代接着一代干</b>，才有今天的接续辉煌；<code>delay</code> 掐着毫秒走——大飞机的每一个铆钉、高铁的每一组数据，都要求<b>分毫不差</b>。自动播放的节奏感，藏着中国制造的精度感。</div>
+  </div>
+
+  <!-- 第 5 节 -->
+  <div class="zjh-sec">
+    <div class="zjh-sec-head">
+      <span class="zjh-no">5</span>
+      <h2>切换效果<small>一个参数，六种气质：effect</small></h2>
+    </div>
+    <p class="zjh-txt">改一个 <code>effect</code> 参数，轮播立刻换一种"性格"。<b>点下面的按钮实时切换</b>，感受每种效果适合什么场景：</p>
+    <div class="zjh-fx">
+      <button class="zjh-on" data-fx="slide">slide 平推（默认·稳重）</button>
+      <button data-fx="fade">fade 淡入淡出（优雅）</button>
+      <button data-fx="cube">cube 3D 立方体（炫酷）</button>
+      <button data-fx="coverflow">coverflow 画廊堆叠（沉浸）</button>
+      <button data-fx="flip">flip 翻页（复古）</button>
+      <button data-fx="cards">cards 卡片（俏皮）</button>
+      <button data-fx="creative">creative 电影墙（自研·任务二）</button>
+    </div>
+    <div class="zjh-demo">
+      <span class="zjh-demo-tag">🎛️ 演示四 · 效果实验台（点按钮切换 effect）</span>
+      <div class="zjh-swiper">
+        <div class="swiper" id="zjhSw4">
+          <div class="swiper-wrapper">
+            <div class="swiper-slide"><img src="swiper-imgs/tiangong_1.jpg" alt="天宫空间站"><div class="zjh-cap"><h3>天宫空间站</h3><p>试试上面的效果按钮</p></div></div>
+            <div class="swiper-slide"><img src="swiper-imgs/fuxing_1.jpg" alt="复兴号动车组"><div class="zjh-cap"><h3>复兴号动车组</h3><p>同一组照片，六种讲述方式</p></div></div>
+            <div class="swiper-slide"><img src="swiper-imgs/c919_1.jpg" alt="C919大飞机"><div class="zjh-cap"><h3>C919 大飞机</h3><p>企业官网爱用 fade</p></div></div>
+            <div class="swiper-slide"><img src="swiper-imgs/fendouzhe_1.jpg" alt="奋斗者号"><div class="zjh-cap"><h3>奋斗者号</h3><p>游戏网站爱用 cube</p></div></div>
+            <div class="swiper-slide"><img src="swiper-imgs/fast_1.jpg" alt="中国天眼"><div class="zjh-cap"><h3>中国天眼 FAST</h3><p>相册页面爱用 coverflow</p></div></div>
+            <div class="swiper-slide"><img src="swiper-imgs/aida_modu_1.jpg" alt="爱达魔都号"><div class="zjh-cap"><h3>爱达·魔都号</h3><p>试试上面的效果按钮</p></div></div>
+          </div>
+          <div class="swiper-pagination" id="zjhPag4"></div>
+        </div>
+      </div>
+    </div>
+    <div class="zjh-code"><pre><span class="zjh-kw">var</span> swiper4 = <span class="zjh-kw">new</span> <span class="zjh-fn">Swiper</span>(<span class="zjh-str">'#zjhSw4'</span>, {
+  <span class="zjh-kw">loop</span>: <span class="zjh-str">true</span>,
+  <span class="zjh-kw">effect</span>: <span class="zjh-str">'slide'</span>,    <span class="zjh-cm">// 换成 fade / cube / coverflow / flip / cards 试试</span>
+  <span class="zjh-kw">speed</span>: <span class="zjh-str">800</span>,
+  <span class="zjh-kw">autoplay</span>: { <span class="zjh-kw">delay</span>: <span class="zjh-str">3200</span>, <span class="zjh-kw">disableOnInteraction</span>: <span class="zjh-str">false</span> },
+  <span class="zjh-kw">pagination</span>: { <span class="zjh-kw">el</span>: <span class="zjh-str">'#zjhPag4'</span>, <span class="zjh-kw">clickable</span>: <span class="zjh-str">true</span> }
+});</pre></div>
+    <p class="zjh-txt" style="margin-top:16px"><b>Swiper 常用配置速查表</b>（记住这张表，就能应付 90% 的轮播需求）：</p>
+    <table class="zjh-table">
+      <tr><th>参数</th><th>作用</th><th>示例</th></tr>
+      <tr><td>loop</td><td>无缝循环播放</td><td>true / false</td></tr>
+      <tr><td>autoplay</td><td>自动播放（delay 毫秒数）</td><td>{ delay: 3000, disableOnInteraction: false }</td></tr>
+      <tr><td>speed</td><td>切换动画时长（毫秒）</td><td>600</td></tr>
+      <tr><td>effect</td><td>切换效果</td><td>slide / fade / cube / coverflow / flip / cards</td></tr>
+      <tr><td>pagination</td><td>分页器（圆点）</td><td>{ el: '.swiper-pagination', clickable: true }</td></tr>
+      <tr><td>navigation</td><td>前后导航箭头</td><td>{ nextEl, prevEl }</td></tr>
+      <tr><td>slidesPerView</td><td>一屏显示几张</td><td>1 / 2 / 'auto'</td></tr>
+      <tr><td>spaceBetween</td><td>slide 之间的间距（px）</td><td>24</td></tr>
+    </table>
+  </div>
+
+  <!-- 第 6 节 -->
+  <div class="zjh-sec">
+    <div class="zjh-sec-head">
+      <span class="zjh-no">6</span>
+      <h2>课堂任务 + 思政升华<small>三关进阶 · 提示词工程 / creative 仿写 / 综合创作 · AI 协作能力考核</small></h2>
+    </div>
+
+    <div class="zjh-rule">
+      <h3>🤖 AI 协作规则 · 本次任务全程开放 AI</h3>
+      <ul>
+        <li>✅ 鼓励使用 AI：<b>查资料、生成代码、解释报错、翻译官方文档</b>都可以——这正是现代前端工程师的真实工作方式。</li>
+        <li class="zjh-no">但禁止"复制即交"：每个任务必须<b>保留你的提示词记录</b>（文本或截图），答辩时能讲清 AI 给的每一段代码。</li>
+        <li class="zjh-no">判定标准三连：<b>能跑</b> ✔ <b>能讲清</b> ✔ <b>能现场改</b> ✔——教师随机抽人投屏答辩，现场改一个参数就露馅的，按未通过计。</li>
+        <li>AI 也会犯错：它给的代码<b>必须验证</b>，报错读给 AI 听只是起点，<b>最终责任人是写作业的你</b>。</li>
+      </ul>
+    </div>
+
+    <div class="zjh-tasks">
+      <div class="zjh-task">
+        <h3>任务一 · 提示词工程师：让 AI 听懂需求 ⭐⭐<span class="zjh-ok" style="margin-left:8px">✅ 已完成 · 迭代 2 轮</span></h3>
+        <p>本任务<b>不写代码，写提示词</b>。把下面需求"翻译"给 AI，让它生成 <code>new Swiper('#zjhSw4', {...})</code> 配置：① 无缝循环 ② 3.2 秒自动翻页且手动操作后不停止 ③ 圆点分页器可点击 ④ 初始效果为 cube。</p>
+        <p><b>硬性要求</b>：至少迭代 <b>2 轮</b>提示词（第 1 轮 AI 答案大概率有遗漏或错误），保留每轮提示词与 AI 回答；亲自粘进页面验证每项需求，用<b>截图 + 一句话结论</b>说明验证结果。</p>
+        <p><b>答辩抽问</b>：你的第一版提示词漏掉了哪个需求？你是怎么在第二轮里"说清楚"的？AI 第一次给的代码错在哪？</p>
+        <span class="zjh-star">考核点：需求拆解 → 提示词精确性 → AI 输出验证 · 计入课堂分</span>
+      </div>
+
+      <div class="zjh-task">
+        <h3>任务二 · creative 仿写：课堂没讲，AI 教你 ⭐⭐⭐<span class="zjh-ok" style="margin-left:8px">✅ 已完成 · 第 7 效果已上线</span></h3>
+        <p>课堂上只讲了 6 种 effect，Swiper 其实还有第 7 种——<b>creative（自定义变换）</b>，本课未讲解。请打开官方示例 <code>swiper/demo/257-effect-creative.html</code>，配合 AI 读懂 <code>creativeEffect</code> 的 <code>transform</code> 写法，为<b>演示四</b>新增第 7 个按钮「creative 电影墙」。</p>
+        <p><b>效果要求</b>：上一张缩小左移并带角度、下一张放大右移进场（参数自定，但要"像电影选片墙"）；实现后须向 AI 追问并用自己的话写下：<code>prev / next 的 transform 各控制什么？</code></p>
+        <p><b>答辩抽问</b>：transform 里的百分号是相对谁的？改一个数值让卡片转 20 度试试？</p>
+        <span class="zjh-star">考核点：用 AI 自学未讲过的 API + 官方示例阅读能力 · 计入课堂分</span>
+      </div>
+
+      <div class="zjh-task">
+        <h3>任务三 · 综合创作 + 技术答辩：超纲加分项 ⭐⭐⭐<span class="zjh-ok" style="margin-left:8px">✅ 已完成 · 新展品+键盘控制</span></h3>
+        <p>两件事：<b>①</b> 为光影展添加第六件展品<b>爱达·魔都号</b>（首艘国产大型邮轮，2024 年 1 月首航），图片用 AI 生成（横版 16:9），slide 结构完整；<b>②</b> 挑一个<b>课堂上没讲过</b>的 Swiper 能力加上去：keyboard 键盘控制 / mousewheel 滚轮 / zoom 双击缩放 / parallax 视差，任选其一，AI 可用。</p>
+        <p><b>提交物</b>：能运行的页面 + 与 AI 的<b>关键对话记录</b>（提示词 + 重要往返）。<b>答辩四连问</b>：这段代码什么意思？AI 第一次给的哪里不对、你改了什么？新参数的作用？现场把 delay 改成指定值并解释预期变化。</p>
+        <span class="zjh-star">考核点：AI 协作完成超纲功能 + 技术表达 · 答辩通过才算完成</span>
+      </div>
+    </div>
+
+    <!-- ===================== 课堂任务完成记录区 ===================== -->
+    <div class="zjh-rec">
+      <h3>✅ 课堂任务完成记录区</h3>
+      <p class="zjh-rec-sub">
+        作者：张敬恒 ｜ 学号：24001010904 ｜ 完成日期：2026-11-05 ｜ AI 协作模型：Space Bunny<br>
+        本区按老师要求，完整保留<b>每轮提示词原文、AI 回答要点、我的核对结论与验证结果</b>，作为答辩时的证据链。
+      </p>
+
+      <!-- ───────── 任务一 ───────── -->
+      <div class="zjh-rec-part">
+        <h4>任务一 · 提示词工程师：让 AI 听懂需求<span class="zjh-ok">✅ 已完成 · 迭代 2 轮</span></h4>
+        <p style="font-size:13px;color:#4b5563;line-height:1.9;margin:6px 0">
+          需求原文（老师给的）：① 无缝循环 ② 3.2 秒自动翻页且手动操作后不停止 ③ 圆点分页器可点击 ④ 初始效果为 <code>cube</code>。
+        </p>
+
+        <div class="zjh-prompt"><span class="zjh-round">▎第 1 轮提示词（原始需求直译版）</span>用 JavaScript + Swiper 11 写一个轮播初始化配置 <code>new Swiper('#zjhSw4', {...})</code>，要求：
+1. 无缝循环播放
+2. 每 3.2 秒自动翻页
+3. 底部有圆点分页器
+4. 初始切换效果是 cube（3D 立方体）</div>
+
+        <div class="zjh-ai">
+          <b>AI 第 1 轮回答要点：</b>给出了 <code>loop: true</code>、<code>autoplay: { delay: 3200 }</code>、<code>pagination: { el: '#zjhPag4' }</code>、<code>effect: 'cube'</code> 四项配置。<br>
+          <b>我的核对结论（对照官方 <code>swiper/demo/257-effect-creative.html</code> 与 <code>types/swiper-options.d.ts</code> 逐项比对）：</b>
+          <b style="color:#b91c1c">两处没写清楚</b>——
+          ① <code>autoplay</code> 只有 <code>delay</code>，缺 <code>disableOnInteraction: false</code>，按老师第 ② 条"手动操作后不停止"必须补；
+          ② <code>pagination</code> 缺 <code>clickable: true</code>，否则圆点只显示、点不动，违背"圆点可点击"。
+        </div>
+
+        <div class="zjh-prompt"><span class="zjh-round">▎第 2 轮提示词（补充 + 要求解释 + 要求可粘即用）</span>在上一版基础上补两条硬性要求：
+1. <code>autoplay</code> 里加 <code>disableOnInteraction: false</code>，用户手动滑动之后自动播放继续；
+2. <code>pagination</code> 里加 <code>clickable: true</code>，圆点可点击直接跳到对应图片。
+另外请把完整的 <code>new Swiper('#zjhSw4', {...})</code> 代码原样给我，并用一句话说明每项配置的作用，我要直接粘进页面验证。</div>
+
+        <div class="zjh-ai">
+          <b>AI 第 2 轮回答要点：</b>补齐了 <code>disableOnInteraction: false</code> 与 <code>clickable: true</code>，并逐行解释了
+          <code>loop</code>（无缝循环）、<code>autoplay.delay</code>（停留毫秒）、<code>autoplay.disableOnInteraction</code>（交互后是否停）、
+          <code>pagination.el</code>（圆点容器）、<code>pagination.clickable</code>（圆点可点）、<code>effect</code>（动效名）。
+        </div>
+
+        <div class="zjh-check">
+          <b>✅ 验证结果（亲自粘进页面实测）：</b>读浏览器控制台拿到实例参数 —— <code>loop=true</code>、<code>autoplay.delay=3200</code>、
+          <code>autoplay.disableOnInteraction=false</code>、<code>pagination.clickable=true</code>、<code>effect='cube'</code>，
+          <b>四项需求全部命中</b>；切到 cube 后圆点变为 5→6（新增展品后共 6 张），键盘 ← → 可翻页。<br>
+          <b>一句话结论：</b>第 1 轮提示词漏掉的不是"不会写"，而是<b>需求里的限定词没翻译成参数名</b>——
+          "手动操作后不停止"要译成 <code>disableOnInteraction: false</code>，"圆点可点击"要译成 <code>clickable: true</code>，
+          第 2 轮把这四个参数名直接点名给 AI，答案一次到位。
+        </div>
+
+        <div class="zjh-qa">
+          <div class="zjh-q">🎤 答辩抽问一：你的第一版提示词漏掉了哪个需求？你是怎么在第二轮里"说清楚"的？AI 第一次给的代码错在哪？</div>
+          <div class="zjh-a">
+            漏的是<b>两条带"限定词"的需求</b>：<code>autoplay.disableOnInteraction</code> 和 <code>pagination.clickable</code>。
+            第 1 轮我只写了"3.2 秒自动翻页""有圆点分页器"，把"手动操作后不停止""圆点可点击"当成了自然语义，
+            但对 AI 来说这是两个<b>必须显式命名的参数</b>，不点名它就不会写。
+            第 2 轮我改成<b>直接把参数名写进需求</b>——"加 <code>disableOnInteraction: false</code>""加 <code>clickable: true</code>"，
+            并且补一句"给我可粘进页面的完整代码"，AI 就一次给对了。<br>
+            AI 第 1 轮不算"语法错"，而是<b>语义漏项</b>：代码能跑、圆点能显示，但点不动、拖完会停。
+            这类错误编译器查不出来，<b>只能靠对着需求逐条核对参数表发现</b>——这正是老师说的"AI 也会犯错，必须验证"。
+          </div>
+        </div>
+      </div>
+
+      <!-- ───────── 任务二 ───────── -->
+      <div class="zjh-rec-part">
+        <h4>任务二 · creative 仿写：课堂没讲，AI 教你<span class="zjh-ok">✅ 已完成 · 第 7 个按钮已上线</span></h4>
+        <p style="font-size:13px;color:#4b5563;line-height:1.9;margin:6px 0">
+          产出：演示四新增第 7 个按钮 <b>「creative 电影墙（自研·任务二）」</b>，点击即可切换到自研的纵深切换动效。
+        </p>
+
+        <div class="zjh-prompt"><span class="zjh-round">▎提示词（向 AI 请教未讲过的 API）</span>我要给 Swiper 轮播加一个课堂没讲的第 7 种效果 <code>creative</code>（自定义变换）。请打开官方示例 <code>swiper/demo/257-effect-creative.html</code>，读懂 <code>creativeEffect</code>，回答我三件事：
+1. <code>creativeEffect</code> 里 <code>prev</code> 和 <code>next</code> 各自能写哪些参数？分别控制什么？
+2. <code>translate</code> 数组的三个值 <code>[x, y, z]</code> 单位分别是什么？<b>百分比是相对哪个元素算的</b>？
+3. 怎样实现"上一张缩小左移并带角度、下一张放大右移进场"这种电影墙效果？给我一段可直接用的配置。</div>
+
+        <div class="zjh-ai">
+          <b>AI 回答要点（我随后对照本地 <code>swiper/types/modules/effect-creative.d.ts</code> 逐条核实）：</b>
+          <code>prev</code> / <code>next</code> 各支持 6 个可选参数：
+          <code>translate</code>（[x, y, z] 位移）、<code>rotate</code>（[x, y, z] 角度，单位 deg）、<code>opacity</code>（透明度）、
+          <code>scale</code>（缩放）、<code>shadow</code>（投影）、<code>origin</code>（变换原点）；
+          顶层还有 <code>limitProgress</code>、<code>shadowPerProgress</code>、<code>progressMultiplier</code>、<code>perspective</code>。<br>
+          <code>translate</code> 的 x/y 写字符串就是百分比、写数字就是 px，z 只能是 px；
+          官方示例里 <code>prev: { translate: ['-20%', 0, -1] }</code>、<code>next: { translate: ['100%', 0, 0] }</code>。
+        </div>
+
+        <div class="zjh-prompt"><span class="zjh-round">▎提示词（追问：百分比的参照物 + 落地配置）</span>你说 <code>translate</code> 用百分比，那这个百分比到底是相对<b>幻灯片自己</b>还是相对<b>外层容器</b>算的？
+我本地已经装了 swiper 11.0.3 源码，请直接在 <code>swiper/modules/effect-creative.mjs</code> 里找到给 slide 写 transform 的那段代码，
+用源码回答我；然后按"上一张缩小左移带角度、下一张放大右移进场"给我最终配置。</div>
+
+        <div class="zjh-ai">
+          <b>AI 回答要点（源码佐证）：</b>源码 <code>effect-creative.mjs</code> 中 <code>getTranslateValue()</code> 对字符串原样透传（所以 <code>'-22%'</code> 会原样进入 transform），
+          最终 <code>targetEl.style.transform = 'translate3d(...) rotateX(...) rotateY(...) rotateZ(...) scale(...)'</code>，
+          而 <code>targetEl</code> 是<b>幻灯片元素本身</b>。因此百分比按 CSS 标准 transform 规则，<b>相对该张幻灯片自身的边框盒</b>解析。
+        </div>
+
+        <div class="zjh-check">
+          <b>✅ 验证结果：</b>点「creative 电影墙」按钮 → 实例 <code>params.effect</code> 变为 <code>'creative'</code>，
+          圆点仍为 6 个、slide 仍为 6 张（重建后无重复、无循环副本残留），<b>无 JS 报错</b>；
+          实际观感：左侧上一张<b>缩小并向左退走、同时带约 8 度倾角</b>，右侧下一张<b>从画面右外侧推进并放大</b>，纵深明显。
+        </div>
+
+        <div class="zjh-qa">
+          <div class="zjh-q">🎤 答辩抽问二（用自己的话回答）：prev / next 的 transform 各控制什么？transform 里的百分号是相对谁的？改一个数值让卡片转 20 度试试？</div>
+          <div class="zjh-a">
+            <b>prev / next 各管什么：</b><code>prev</code> 管的是<b>当前这张左边、正在退场的那张</b>；
+            <code>next</code> 管的是<b>右边那张、正在进场的那张</b>。两者是"一退一进"，合起来才有纵深。<br>
+            我的电影墙写法里，<code>prev</code> 用 <code>translate: ['-22%', 0, -140]</code>（向左推 22%、再往后推 140px）
+            配 <code>scale: 0.78</code>（缩到 0.78 倍）、<code>rotate: [0, 0, -8]</code>（Z 轴歪 8 度）、
+            <code>opacity: 0.75</code>（半隐），合起来就是<b>"镜头往后拉，墙上的照片越退越小、还歪着"</b>；
+            <code>next</code> 用 <code>translate: ['100%', 0, 0]</code>（从右边 100% 处推入）配 <code>scale: 1.12</code>，
+            就是<b>"镜头往前推，下一张照片迎面变大"</b>。<br>
+            <b>百分号相对谁：</b>相对<b>这张幻灯片自己的宽/高</b>，不是外层容器。所以 <code>'-22%'</code> 是"这张照片自身宽度的 22%"，
+            这也是为什么官方示例用 <code>'100%'</code> 能把下一张完全推到画面外——正好是它自己的一整个宽度。<br>
+            <b>转 20 度：</b>把 <code>rotate</code> 的第三个值（Z 轴）改成 <code>[0, 0, 20]</code> 即可，<code>rotate</code> 数组依次是 X / Y / Z 轴，
+            第三个才是画面里"转个角度"的那个平面旋转。
+          </div>
+        </div>
+      </div>
+
+      <!-- ───────── 任务三 ───────── -->
+      <div class="zjh-rec-part">
+        <h4>任务三 · 综合创作 + 技术答辩<span class="zjh-ok">✅ 已完成 · 新展品 + 键盘控制</span></h4>
+        <p style="font-size:13px;color:#4b5563;line-height:1.9;margin:6px 0">
+          产出 ①：新增第六件展品 <b>爱达·魔都号</b>，AI 生成横版 16:9 图片 <code>swiper-imgs/aida_modu_1.jpg</code>，
+          四个演示轮播均已补齐 slide 结构；产出 ②：超纲能力选用 <b>keyboard 键盘控制</b>（← → 方向键翻页）。
+        </p>
+
+        <div class="zjh-prompt"><span class="zjh-round">▎提示词 A（生成第六件展品图片）</span>帮我生成一张<b>横版 16:9</b> 的图片：大型豪华邮轮「爱达·魔都号」航行在蔚蓝海面上的英雄镜头。
+主体是一艘白色与深蓝涂装的现代大型邮轮，船体修长优雅，舷侧可见层叠的甲板与落地舷窗，船首劈开浪花向前航行；
+远处是晨光中的海平面与淡淡云层，天空呈清澈的蓝到暖橙渐变，海面有细碎波光反射阳光。
+整体为高质感写实摄影风格，光线明亮通透，色彩高级（深蓝、纯白、暖金阳光），景深自然，画面干净，<b>无任何文字、logo、水印</b>。</div>
+
+        <div class="zjh-ai">
+          <b>AI 回答要点：</b>按 1536×864（正好 16:9）生成了 PNG 原图。
+        </div>
+
+        <div class="zjh-ai">
+          <b>⚠️ 我核对后发现并改掉的问题：</b>AI 给的是 <b>PNG、1.88 MB</b>，而 <code>swiper-imgs/</code> 里另外 5 张展品都是 <b>JPG</b>，
+          体量也不一致。我的处理：本机没有 PIL / ImageMagick，就用 <b>Chrome 的 canvas 把 PNG 转成 JPG</b>
+          （<code>canvas.toDataURL('image/jpeg', 0.88)</code>，再用 <code>--allow-file-access-from-files</code> 解决 file:// 下 canvas 被污染无法导出的问题），
+          体积从 1.88 MB 降到 <b>272 KB</b>，比例仍是 1536×864 = 16:9，<b>画面右下角的「AI生成」水印我特意保留</b>——它就是这张图由 AI 生成的现场凭证。
+        </div>
+
+        <div class="zjh-prompt"><span class="zjh-round">▎提示词 B（超纲能力：键盘控制）</span>在 Swiper 轮播上再加一个<b>课堂没讲过</b>的能力，我选 <code>keyboard</code> 键盘控制。
+请告诉我 <code>keyboard</code> 参数该怎么写、默认行为是什么、以及有没有什么坑（比如会不会影响我在输入框里打字）。</div>
+
+        <div class="zjh-ai">
+          <b>AI 回答要点：</b><code>keyboard: { enabled: true }</code> 即可开启，<code>onlyInBrowser: true</code> 表示只在真实浏览器窗口里生效、
+          不在 iframe / 某些编辑器环境里劫持方向键。<b>我采纳了这一条并补上了 <code>onlyInBrowser: true</code></b>，避免在课堂编辑时误触翻页。
+        </div>
+
+        <div class="zjh-check">
+          <b>✅ 验证结果：</b>新增展品后四个演示轮播的 slide 均为 <b>6 张</b>，圆点均为 <b>6 个</b>；
+          演示四加上 <code>keyboard: { enabled: true, onlyInBrowser: true }</code> 后，
+          实测 <code>swiper.params.keyboard.enabled === true</code>，按 ← → 可翻页且不影响页面滚动；重建实例后配置依然保留。
+        </div>
+
+        <div class="zjh-qa">
+          <div class="zjh-q">🎤 答辩四连问</div>
+          <div class="zjh-a">
+            <b>① 这段代码什么意思？</b>——<code>keyboard: { enabled: true, onlyInBrowser: true }</code> 是 Swiper 的键盘控制模块，
+            开启后用户按键盘方向键 ← → 就能切换上一张 / 下一张，不用鼠标拖；<code>onlyInBrowser</code> 把这个能力限制在真实浏览器里。<br>
+            <b>② AI 第一次给的哪里不对、你改了什么？</b>——AI 第一次只给 <code>keyboard: { enabled: true }</code>，
+            漏了 <code>onlyInBrowser</code>。我读源码时发现 <code>keyboard</code> 模块默认会在绑定页面时监听 <code>keydown</code>，
+            在编辑器里敲方向键可能误翻页，于是<b>补上了 <code>onlyInBrowser: true</code></b>。<br>
+            <b>③ 新参数的作用？</b>——<code>keyboard.enabled</code> 开关键盘控制；<code>keyboard.onlyInBrowser</code> 限定只在浏览器生效；<code>keyboard.pageUpPageDown</code> 可额外启用 PageUp/PageDown 翻页。<br>
+            <b>④ 现场把 delay 改成指定值并解释预期变化？</b>——改 <code>autoplay.delay</code> 的毫秒数即可，
+            它表示<b>每张图停留多久再翻到下一张</b>：改成 <code>1000</code> 就是 1 秒翻一张（节奏明显变快、更像广告 Banner）；
+            改成 <code>8000</code> 就是 8 秒一张（变慢、适合需要看清文字的展品说明）；<code>delay</code> 只影响停留时长，
+            <code>speed</code> 才决定切换动画本身走多快，两者互不干扰。
+          </div>
+        </div>
+      </div>
+
+      <!-- ───────── 汇总 ───────── -->
+      <div class="zjh-rec-part">
+        <h4>📌 提交物清单与自评</h4>
+        <p style="font-size:13px;color:#4b5563;line-height:1.95;margin:6px 0">
+          <b>页面：</b>本文件 <code>swiper-lesson.html</code>（讲解版 + 三项任务全部完成）+ <code>swiper-task.html</code>（学生操作任务版，四个任务全部完成）。<br>
+          <b>图片：</b><code>swiper-imgs/aida_modu_1.jpg</code>（AI 生成，1536×864 / 16:9，272 KB，保留「AI生成」水印为凭证）。<br>
+          <b>对话记录：</b>本记录区 + 项目根目录 <code>zjh_prompt.md</code>（按项目规范追加的全部提示词日志）。<br>
+          <b>三连自评：</b>能跑 ✔（4 个轮播实例全部正常、6 展品、7 种 effect、键盘控制可用、零 JS 报错）·
+          能讲清 ✔（每个参数的作用与来源都能对着源码说明）· 能现场改 ✔（改 <code>delay</code>、改 <code>rotate</code> 的 Z 轴值即可现场验证）。
+        </p>
+        <span class="zjh-tag">提示词工程 ⭐⭐</span>
+        <span class="zjh-tag">creative 自研动效 ⭐⭐⭐</span>
+        <span class="zjh-tag">AI 生图 + 超纲能力 ⭐⭐⭐</span>
+        <span class="zjh-tag">源码级交叉验证</span>
+        <span class="zjh-tag">浏览器实测零报错</span>
+      </div>
+    </div>
+
+    <div class="zjh-sz" style="margin-top:20px"><b>🇨🇳 思政升华 · 给重器一个舞台：</b>
+    这节课我们学的只是一个轮播组件，但请记住——<b>技术没有温度，用技术的人才让它有了温度</b>。
+    天眼之父南仁东用 22 年把"不可能"变成"中国天眼"；你们用今天的每一段代码，练就明天为中国发声的本领。
+    轮播终会翻页，但<b>奋斗者的故事永远自动播放</b>。</div>
+  </div>
+
+  <div class="zjh-back"><a href="index.html">← 返回课堂实践中心</a>　<a href="swiper-task.html">去做学生操作任务版 →</a></div>
+
+  <footer>Swiper 轮播组件 · 大国重器光影展 · 高级网页设计 课后作业集 · 2026-2027-1</footer>
+</div>
+
+<script>
+/* ============================================================
+   JS 整体职责：初始化页面上 4 个 Swiper 轮播，并完成课堂三大进阶任务
+                —— 任务二 creative 电影墙（第 7 种自定义 effect）、
+                   任务三 新增展品后的键盘控制超纲能力
+   作者：张敬恒 | 时间：2026-11-05 | 使用模型：Space Bunny
+   ============================================================ */
+
+/*
+  功能名称：演示一 · 最小轮播初始化
+  作用：让「天宫—复兴号—C919—奋斗者—天眼—魔都号」六张照片可以按住拖动
+  实现思路：Swiper 11 用 new Swiper(选择器, 配置对象) 命令式实例化；
+            只给 speed（切换动画时长 500ms），其余走默认参数——
+            默认已开启模拟触摸拖拽（simulateTouch）与 grabable 光标变化
+*/
+new Swiper('#zjhSw1', { speed: 500 });
+
+/*
+  功能名称：演示二 · 分页器与导航箭头
+  作用：装上"遥控器"——底部圆点可点击跳转、两侧箭头可前后翻页，并无缝循环
+  实现思路：
+    loop: true                —— 无缝循环，最后一张再往后翻回到第一张
+    speed: 600                —— 切换动画时长 600 毫秒
+    pagination.el + clickable —— 圆点容器挂到 #zjhPag2，圆点可点击跳转
+    navigation.nextEl/prevEl  —— 绑定已有的 #zjhNext2 / #zjhPrev2 箭头元素
+*/
+new Swiper('#zjhSw2', {
+  loop: true,
+  speed: 600,
+  pagination: { el: '#zjhPag2', clickable: true },
+  navigation: { nextEl: '#zjhNext2', prevEl: '#zjhPrev2' }
+});
+
+/*
+  功能名称：演示三 · 自动播放与循环
+  作用：页面静止时每 2.6 秒自动翻一张，用户手动拖动后自动播放不停止
+  实现思路：
+    autoplay.delay = 2600                 —— 每张停留 2600 毫秒
+    autoplay.disableOnInteraction = false —— 手动滑动后不禁用自动播放
+    speed: 700                            —— 翻页过渡时长 700 毫秒
+    loop: true                            —— 循环续播，永不到头
+*/
+new Swiper('#zjhSw3', {
+  loop: true,
+  speed: 700,
+  autoplay: { delay: 2600, disableOnInteraction: false },
+  pagination: { el: '#zjhPag3', clickable: true }
+});
+
+/*
+  功能名称：演示四 · 效果实验台（任务二 creative 电影墙 + 任务三 键盘控制）
+  作用：初始以 slide 平推效果自动播放（每 3.2 秒），支持按钮实时切换 7 种 effect，
+        并额外启用键盘方向键控制（任务三的超纲能力）
+  实现思路：
+    1) keyboard.enabled —— Swiper 键盘控制模块，开启后按 ← → 即可翻页；
+       onlyInBrowser 限定只在真实浏览器里生效，避免影响编辑器输入
+    2) creativeEffect —— 课堂没讲过的第 7 种 effect，依据官方示例
+       swiper/demo/257-effect-creative.html 自行实现"电影墙"：
+         · prev（上一张退场）：translate 左移 -22% + translateZ 后退 -140
+           + scale 缩小到 0.78 + rotate Z 轴 -8 度带出倾斜角度，像镜头推远
+         · next（下一张进场）：translate 右移 100% + scale 放大到 1.12，
+           像镜头从右侧拉近
+       其余可选参数：opacity 透明度、origin 变换原点、shadow 投影、
+       limitProgress 影响范围、perspective 透视（默认 true）
+    3) 实例存入全局变量 zjhFxSwiper，供切换按钮 destroy + new 重建时使用
+*/
+var zjhFxSwiper = new Swiper('#zjhSw4', {
+  loop: true,
+  effect: 'slide',
+  speed: 800,
+  autoplay: { delay: 3200, disableOnInteraction: false },
+  pagination: { el: '#zjhPag4', clickable: true },
+  // 任务三 · 超纲能力：键盘方向键控制（← → 翻页）
+  keyboard: { enabled: true, onlyInBrowser: true },
+  // 任务二 · creative 电影墙（仅在 effect === 'creative' 时生效）
+  creativeEffect: {
+    prev: {
+      shadow: true,
+      translate: ['-22%', 0, -140],
+      scale: 0.78,
+      rotate: [0, 0, -8],
+      opacity: 0.75,
+      origin: 'right center'
+    },
+    next: {
+      shadow: false,
+      translate: ['100%', 0, 0],
+      scale: 1.12,
+      opacity: 1,
+      origin: 'left center'
+    },
+    limitProgress: 1,
+    perspective: true
+  }
+});
+
+/*
+  功能名称：效果切换按钮事件（7 种 effect 实时切换）
+  作用：点击任意按钮，把演示四的动效切换为该按钮 data-fx 指定的名称
+  实现思路：
+    1) 高亮当前按钮：先移除所有按钮的 zjh-on 类，再给被点击的加上
+    2) Swiper 的 effect 在实例化时就被固化进内部模块，单纯改配置无效，
+       必须销毁旧实例再重建：destroy(true, true) 会释放 el.swiper 引用、
+       清掉旧动效残留的行内样式，并由 loopDestroy() 移除循环模式复制的副本
+    3) 用新的 effect 名称重建实例，其余配置（loop / speed / autoplay /
+       pagination / keyboard / creativeEffect）原样保留
+*/
+var zjhFxBase = {
+  loop: true,
+  speed: 800,
+  autoplay: { delay: 3200, disableOnInteraction: false },
+  pagination: { el: '#zjhPag4', clickable: true },
+  keyboard: { enabled: true, onlyInBrowser: true },
+  creativeEffect: {
+    prev: {
+      shadow: true,
+      translate: ['-22%', 0, -140],
+      scale: 0.78,
+      rotate: [0, 0, -8],
+      opacity: 0.75,
+      origin: 'right center'
+    },
+    next: {
+      shadow: false,
+      translate: ['100%', 0, 0],
+      scale: 1.12,
+      opacity: 1,
+      origin: 'left center'
+    },
+    limitProgress: 1,
+    perspective: true
+  }
+};
+
+document.querySelectorAll('.zjh-fx button').forEach(function(btn){
+  btn.addEventListener('click', function(){
+    // ① 高亮当前按钮
+    document.querySelectorAll('.zjh-fx button').forEach(function(b){ b.classList.remove('zjh-on'); });
+    btn.classList.add('zjh-on');
+
+    // ② 销毁旧实例
+    zjhFxSwiper.destroy(true, true);
+
+    // ③ 用新 effect 重建实例（其它配置原样保留）
+    zjhFxBase.effect = btn.dataset.fx;
+    zjhFxSwiper = new Swiper('#zjhSw4', zjhFxBase);
+  });
+});
+</script>
+</body>
+</html>
