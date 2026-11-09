@@ -1,0 +1,290 @@
+<!--
+  功能名称：Swiper 课堂任务 · 任务二「creative 电影墙」
+  功能简介：任务二独立页。课堂讲了六种 effect，本页补第 7 种 creative（自定义变换），
+            提供 7 个按钮实时切换演示；列出 prev / next 参数表与最终配置，
+            保留两轮提示词与源码追问，最后用自己的话讲清 transform 的含义。
+  作者：张敬恒
+  时间：2026-11-09
+  使用模型：DeepSeek-V4.1-Flash
+-->
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>任务二 · creative 电影墙 · Swiper 课堂任务</title>
+<link rel="stylesheet" href="swiper/swiper-bundle.min.css">
+<link rel="stylesheet" href="swiper-tasks-904.css">
+<script src="swiper/swiper-bundle.min.js"></script>
+</head>
+<body>
+<div class="zjh-wrap">
+
+  <!-- ==== 页头 ==== -->
+  <div class="zjh-head">
+    <span class="zjh-badge">高 级 网 页 设 计 · SWIPER 课 堂 任 务 · 任 务 二</span>
+    <h1>任务二 · <b>creative 电影墙</b></h1>
+    <p>课堂讲了 fade、cube、coverflow、flip、cards 这几种 effect，缺的第七种是 <b>creative</b>。
+      这一关把它做成电影墙：上一张缩小、左移、带角度退场，下一张放大、从右侧进场。</p>
+    <div class="zjh-goals">
+      <i>① 新增第 7 个按钮</i><i>② 上一张缩小左移带角度</i><i>③ 下一张放大右移进场</i><i>④ 讲清 prev / next</i>
+    </div>
+  </div>
+
+  <!-- ==== 任务要求 ==== -->
+  <div class="zjh-rule">
+    <b>要求：</b>在演示台里加上第 7 个按钮「creative 电影墙」，点它能把轮播切成电影墙效果；
+    需要向 AI 追问 <code>prev</code> / <code>next</code> 的参数含义，最终能用自己的话说清楚百分号相对谁计算。
+  </div>
+
+  <!-- ==== 1 演示台 ==== -->
+  <div class="zjh-sec">
+    <div class="zjh-sec-head">
+      <span class="zjh-no">1</span>
+      <h2>演示台<small>7 个按钮，点一下换一种 effect</small></h2>
+      <span class="zjh-done">当前：<b id="zjhFxNow">slide</b></span>
+    </div>
+
+    <div class="zjh-fx" id="zjhFxBar">
+      <button type="button" data-fx="slide" class="zjh-on">slide（默认）</button>
+      <button type="button" data-fx="fade">fade 淡入</button>
+      <button type="button" data-fx="cube">cube 立方体</button>
+      <button type="button" data-fx="coverflow">coverflow 封面流</button>
+      <button type="button" data-fx="flip">flip 翻转</button>
+      <button type="button" data-fx="cards">cards 卡片</button>
+      <button type="button" data-fx="creative">creative 电影墙（任务二）</button>
+    </div>
+
+    <div class="zjh-swiper">
+      <div class="swiper" id="zjhSwFx">
+        <div class="swiper-wrapper">
+          <div class="swiper-slide"><img src="swiper-imgs/tiangong_1.jpg" alt="天宫空间站"></div>
+          <div class="swiper-slide"><img src="swiper-imgs/fuxing_1.jpg" alt="复兴号动车组"></div>
+          <div class="swiper-slide"><img src="swiper-imgs/c919_1.jpg" alt="C919 大飞机"></div>
+          <div class="swiper-slide"><img src="swiper-imgs/fendouzhe_1.jpg" alt="奋斗者号"></div>
+          <div class="swiper-slide"><img src="swiper-imgs/fast_1.jpg" alt="中国天眼"></div>
+        </div>
+        <div class="swiper-pagination" id="zjhPagFx"></div>
+      </div>
+    </div>
+    <p class="zjh-txt">选「creative 电影墙」后左右拖动看纵深：退场的那张缩小、左移并倾斜 8°，
+      进场的那张从画面右侧推入并放大。其余六个按钮用的是课堂讲过的配置，可以对比着看。</p>
+  </div>
+
+  <!-- ==== 2 参数 ==== -->
+  <div class="zjh-sec">
+    <div class="zjh-sec-head">
+      <span class="zjh-no">2</span>
+      <h2>prev / next 参数<small>各 6 个，合起来管一退一进</small></h2>
+      <span class="zjh-done">✅ 已落地</span>
+    </div>
+    <table class="zjh-table">
+      <thead>
+        <tr><th style="width:22%">参数</th><th style="width:28%">类型</th><th>作用</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>translate</code></td><td><code>[x, y, z]</code></td><td>位移。x / y 可写百分比字符串或 px 数字，z 只能写 px</td></tr>
+        <tr><td><code>rotate</code></td><td><code>[x, y, z]</code></td><td>三轴旋转，单位度；第三个值才是画面里的平面旋转</td></tr>
+        <tr><td><code>scale</code></td><td>number</td><td>缩放倍数，小于 1 缩小、大于 1 放大</td></tr>
+        <tr><td><code>opacity</code></td><td>number</td><td>透明度，0 全透明、1 不透明</td></tr>
+        <tr><td><code>shadow</code></td><td>boolean</td><td>是否给幻灯片加投影</td></tr>
+        <tr><td><code>origin</code></td><td>string</td><td>变换原点，例如 <code>'right center'</code> 表示以右边缘为中心缩放</td></tr>
+      </tbody>
+    </table>
+    <div class="zjh-code">creativeEffect: {
+  prev: {                          <span class="zjh-kw">// 左边退场的那张</span>
+    shadow: true,
+    translate: ['-22%', 0, -140],  <span class="zjh-kw">// 左移自身宽 22%，后退 140px</span>
+    scale: 0.78,                   <span class="zjh-kw">// 缩小到 0.78 倍</span>
+    rotate: [0, 0, -8],            <span class="zjh-kw">// 平面倾斜 8 度</span>
+    opacity: 0.75,
+    origin: 'right center'
+  },
+  next: {                          <span class="zjh-kw">// 右边进场的那张</span>
+    shadow: false,
+    translate: ['100%', 0, 0],     <span class="zjh-kw">// 从自身宽度 100% 处推入</span>
+    scale: 1.12,                   <span class="zjh-kw">// 放大到 1.12 倍</span>
+    opacity: 1,
+    origin: 'left center'
+  },
+  limitProgress: 1,
+  perspective: true
+}</div>
+  </div>
+
+  <!-- ==== 3 提示词 ==== -->
+  <div class="zjh-sec">
+    <div class="zjh-sec-head">
+      <span class="zjh-no">3</span>
+      <h2>两轮提示词<small>先问参数，再追问参照物</small></h2>
+      <span class="zjh-done">✅ 源码核实</span>
+    </div>
+
+    <div class="zjh-rec-part" style="margin-top:0">
+      <h4>提示词 A · 问参数
+        <a class="zjh-pl" href="zjh_prompt.md" target="_blank" rel="noopener">📄 zjh_prompt.md</a>
+        <a class="zjh-pl" href="https://github.com/jinheng-zhang/web-design-classnote-zjh904/blob/main/zjh_prompt.md#L331-L335" target="_blank" rel="noopener">GitHub ↗</a>
+      </h4>
+      <div class="zjh-prompt">我要给 Swiper 轮播加一个课堂没讲的第 7 种效果 creative（自定义变换）。请打开官方示例
+swiper/demo/257-effect-creative.html，读懂 creativeEffect，回答我三件事：
+1. creativeEffect 里 prev 和 next 各自能写哪些参数？分别控制什么？
+2. translate 数组的三个值 [x, y, z] 单位分别是什么？百分比是相对哪个元素算的？
+3. 怎样实现"上一张缩小左移并带角度、下一张放大右移进场"这种电影墙效果？给我一段可直接用的配置。</div>
+      <div class="zjh-ai">
+        <b>AI 回答：</b>给了 6 个参数（见上表）和一版配置，但没说明百分比相对谁计算。
+        对照本地 <code>types/modules/effect-creative.d.ts</code> 核对，参数名都对。
+      </div>
+    </div>
+
+    <div class="zjh-rec-part">
+      <h4>提示词 B · 追问参照物
+        <a class="zjh-pl" href="zjh_prompt.md" target="_blank" rel="noopener">📄 zjh_prompt.md</a>
+        <a class="zjh-pl" href="https://github.com/jinheng-zhang/web-design-classnote-zjh904/blob/main/zjh_prompt.md#L357-L360" target="_blank" rel="noopener">GitHub ↗</a>
+      </h4>
+      <div class="zjh-prompt">你说 translate 用百分比，那这个百分比到底是相对【幻灯片自己】还是相对【外层容器】算的？
+我本地已经装了 swiper 11.0.3 源码，请直接在 swiper/modules/effect-creative.mjs 里
+找到给 slide 写 transform 的那段代码，用源码回答我；然后按"上一张缩小左移带角度、
+下一张放大右移进场"给我最终配置。</div>
+      <div class="zjh-ai">
+        <b>AI 回答：</b>源码里 <code>getTranslateValue()</code> 对字符串原样透传给 <code>style.transform</code>，
+        而 transform 写在幻灯片自己身上，所以百分比相对<b>幻灯片自身的宽度</b>计算。
+        这也解释了为什么 <code>'100%'</code> 正好能把下一张推到画面外。
+      </div>
+    </div>
+  </div>
+
+  <!-- ==== 4 用自己的话 ==== -->
+  <div class="zjh-sec">
+    <div class="zjh-sec-head">
+      <span class="zjh-no">4</span>
+      <h2>答辩两问<small>用自己的话，不看稿</small></h2>
+      <span class="zjh-done">✅ 已准备</span>
+    </div>
+    <div class="zjh-qa">
+      <h4>Q1 · prev 和 next 各控制什么？</h4>
+      <p><code>prev</code> 管左边那张正在退场的，<code>next</code> 管右边那张正在进场的。一个往后退、一个往前推，
+        合起来才有纵深。我的写法是左边缩小到 0.78、左移 22%、后退 140px、倾斜 8°，
+        右边从 100% 处推入并放大到 1.12 倍。</p>
+    </div>
+    <div class="zjh-qa">
+      <h4>Q2 · 百分号相对谁？改成转 20 度怎么写？</h4>
+      <p>相对<b>幻灯片自己的宽度</b>，不是外层容器，所以 <code>'-22%'</code> 是这张图自身宽度的 22%。
+        想转 20 度就把 <code>rotate</code> 的第三个值改成 <code>[0, 0, 20]</code>，第三位才控制平面旋转。</p>
+    </div>
+  </div>
+
+  <!-- ==== 记录入口 ==== -->
+  <div class="zjh-rec">
+    <h3>提示词完整记录</h3>
+    <p class="zjh-rec-sub">两轮提示词的原文、AI 回答和源码核对过程在 <code>zjh_prompt.md</code> 附录的任务二小节。</p>
+    <a class="zjh-link" href="zjh_prompt.md" target="_blank" rel="noopener">打开 zjh_prompt.md</a>
+  </div>
+
+  <div class="zjh-back">
+    <a href="index.html">← 返回课堂实践中心</a>
+  </div>
+
+  <footer>任务二 · creative 电影墙 · 高级网页设计 · 2026-2027-1</footer>
+</div>
+
+<script>
+/* ============================================================
+   JS 整体职责：任务二的 7 按钮效果切换台。
+                点击按钮后用 destroy + new 重建 Swiper 实例，
+                把 effect 换成对应效果；creative 用自写配置实现电影墙。
+   作者：张敬恒 | 时间：2026-11-09 | 使用模型：DeepSeek-V4.1-Flash
+   ============================================================ */
+
+var zjh_swFx = null;
+
+/*
+  功能名称：按 effect 名生成配置
+  作用：返回一份完整的 Swiper 配置对象，公共部分（循环、速度、自动播放、
+        分页器）统一写，effect 相关的参数在 switch 里分开注入
+  实现思路：先写公共配置，再按 zjh_fx 判断往对象上挂 cubeEffect /
+            coverflowEffect / cardsEffect / creativeEffect / fadeEffect；
+            effect 本身只需写字符串名
+*/
+function zjh_buildOptions(zjh_fx) {
+  var zjh_opt = {
+    loop: true,
+    speed: 720,
+    effect: zjh_fx,
+    autoplay: { delay: 3600, disableOnInteraction: false },
+    pagination: { el: '#zjhPagFx', clickable: true }
+  };
+
+  if (zjh_fx === 'cube') {
+    zjh_opt.cubeEffect = { shadow: true, slideShadows: true, shadowOffset: 20, shadowScale: 0.94 };
+  } else if (zjh_fx === 'coverflow') {
+    zjh_opt.coverflowEffect = { rotate: 30, stretch: 0, depth: 120, modifier: 1, slideShadows: true };
+  } else if (zjh_fx === 'cards') {
+    zjh_opt.cardsEffect = { slideShadows: true, rotate: true, perSlideRotate: 2, perSlideOffset: 8 };
+  } else if (zjh_fx === 'creative') {
+    /* 电影墙：左边退场缩小左移带角度，右边进场放大推入 */
+    zjh_opt.creativeEffect = {
+      prev: {
+        shadow: true,
+        translate: ['-22%', 0, -140],
+        scale: 0.78,
+        rotate: [0, 0, -8],
+        opacity: 0.75,
+        origin: 'right center'
+      },
+      next: {
+        shadow: false,
+        translate: ['100%', 0, 0],
+        scale: 1.12,
+        opacity: 1,
+        origin: 'left center'
+      },
+      limitProgress: 1,
+      perspective: true
+    };
+  } else if (zjh_fx === 'fade') {
+    zjh_opt.fadeEffect = { crossFade: true };
+  }
+
+  return zjh_opt;
+}
+
+/*
+  功能名称：重建轮播
+  作用：换 effect 时把旧实例销毁，用新配置重新初始化
+  实现思路：effect 不能在运行中直接改参数，必须先 destroy(true, true) 连同
+            生成的 DOM 一起清掉；同时清空分页器容器里的旧圆点，避免叠加；
+            最后用新配置 new Swiper，重新赋值给 zjh_swFx
+*/
+function zjh_rebuild(zjh_fx) {
+  if (zjh_swFx) {
+    zjh_swFx.destroy(true, true);
+  }
+  document.querySelector('#zjhPagFx').innerHTML = '';
+  zjh_swFx = new Swiper('#zjhSwFx', zjh_buildOptions(zjh_fx));
+}
+
+/*
+  功能名称：按钮点击切换
+  作用：读取按钮上的 data-fx，重建轮播，更新角标和按钮高亮
+  实现思路：给每个按钮绑 click；用 querySelectorAll 遍历同组按钮，
+            先清掉所有 zjh-on 再给当前按钮加上，实现单选高亮；
+            角标文字同步改成中文效果名
+*/
+document.querySelectorAll('#zjhFxBar button').forEach(function (zjh_btn) {
+  zjh_btn.addEventListener('click', function () {
+    var zjh_fx = zjh_btn.dataset.fx;
+
+    document.querySelectorAll('#zjhFxBar button').forEach(function (zjh_b) {
+      zjh_b.classList.remove('zjh-on');
+    });
+    zjh_btn.classList.add('zjh-on');
+
+    zjh_rebuild(zjh_fx);
+    document.getElementById('zjhFxNow').textContent = zjh_btn.textContent.trim();
+  });
+});
+
+zjh_rebuild('slide');
+</script>
+</body>
+</html>

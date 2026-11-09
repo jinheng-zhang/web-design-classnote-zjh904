@@ -1,0 +1,249 @@
+<!--
+  功能名称：Swiper 课堂任务 · 任务一「提示词工程师」
+  功能简介：任务一独立页。把老师的四条需求拆成参数，给出可运行的 #zjhSw4 演示，
+            保留两轮提示词与 AI 回答（每条提示词旁带 zjh_prompt.md 链接），
+            最后用「一键自检」读取实例参数，逐项验证并给出结论。
+  作者：张敬恒
+  时间：2026-11-09
+  使用模型：DeepSeek-V4.1-Flash
+-->
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>任务一 · 提示词工程师 · Swiper 课堂任务</title>
+<link rel="stylesheet" href="swiper/swiper-bundle.min.css">
+<link rel="stylesheet" href="swiper-tasks-904.css">
+<script src="swiper/swiper-bundle.min.js"></script>
+</head>
+<body>
+<div class="zjh-wrap">
+
+  <!-- ==== 页头 ==== -->
+  <div class="zjh-head">
+    <span class="zjh-badge">高 级 网 页 设 计 · SWIPER 课 堂 任 务 · 任 务 一</span>
+    <h1>任务一 · <b>提示词工程师</b></h1>
+    <p>这一关不写代码，只写提示词：把老师口述的四条需求写成 <b>new Swiper('#zjhSw4', {...})</b>，
+      至少改两轮，最后把代码放进页面逐项验证。</p>
+    <div class="zjh-goals">
+      <i>① 无缝循环</i><i>② 3.2 秒自动翻页，手动后不停</i><i>③ 圆点可点击</i><i>④ 初始 cube</i>
+    </div>
+  </div>
+
+  <!-- ==== 任务要求 ==== -->
+  <div class="zjh-rule">
+    <b>老师的需求：</b>① 无缝循环；② 每 3.2 秒自动翻页，手动操作后不停；③ 底部圆点分页器可点击；④ 初始效果是 cube。<br>
+    <b>提交要求：</b>提示词至少两轮，每轮都要留提示词原文和 AI 回答；代码要粘进页面实测，逐项验证后写一句话结论。
+  </div>
+
+  <!-- ==== 1 需求拆解 ==== -->
+  <div class="zjh-sec">
+    <div class="zjh-sec-head">
+      <span class="zjh-no">1</span>
+      <h2>需求拆成参数<small>每条需求都要落到一个参数名上</small></h2>
+      <span class="zjh-done">✅ 已拆解</span>
+    </div>
+    <table class="zjh-table">
+      <thead>
+        <tr><th style="width:34%">需求</th><th style="width:34%">对应参数</th><th>不写会怎样</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>无缝循环</td><td><code>loop: true</code></td><td>翻到最后一张停住，回不到第一张</td></tr>
+        <tr><td>3.2 秒自动翻页</td><td><code>autoplay: { delay: 3200 }</code></td><td>不会自动翻页</td></tr>
+        <tr><td>手动操作后不停</td><td><code>autoplay.disableOnInteraction: false</code></td><td>拖一下松手，自动播放就停了</td></tr>
+        <tr><td>圆点分页器</td><td><code>pagination: { el: '#zjhPag4' }</code></td><td>圆点不显示</td></tr>
+        <tr><td>圆点可点击</td><td><code>pagination.clickable: true</code></td><td>圆点只是装饰，点了没反应</td></tr>
+        <tr><td>初始 cube</td><td><code>effect: 'cube'</code></td><td>变成默认的平推切换</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ==== 2 成品演示 ==== -->
+  <div class="zjh-sec">
+    <div class="zjh-sec-head">
+      <span class="zjh-no">2</span>
+      <h2>成品演示<small>拖动、点圆点、等 3.2 秒，三种行为都能看到</small></h2>
+      <span class="zjh-done">✅ 四项已实现</span>
+    </div>
+    <div class="zjh-swiper">
+      <div class="swiper" id="zjhSw4">
+        <div class="swiper-wrapper">
+          <div class="swiper-slide"><img src="swiper-imgs/tiangong_1.jpg" alt="天宫空间站"><div class="zjh-cap"><h3>天宫空间站</h3><p>2022 年全面建成</p></div></div>
+          <div class="swiper-slide"><img src="swiper-imgs/fuxing_1.jpg" alt="复兴号动车组"><div class="zjh-cap"><h3>复兴号动车组</h3><p>350 km/h 商业运营</p></div></div>
+          <div class="swiper-slide"><img src="swiper-imgs/c919_1.jpg" alt="C919 大飞机"><div class="zjh-cap"><h3>C919 大飞机</h3><p>2023 年商业首航</p></div></div>
+          <div class="swiper-slide"><img src="swiper-imgs/fendouzhe_1.jpg" alt="奋斗者号"><div class="zjh-cap"><h3>奋斗者号</h3><p>10909 米深潜</p></div></div>
+          <div class="swiper-slide"><img src="swiper-imgs/fast_1.jpg" alt="中国天眼"><div class="zjh-cap"><h3>中国天眼 FAST</h3><p>500 米口径</p></div></div>
+        </div>
+        <div class="swiper-pagination" id="zjhPag4"></div>
+      </div>
+    </div>
+
+    <div class="zjh-check-bar">
+      <button id="zjhCheckBtn" type="button">读取实例参数，逐项自检</button>
+      <span>点一下会打印 Swiper 实例里的真实参数，作为验证结果</span>
+    </div>
+    <div class="zjh-check-out" id="zjhCheckOut">尚未自检。</div>
+  </div>
+
+  <!-- ==== 3 两轮提示词 ==== -->
+  <div class="zjh-sec">
+    <div class="zjh-sec-head">
+      <span class="zjh-no">3</span>
+      <h2>两轮提示词<small>第 1 轮直译需求，第 2 轮补参数名</small></h2>
+      <span class="zjh-done">✅ 2 → 4 项</span>
+    </div>
+
+    <div class="zjh-rec-part" style="margin-top:0">
+      <h4>第 1 轮提示词
+        <a class="zjh-pl" href="zjh_prompt.md" target="_blank" rel="noopener">📄 zjh_prompt.md</a>
+        <a class="zjh-pl" href="https://github.com/jinheng-zhang/web-design-classnote-zjh904/blob/main/zjh_prompt.md#L243-L247" target="_blank" rel="noopener">GitHub ↗</a>
+      </h4>
+      <div class="zjh-prompt">用 JavaScript + Swiper 11 写一个轮播初始化配置 new Swiper('#zjhSw4', {...})，要求：
+1. 无缝循环播放
+2. 每 3.2 秒自动翻页
+3. 底部有圆点分页器
+4. 初始切换效果是 cube（3D 立方体）</div>
+      <div class="zjh-ai">
+        <b>AI 回答：</b>
+        <code>new Swiper('#zjhSw4', { loop: true, effect: 'cube', speed: 800,
+        autoplay: { delay: 3200 }, pagination: { el: '#zjhPag4' } })</code><br>
+        <b>核对后有两处漏项：</b>缺少 <code>disableOnInteraction: false</code>，
+        拖动后自动播放会停；缺少 <code>clickable: true</code>，圆点点不动。
+      </div>
+    </div>
+
+    <div class="zjh-rec-part">
+      <h4>第 2 轮提示词
+        <a class="zjh-pl" href="zjh_prompt.md" target="_blank" rel="noopener">📄 zjh_prompt.md</a>
+        <a class="zjh-pl" href="https://github.com/jinheng-zhang/web-design-classnote-zjh904/blob/main/zjh_prompt.md#L276-L280" target="_blank" rel="noopener">GitHub ↗</a>
+      </h4>
+      <div class="zjh-prompt">在上一版基础上补两条硬性要求：
+1. autoplay 里加 disableOnInteraction: false，用户手动滑动之后自动播放继续；
+2. pagination 里加 clickable: true，圆点可点击直接跳到对应图片。
+另外请把完整的 new Swiper('#zjhSw4', {...}) 代码原样给我，并用一句话说明每项配置的作用，我要直接粘进页面验证。</div>
+      <div class="zjh-ai">
+        <b>AI 回答：</b>两条都补上了，并逐条解释了每个参数的作用。落地到本页的代码：
+      </div>
+      <div class="zjh-code">new Swiper('#zjhSw4', {
+  loop: true,                    <span class="zjh-kw">// 无缝循环</span>
+  speed: 800,                    <span class="zjh-kw">// 切换动画时长（毫秒）</span>
+  effect: 'cube',                <span class="zjh-kw">// 初始效果：3D 立方体</span>
+  autoplay: {
+    delay: 3200,                 <span class="zjh-kw">// 每张停留 3.2 秒</span>
+    disableOnInteraction: false  <span class="zjh-kw">// 手动操作后继续播放</span>
+  },
+  pagination: {
+    el: '#zjhPag4',              <span class="zjh-kw">// 圆点容器</span>
+    clickable: true              <span class="zjh-kw">// 圆点可点击跳转</span>
+  }
+});</div>
+    </div>
+  </div>
+
+  <!-- ==== 4 验证结论 ==== -->
+  <div class="zjh-sec">
+    <div class="zjh-sec-head">
+      <span class="zjh-no">4</span>
+      <h2>逐项验证<small>把第 2 轮的代码放进页面后实测</small></h2>
+      <span class="zjh-done">✅ 4 / 4</span>
+    </div>
+    <table class="zjh-table">
+      <thead>
+        <tr><th style="width:26%">需求</th><th style="width:32%">实测值</th><th>结论</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>① 无缝循环</td><td><code>loop = true</code></td><td class="zjh-pass">翻过第 5 张继续走，能回到第 1 张。</td></tr>
+        <tr><td>② 3.2 秒自动翻页，手动后不停</td><td><code>delay = 3200</code><br><code>disableOnInteraction = false</code></td><td class="zjh-pass">静止约 3.2 秒自动翻一张；拖动松开后继续翻。</td></tr>
+        <tr><td>③ 圆点可点击</td><td><code>clickable = true</code><br>圆点 5 个</td><td class="zjh-pass">点第 4 个圆点直接跳到第 4 张。</td></tr>
+        <tr><td>④ 初始 cube</td><td><code>effect = 'cube'</code></td><td class="zjh-pass">打开页面就是立方体翻转。</td></tr>
+      </tbody>
+    </table>
+    <div class="zjh-qa">
+      <h4>一句话结论</h4>
+      <p>第 1 轮的问题不是语法错，而是需求里的限定词没写成参数名：手动后不停 → <code>disableOnInteraction: false</code>，
+        圆点可点击 → <code>clickable: true</code>。第 2 轮直接把参数名写进提示词，一次改对。</p>
+    </div>
+  </div>
+
+  <!-- ==== 记录入口 ==== -->
+  <div class="zjh-rec">
+    <h3>提示词完整记录</h3>
+    <p class="zjh-rec-sub">逐字原文、AI 完整回答和核对过程都在 <code>zjh_prompt.md</code> 附录的任务一小节，
+      每轮提示词旁的链接可以直接跳过去。</p>
+    <a class="zjh-link" href="zjh_prompt.md" target="_blank" rel="noopener">打开 zjh_prompt.md</a>
+  </div>
+
+  <div class="zjh-back">
+    <a href="index.html">← 返回课堂实践中心</a>
+  </div>
+
+  <footer>任务一 · 提示词工程师 · 高级网页设计 · 2026-2027-1</footer>
+</div>
+
+<script>
+/* ============================================================
+   JS 整体职责：初始化任务一的轮播 #zjhSw4（循环 + 3.2 秒自动播放 +
+                圆点可点击 + cube 效果），并提供一个自检按钮，
+                把实例里的真实参数打印出来作为验证结果。
+   作者：张敬恒 | 时间：2026-11-09 | 使用模型：DeepSeek-V4.1-Flash
+   ============================================================ */
+
+/*
+  功能名称：初始化成品轮播
+  作用：把第 2 轮提示词改出来的配置用到页面上
+  实现思路：new Swiper(选择器, 配置对象) 初始化；
+            loop 让首尾相接；autoplay.delay 控制停留时长，
+            disableOnInteraction 设 false 保证拖动后继续播放；
+            pagination.el 指定圆点容器，clickable 打开圆点跳转；
+            effect 设为 cube 作为初始动效
+*/
+var zjh_sw4 = new Swiper('#zjhSw4', {
+  loop: true,
+  speed: 800,
+  effect: 'cube',
+  autoplay: {
+    delay: 3200,
+    disableOnInteraction: false
+  },
+  pagination: {
+    el: '#zjhPag4',
+    clickable: true
+  }
+});
+
+/*
+  功能名称：逐项自检
+  作用：点击按钮后读取实例参数和圆点数量，判断四条需求是否满足，
+        结果显示在 #zjhCheckOut
+  实现思路：
+    1) 从 params 上取 loop / autoplay.delay / disableOnInteraction /
+       pagination.clickable / effect，与目标值做全等比较；
+    2) 用 querySelectorAll 统计圆点数量，与 5 张幻灯片对照；
+    3) 结果逐行拼成字符串，一次性写进输出框
+*/
+function zjh_selfCheck() {
+  var zjh_lines = [];
+  var zjh_ok1 = zjh_sw4.params.loop === true;
+  var zjh_ok2 = zjh_sw4.params.autoplay.delay === 3200 &&
+                zjh_sw4.params.autoplay.disableOnInteraction === false;
+  var zjh_ok3 = zjh_sw4.params.pagination.clickable === true;
+  var zjh_ok4 = zjh_sw4.params.effect === 'cube';
+  var zjh_bullets = document.querySelectorAll('#zjhPag4 .swiper-pagination-bullet').length;
+
+  zjh_lines.push('自检结果（' + new Date().toLocaleTimeString() + '）');
+  zjh_lines.push((zjh_ok1 ? '✅' : '⚠️') + ' ① loop = ' + zjh_sw4.params.loop);
+  zjh_lines.push((zjh_ok2 ? '✅' : '⚠️') + ' ② delay = ' + zjh_sw4.params.autoplay.delay +
+                '，disableOnInteraction = ' + zjh_sw4.params.autoplay.disableOnInteraction);
+  zjh_lines.push((zjh_ok3 ? '✅' : '⚠️') + ' ③ clickable = ' + zjh_sw4.params.pagination.clickable +
+                '，圆点 ' + zjh_bullets + ' 个');
+  zjh_lines.push((zjh_ok4 ? '✅' : '⚠️') + ' ④ effect = ' + zjh_sw4.params.effect);
+  zjh_lines.push('结论：' + (zjh_ok1 && zjh_ok2 && zjh_ok3 && zjh_ok4 ? '四项都满足' : '还有需求没满足'));
+
+  document.getElementById('zjhCheckOut').textContent = zjh_lines.join('\n');
+}
+
+document.getElementById('zjhCheckBtn').addEventListener('click', zjh_selfCheck);
+</script>
+</body>
+</html>

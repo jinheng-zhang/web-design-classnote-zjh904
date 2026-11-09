@@ -1,0 +1,275 @@
+/* ============================================================
+   功能名称：Swiper 三大任务独立页面 · 公共样式
+   功能简介：供 swiper-task1-904.html / swiper-task2-904.html / swiper-task3-904.html
+             三个页面共用，统一沿用 swiper-task.html 的视觉风格（深蓝主色 + 绿色任务框）
+   作者：张敬恒 | 时间：2026-11-09 | 使用模型：DeepSeek-V4.1-Flash
+   ============================================================ */
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: "Microsoft YaHei", "PingFang SC", system-ui, sans-serif;
+  background: #f6f8fc;
+  color: #1f2937;
+  line-height: 1.85;
+}
+
+.zjh-wrap { max-width: 1040px; margin: 0 auto; padding: 40px 20px 60px; }
+
+/* ==== 头部 ==== */
+.zjh-head {
+  background: linear-gradient(135deg, #0f2b5b, #1d5bbf);
+  border-radius: 20px; padding: 36px 38px; color: #fff;
+  margin-bottom: 14px; box-shadow: 0 12px 30px rgba(15, 43, 91, .3);
+}
+.zjh-head .zjh-badge {
+  display: inline-block; padding: 5px 14px; border-radius: 999px;
+  background: rgba(255, 255, 255, .14); border: 1px solid rgba(255, 255, 255, .3);
+  font-size: 13px; letter-spacing: 2px; margin-bottom: 14px;
+}
+.zjh-head h1 { font-size: 30px; letter-spacing: 1px; line-height: 1.4; }
+.zjh-head h1 b { color: #ffd166; }
+.zjh-head p { margin-top: 12px; font-size: 14.5px; color: #d9e3f5; line-height: 2; }
+.zjh-head p b { color: #fff; }
+.zjh-goals { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 18px; }
+.zjh-goals i {
+  font-style: normal; font-size: 13px; background: rgba(255, 255, 255, .12);
+  border: 1px solid rgba(255, 255, 255, .28); padding: 6px 14px; border-radius: 8px;
+}
+
+/* ==== 要求说明框 ==== */
+.zjh-rule {
+  background: #fffbea; border: 1px solid #fde68a; border-radius: 16px;
+  padding: 18px 22px; margin-bottom: 26px; font-size: 14px; color: #7c5e10; line-height: 2;
+}
+.zjh-rule b { color: #b45309; }
+.zjh-rule code {
+  background: #fef3c7; color: #92400e; padding: 1px 7px;
+  border-radius: 5px; font-family: Consolas, monospace; font-size: 13px;
+}
+
+/* ==== 章节 ==== */
+.zjh-sec {
+  background: #fff; border-radius: 18px; padding: 26px 30px; margin-bottom: 26px;
+  border: 1px solid #e8ecf5; box-shadow: 0 4px 14px rgba(31, 41, 55, .06);
+  position: relative; overflow: hidden;
+}
+.zjh-sec::before {
+  content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 5px;
+  background: linear-gradient(#0f2b5b, #1d5bbf);
+}
+.zjh-sec-head { display: flex; align-items: center; gap: 14px; margin-bottom: 12px; }
+.zjh-sec-head .zjh-no {
+  flex: none; width: 42px; height: 42px; border-radius: 12px;
+  background: linear-gradient(135deg, #0f2b5b, #1d5bbf); color: #fff;
+  font-size: 19px; font-weight: bold; display: flex; align-items: center; justify-content: center;
+}
+.zjh-sec-head h2 { font-size: 20px; color: #111827; }
+.zjh-sec-head h2 small {
+  display: block; font-weight: normal; color: #9ca3af; font-size: 13px; margin-top: 3px;
+}
+.zjh-done {
+  display: inline-block; flex: none; margin-left: auto; font-size: 12.5px; white-space: nowrap;
+  color: #15803d; background: #dcfce7; border: 1px solid #86efac;
+  border-radius: 999px; padding: 4px 14px;
+}
+.zjh-sec p.zjh-txt { font-size: 14.5px; color: #374151; line-height: 2; margin-bottom: 10px; }
+.zjh-sec p.zjh-txt b { color: #0f2b5b; }
+.zjh-sec code {
+  background: #eef2ff; color: #1d4ed8; padding: 1px 7px;
+  border-radius: 5px; font-family: Consolas, monospace; font-size: 13px;
+}
+
+/* ==== 任务要求卡 ==== */
+.zjh-req {
+  background: #f0fdf4; border: 1.5px dashed #16a34a; border-radius: 12px;
+  padding: 14px 18px; margin: 14px 0 6px;
+}
+.zjh-req h3 { font-size: 14.5px; color: #15803d; margin-bottom: 6px; }
+.zjh-req p { font-size: 13.5px; color: #166534; line-height: 2; }
+.zjh-req code {
+  background: #dcfce7; color: #15803d; padding: 1px 7px;
+  border-radius: 5px; font-family: Consolas, monospace; font-size: 12.5px;
+}
+.zjh-req .zjh-star { color: #e8890c; font-size: 13px; display: block; margin-top: 6px; }
+
+/* ==== 演示台 ==== */
+.zjh-demo { margin: 18px 0 6px; }
+.zjh-demo .zjh-demo-tag {
+  display: inline-block; font-size: 12.5px; color: #0f2b5b; background: #e8f0ff;
+  border: 1px solid #c7d8f8; border-radius: 999px; padding: 4px 14px; margin-bottom: 12px;
+}
+.zjh-swiper { width: 100%; max-width: 780px; margin: 0 auto; border-radius: 16px; }
+.zjh-swiper .swiper { border-radius: 16px; box-shadow: 0 10px 26px rgba(15, 43, 91, .18); }
+.zjh-swiper .swiper-slide { position: relative; height: 300px; }
+.zjh-swiper .swiper-slide img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.zjh-swiper .swiper-zoom-container { width: 100%; height: 100%; cursor: zoom-in; }
+.zjh-swiper .swiper-zoom-container img { max-width: none; object-fit: cover; }
+.zjh-swiper--tall .swiper-slide { height: 420px; }
+.zjh-cap {
+  position: absolute; left: 0; right: 0; bottom: 0; padding: 38px 20px 14px; color: #fff;
+  background: linear-gradient(transparent, rgba(5, 15, 35, .84));
+}
+.zjh-cap h3 { font-size: 18px; letter-spacing: 1px; }
+.zjh-cap p { font-size: 13px; color: #dbe6f8; margin-top: 4px; }
+
+/* 分页器与箭头配色 */
+.zjh-swiper .swiper-pagination-bullet { background: #0f2b5b; opacity: .35; }
+.zjh-swiper .swiper-pagination-bullet-active { background: #e8890c; opacity: 1; width: 22px; border-radius: 6px; }
+.zjh-swiper .swiper-button-next,
+.zjh-swiper .swiper-button-prev {
+  width: 42px; height: 42px; border-radius: 50%; background: rgba(15, 43, 91, .65); color: #fff;
+  --swiper-navigation-size: 18px; transition: background .2s;
+}
+.zjh-swiper .swiper-button-next:hover,
+.zjh-swiper .swiper-button-prev:hover { background: #e8890c; }
+
+/* ==== 效果切换按钮 ==== */
+.zjh-fx { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0 2px; }
+.zjh-fx button {
+  border: 1.5px solid #c7d8f8; background: #fff; color: #1d5bbf; font-size: 13.5px;
+  padding: 8px 16px; border-radius: 999px; cursor: pointer; transition: all .2s; font-family: inherit;
+}
+.zjh-fx button:hover { transform: translateY(-2px); box-shadow: 0 6px 14px rgba(29, 91, 191, .18); }
+.zjh-fx button.zjh-on { background: linear-gradient(135deg, #0f2b5b, #1d5bbf); color: #fff; border-color: transparent; }
+.zjh-fx button.zjh-creative { border-color: #e8890c; color: #b45309; }
+.zjh-fx button.zjh-creative.zjh-on { background: linear-gradient(135deg, #b45309, #e8890c); color: #fff; }
+
+/* ==== 表格 ==== */
+.zjh-table { width: 100%; border-collapse: collapse; font-size: 13.5px; margin: 12px 0; }
+.zjh-table th {
+  background: #eef2ff; color: #0f2b5b; font-weight: bold; text-align: left;
+}
+.zjh-table th, .zjh-table td { border: 1px solid #e2e8f0; padding: 9px 12px; vertical-align: top; }
+.zjh-table tr:nth-child(even) td { background: #fbfcff; }
+.zjh-table code {
+  background: #eef2ff; color: #1d4ed8; padding: 1px 6px;
+  border-radius: 4px; font-family: Consolas, monospace; font-size: 12.5px;
+}
+.zjh-table .zjh-pass { color: #15803d; white-space: nowrap; }
+.zjh-table .zjh-warn { color: #b45309; white-space: nowrap; }
+
+/* ==== 代码块 ==== */
+.zjh-code {
+  background: #0f2b5b; color: #e2e8f0; border-radius: 12px; padding: 16px 18px; margin: 12px 0;
+  font-family: Consolas, Monaco, "Courier New", monospace; font-size: 12.8px;
+  line-height: 1.95; white-space: pre-wrap; word-break: break-word; overflow-x: auto;
+}
+.zjh-code .zjh-kw { color: #ffd166; }
+
+/* ==== 自检按钮与结果 ==== */
+.zjh-check-bar { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin: 14px 0 6px; }
+.zjh-check-bar button {
+  border: 0; cursor: pointer; font-family: inherit; font-size: 13.5px; font-weight: bold;
+  color: #fff; background: linear-gradient(135deg, #0f2b5b, #1d5bbf);
+  padding: 10px 24px; border-radius: 999px; transition: transform .2s, box-shadow .2s;
+}
+.zjh-check-bar button:hover { transform: translateY(-2px); box-shadow: 0 8px 18px rgba(15, 43, 91, .2); }
+.zjh-check-bar span { font-size: 12.5px; color: #6b7280; }
+.zjh-check-out {
+  background: #0b1622; color: #9ae6b4; border-radius: 12px; padding: 14px 18px; margin-top: 10px;
+  font-family: Consolas, Monaco, "Courier New", monospace; font-size: 12.6px; line-height: 2;
+  white-space: pre-wrap;
+}
+.zjh-check-out .zjh-bad { color: #fbbf24; }
+
+/* ==== 能力提示条 ==== */
+.zjh-tips { display: flex; flex-wrap: wrap; gap: 8px; margin: 14px 0 4px; }
+.zjh-tips span {
+  font-size: 12.5px; color: #0f2b5b; background: #e8f0ff;
+  border: 1px solid #c7d8f8; border-radius: 999px; padding: 5px 14px;
+}
+.zjh-tips span b { color: #b45309; }
+
+/* ==== 答辩问答 ==== */
+.zjh-qa {
+  background: #fff7ed; border: 1px solid #fed7aa; border-radius: 14px;
+  padding: 16px 20px; margin-top: 16px;
+}
+.zjh-qa > h4 { font-size: 15px; color: #b45309; margin-bottom: 8px; }
+.zjh-qa p { font-size: 13.8px; color: #7c2d12; line-height: 2; margin-bottom: 6px; }
+.zjh-qa p:last-child { margin-bottom: 0; }
+.zjh-qa code {
+  background: #ffedd5; color: #c2410c; padding: 1px 6px;
+  border-radius: 4px; font-family: Consolas, monospace; font-size: 12.5px;
+}
+
+/* ==== AI 提示词记录区 ==== */
+.zjh-rec { margin-top: 26px; background: #f0fdf4; border: 2px solid #16a34a; border-radius: 18px; padding: 24px 28px; }
+.zjh-rec > h3 { font-size: 19px; color: #15803d; margin-bottom: 4px; }
+.zjh-rec .zjh-rec-sub { font-size: 13.5px; color: #166534; margin-bottom: 16px; line-height: 1.9; }
+.zjh-rec-part { background: #fff; border: 1px solid #bbf7d0; border-radius: 14px; padding: 18px 20px; margin-top: 16px; }
+.zjh-rec-part > h4 {
+  font-size: 15.5px; color: #0f2b5b; margin-bottom: 10px; padding-bottom: 8px; border-bottom: 1px dashed #bbf7d0;
+}
+.zjh-rec-part > h4 .zjh-ok {
+  font-size: 12px; color: #15803d; background: #dcfce7; border: 1px solid #86efac;
+  border-radius: 999px; padding: 2px 10px; margin-left: 8px; vertical-align: middle; font-weight: normal;
+}
+.zjh-prompt {
+  background: #0f2b5b; color: #e2e8f0; border-radius: 12px; padding: 14px 18px; margin: 10px 0;
+  font-size: 12.8px; line-height: 1.95; font-family: Consolas, Monaco, "Courier New", monospace;
+  white-space: pre-wrap; word-break: break-word;
+}
+.zjh-prompt .zjh-round {
+  display: block; color: #ffd166; font-weight: bold; margin-bottom: 8px;
+  font-family: "Microsoft YaHei", "PingFang SC", sans-serif; font-size: 13px;
+}
+.zjh-ai {
+  background: #f8fafc; border-left: 4px solid #94a3b8; border-radius: 0 10px 10px 0;
+  padding: 12px 16px; margin: 8px 0 12px; font-size: 13px; color: #334155; line-height: 1.95;
+}
+.zjh-ai b { color: #0f2b5b; }
+.zjh-ai code, .zjh-rec code {
+  background: #e2e8f0; color: #1e40af; padding: 1px 6px; border-radius: 4px;
+  font-family: Consolas, monospace; font-size: 12.3px;
+}
+.zjh-rec .zjh-tag {
+  display: inline-block; font-size: 12px; color: #0f2b5b; background: #e8f0ff;
+  border: 1px solid #c7d8f8; border-radius: 999px; padding: 3px 12px; margin: 6px 6px 0 0;
+}
+.zjh-rec .zjh-link {
+  display: inline-block; margin-top: 14px; padding: 10px 22px; color: #fff; text-decoration: none;
+  background: linear-gradient(135deg, #0f2b5b, #1d5bbf); border-radius: 999px;
+  font-size: 13.5px; font-weight: bold; transition: transform .2s, box-shadow .2s;
+}
+.zjh-rec .zjh-link:hover { transform: translateY(-2px); box-shadow: 0 8px 18px rgba(15, 43, 91, .2); }
+
+/* ==== 提示词旁的「查看原始记录」小链接 ==== */
+.zjh-pl {
+  float: right; margin: 0 6px 0 0; padding: 1px 10px; border-radius: 999px;
+  font-family: "Microsoft YaHei", "PingFang SC", sans-serif; font-size: 11.5px;
+  font-weight: normal; text-decoration: none; letter-spacing: 0;
+  background: rgba(255, 255, 255, .12); color: #ffd166; border: 1px solid rgba(255, 209, 102, .5);
+  transition: background .2s;
+}
+.zjh-pl:hover { background: rgba(255, 209, 102, .22); color: #fff; }
+
+/* ==== 任务三 · 视差字幕 ==== */
+.zjh-plx { position: absolute; left: 0; right: 0; bottom: 0; padding: 60px 26px 22px; color: #fff; z-index: 2; }
+.zjh-plx h3 { font-size: 26px; letter-spacing: 2px; text-shadow: 0 4px 18px rgba(0, 0, 0, .5); }
+.zjh-plx p { font-size: 14px; color: #e2e8f0; margin-top: 6px; text-shadow: 0 3px 12px rgba(0, 0, 0, .5); }
+.zjh-plx::after {
+  content: ""; position: absolute; inset: 0; z-index: -1;
+  background: linear-gradient(transparent, rgba(4, 12, 30, .85));
+}
+
+/* ==== 返回导航与页脚 ==== */
+.zjh-back { text-align: center; margin-top: 28px; }
+.zjh-back a {
+  display: inline-block; margin: 0 4px; text-decoration: none; color: #0f2b5b;
+  font-size: 14.5px; font-weight: bold; background: #fff; border: 1px solid #dbe4ff;
+  border-radius: 999px; padding: 10px 26px; transition: transform .2s, box-shadow .2s;
+}
+.zjh-back a:hover { transform: translateY(-2px); box-shadow: 0 8px 18px rgba(15, 43, 91, .15); }
+footer { text-align: center; margin-top: 34px; color: #9ca3af; font-size: 13px; line-height: 2; }
+
+@media (max-width: 640px) {
+  .zjh-head { padding: 26px 22px; }
+  .zjh-head h1 { font-size: 22px; }
+  .zjh-sec { padding: 22px 18px; }
+  .zjh-swiper .swiper-slide { height: 220px; }
+  .zjh-swiper--tall .swiper-slide { height: 260px; }
+  .zjh-plx h3 { font-size: 19px; }
+  .zjh-pl { float: none; display: inline-block; margin: 4px 6px 0 0; }
+}

@@ -1,0 +1,292 @@
+<!--
+  功能名称：Swiper 课堂任务 · 任务三「四项能力全开」
+  功能简介：任务三独立页。demo 取自 swiper/demo/400-zoom.html（全屏照片 + 双击缩放），
+            再叠加 360-parallax.html 的字幕视差，并在同一个实例里打开 keyboard 与 mousewheel，
+            四项能力都配了参数说明与代码解释，末尾是答辩四连问。
+  作者：张敬恒
+  时间：2026-11-09
+  使用模型：DeepSeek-V4.1-Flash
+-->
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>任务三 · 四项能力全开 · Swiper 课堂任务</title>
+<link rel="stylesheet" href="swiper/swiper-bundle.min.css">
+<link rel="stylesheet" href="swiper-tasks-904.css">
+<script src="swiper/swiper-bundle.min.js"></script>
+</head>
+<body>
+<div class="zjh-wrap">
+
+  <!-- ==== 页头 ==== -->
+  <div class="zjh-head">
+    <span class="zjh-badge">高 级 网 页 设 计 · SWIPER 课 堂 任 务 · 任 务 三</span>
+    <h1>任务三 · <b>四项能力全开</b></h1>
+    <p>demo 直接取官方示例：以 <code>400-zoom.html</code> 为底（全屏照片 + 双击缩放），
+      叠加 <code>360-parallax.html</code> 的字幕视差，再把键盘和滚轮打开。四项能力跑在同一个实例上。</p>
+    <div class="zjh-goals">
+      <i>⌨️ 方向键翻页</i><i>🖱️ 滚轮翻页</i><i>🔍 双击缩放</i><i>🌄 视差字幕</i>
+    </div>
+  </div>
+
+  <!-- ==== 任务要求 ==== -->
+  <div class="zjh-rule">
+    <b>要求：</b>四项能力都写进同一份配置，并说明每个参数的作用；答辩要能讲清代码含义、
+    AI 第一次错在哪、新参数的作用，以及现场改写一个值后结果会怎么变。
+  </div>
+
+  <!-- ==== 1 演示 ==== -->
+  <div class="zjh-sec">
+    <div class="zjh-sec-head">
+      <span class="zjh-no">1</span>
+      <h2>演示<small>照片来自 swiper/demo/images</small></h2>
+      <span class="zjh-done">✅ 四项同时开启</span>
+    </div>
+
+    <div class="zjh-swiper zjh-swiper--tall">
+      <div class="swiper" id="zjhSwDemo">
+        <div class="swiper-wrapper">
+          <div class="swiper-slide">
+            <div class="swiper-zoom-container"><img src="swiper/demo/images/nature-1.jpg" alt="自然风光 1"></div>
+            <div class="zjh-plx">
+              <h3 data-swiper-parallax="-180" data-swiper-parallax-opacity="0.15">山川</h3>
+              <p data-swiper-parallax="-260">01 / 09 · 视差字幕随翻页向内移动</p>
+            </div>
+          </div>
+          <div class="swiper-slide">
+            <div class="swiper-zoom-container"><img src="swiper/demo/images/nature-2.jpg" alt="自然风光 2"></div>
+            <div class="zjh-plx">
+              <h3 data-swiper-parallax="-180" data-swiper-parallax-opacity="0.15">湖光</h3>
+              <p data-swiper-parallax="-260">02 / 09</p>
+            </div>
+          </div>
+          <div class="swiper-slide">
+            <div class="swiper-zoom-container"><img src="swiper/demo/images/nature-3.jpg" alt="自然风光 3"></div>
+            <div class="zjh-plx">
+              <h3 data-swiper-parallax="-180" data-swiper-parallax-opacity="0.15">密林</h3>
+              <p data-swiper-parallax="-260">03 / 09</p>
+            </div>
+          </div>
+          <div class="swiper-slide">
+            <div class="swiper-zoom-container"><img src="swiper/demo/images/nature-4.jpg" alt="自然风光 4"></div>
+            <div class="zjh-plx">
+              <h3 data-swiper-parallax="-180" data-swiper-parallax-opacity="0.15">海岸</h3>
+              <p data-swiper-parallax="-260">04 / 09</p>
+            </div>
+          </div>
+          <div class="swiper-slide">
+            <div class="swiper-zoom-container"><img src="swiper/demo/images/nature-5.jpg" alt="自然风光 5"></div>
+            <div class="zjh-plx">
+              <h3 data-swiper-parallax="-180" data-swiper-parallax-opacity="0.15">雪峰</h3>
+              <p data-swiper-parallax="-260">05 / 09</p>
+            </div>
+          </div>
+          <div class="swiper-slide">
+            <div class="swiper-zoom-container"><img src="swiper/demo/images/nature-6.jpg" alt="自然风光 6"></div>
+            <div class="zjh-plx">
+              <h3 data-swiper-parallax="-180" data-swiper-parallax-opacity="0.15">荒原</h3>
+              <p data-swiper-parallax="-260">06 / 09</p>
+            </div>
+          </div>
+          <div class="swiper-slide">
+            <div class="swiper-zoom-container"><img src="swiper/demo/images/nature-7.jpg" alt="自然风光 7"></div>
+            <div class="zjh-plx">
+              <h3 data-swiper-parallax="-180" data-swiper-parallax-opacity="0.15">溪谷</h3>
+              <p data-swiper-parallax="-260">07 / 09</p>
+            </div>
+          </div>
+          <div class="swiper-slide">
+            <div class="swiper-zoom-container"><img src="swiper/demo/images/nature-8.jpg" alt="自然风光 8"></div>
+            <div class="zjh-plx">
+              <h3 data-swiper-parallax="-180" data-swiper-parallax-opacity="0.15">黄昏</h3>
+              <p data-swiper-parallax="-260">08 / 09</p>
+            </div>
+          </div>
+          <div class="swiper-slide">
+            <div class="swiper-zoom-container"><img src="swiper/demo/images/nature-9.jpg" alt="自然风光 9"></div>
+            <div class="zjh-plx">
+              <h3 data-swiper-parallax="-180" data-swiper-parallax-opacity="0.15">星空</h3>
+              <p data-swiper-parallax="-260">09 / 09</p>
+            </div>
+          </div>
+        </div>
+        <div class="swiper-button-prev" id="zjhPrevDemo"></div>
+        <div class="swiper-button-next" id="zjhNextDemo"></div>
+        <div class="swiper-pagination" id="zjhPagDemo"></div>
+      </div>
+    </div>
+
+    <div class="zjh-fx" id="zjhMwBar">
+      <button type="button" id="zjhMwBtn">滚轮翻页：开</button>
+      <span style="font-size:12.5px;color:#6b7280;align-self:center" id="zjhMwTip">
+        页面滚动被轮播抢占时，点这里关掉
+      </span>
+    </div>
+    <p class="zjh-txt">操作：方向键 ← → 或滚轮翻页；双击照片放大，再双击还原；翻页时字幕比照片移动更快。</p>
+  </div>
+
+  <!-- ==== 2 参数 ==== -->
+  <div class="zjh-sec">
+    <div class="zjh-sec-head">
+      <span class="zjh-no">2</span>
+      <h2>四个模块的参数<small>只列关键项</small></h2>
+      <span class="zjh-done">✅ 已落地</span>
+    </div>
+    <table class="zjh-table">
+      <thead>
+        <tr><th style="width:18%">模块</th><th style="width:40%">关键参数</th><th>作用</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>keyboard</code></td><td><code>enabled: true</code><br><code>onlyInViewport: true</code><br><code>pageUpDown: true</code></td><td>方向键、PageUp/PageDown 翻页；只在轮播进入视口时响应，输入框里打字不受影响</td></tr>
+        <tr><td><code>mousewheel</code></td><td><code>enabled: true</code><br><code>sensitivity: 0.85</code><br><code>thresholdDelta: 25</code></td><td>滚轮翻页；数值越大越灵敏；<code>releaseOnEdges</code> 让首尾处把滚动交还页面</td></tr>
+        <tr><td><code>zoom</code></td><td><code>maxRatio: 2.6</code><br><code>toggle: false</code></td><td>双击放大到 2.6 倍；图片必须放在 <code>.swiper-zoom-container</code> 里</td></tr>
+        <tr><td><code>parallax</code></td><td><code>parallax: true</code><br><code>data-swiper-parallax="-180"</code></td><td>开启后，带 data 属性的子元素在翻页时按比例错位，产生纵深</td></tr>
+      </tbody>
+    </table>
+    <div class="zjh-code">var zjh_swDemo = new Swiper('#zjhSwDemo', {
+  loop: true,
+  speed: 750,
+  keyboard: { enabled: true, onlyInViewport: true, pageUpDown: true },
+  mousewheel: { enabled: true, sensitivity: 0.85, thresholdDelta: 25, releaseOnEdges: true },
+  zoom: { maxRatio: 2.6, minRatio: 1, toggle: false },   <span class="zjh-kw">// 双击交给下面的 dblclick</span>
+  parallax: true,
+  pagination: { el: '#zjhPagDemo', clickable: true },
+  navigation: { nextEl: '#zjhNextDemo', prevEl: '#zjhPrevDemo' }
+});</div>
+  </div>
+
+  <!-- ==== 3 提示词 ==== -->
+  <div class="zjh-sec">
+    <div class="zjh-sec-head">
+      <span class="zjh-no">3</span>
+      <h2>提示词<small>向 AI 请教没讲过的 keyboard</small></h2>
+      <span class="zjh-done">✅ 已修正</span>
+    </div>
+    <div class="zjh-rec-part" style="margin-top:0">
+      <h4>提示词
+        <a class="zjh-pl" href="zjh_prompt.md" target="_blank" rel="noopener">📄 zjh_prompt.md</a>
+        <a class="zjh-pl" href="https://github.com/jinheng-zhang/web-design-classnote-zjh904/blob/main/zjh_prompt.md#L457-L459" target="_blank" rel="noopener">GitHub ↗</a>
+      </h4>
+      <div class="zjh-prompt">在 Swiper 轮播上再加一个【课堂没讲过】的能力，我选 keyboard 键盘控制。
+请告诉我 keyboard 参数该怎么写、默认行为是什么、以及有没有什么坑
+（比如会不会影响我在输入框里打字）。</div>
+      <div class="zjh-ai">
+        <b>AI 第一次的错：</b>写成 <code>keyboard: true</code>，Swiper 实际要求对象
+        <code>{ enabled: true }</code>；另外把参数 <code>onlyInViewport</code> 写成了不存在的
+        <code>onlyInBrowser</code>。对照本地 <code>swiper/modules/keyboard.mjs</code> 才改对。<br>
+        <b>另一个坑：</b>zoom 默认 <code>toggle: true</code>，会自己响应双击，
+        和我写的 dblclick 各放大一次、互相抵消，看起来像没反应，所以配置里关掉它。
+      </div>
+    </div>
+  </div>
+
+  <!-- ==== 4 答辩 ==== -->
+  <div class="zjh-sec">
+    <div class="zjh-sec-head">
+      <span class="zjh-no">4</span>
+      <h2>答辩四连问<small>每题两三句话</small></h2>
+      <span class="zjh-done">✅ 已准备</span>
+    </div>
+    <div class="zjh-qa">
+      <h4>Q1 · 这段代码在做什么？</h4>
+      <p>一个实例上挂了四个模块：<code>keyboard</code> 监听键盘事件，<code>mousewheel</code> 把滚轮转成翻页，
+        <code>zoom</code> 处理双击缩放的指针手势，<code>parallax</code> 在翻页过程中按比例位移字幕。
+        图片包在 <code>.swiper-zoom-container</code> 里，zoom 才能找到缩放对象。</p>
+    </div>
+    <div class="zjh-qa">
+      <h4>Q2 · AI 第一次错在哪？</h4>
+      <p>把 keyboard 写成布尔值 <code>keyboard: true</code>，还编了一个不存在的参数 <code>onlyInBrowser</code>。
+        按源码改成 <code>{ enabled: true, onlyInViewport: true }</code> 才生效。</p>
+    </div>
+    <div class="zjh-qa">
+      <h4>Q3 · zoom 里的 toggle: false 起什么作用？</h4>
+      <p>zoom 模块默认开启 toggle，会自己响应双击；我另外写了 dblclick 再 toggle 一次，
+        两次互相抵消。设成 false 后，双击只由我的 dblclick 处理，放大和还原都正常。</p>
+    </div>
+    <div class="zjh-qa">
+      <h4>Q4 · 把 thresholdDelta 改成 10 会怎样？</h4>
+      <p>阈值变小，滚轮更容易触发翻页，轻轻滚一下就会换张，灵敏但容易误触。
+        反过来调大，就必须多滚几下才翻一页。</p>
+    </div>
+  </div>
+
+  <!-- ==== 记录入口 ==== -->
+  <div class="zjh-rec">
+    <h3>提示词完整记录</h3>
+    <p class="zjh-rec-sub">这条提示词和 AI 回答的原文在 <code>zjh_prompt.md</code> 附录的任务三小节。</p>
+    <a class="zjh-link" href="zjh_prompt.md" target="_blank" rel="noopener">打开 zjh_prompt.md</a>
+  </div>
+
+  <div class="zjh-back">
+    <a href="index.html">← 返回课堂实践中心</a>
+  </div>
+
+  <footer>任务三 · 四项能力全开 · 高级网页设计 · 2026-2027-1</footer>
+</div>
+
+<script>
+/* ============================================================
+   JS 整体职责：任务三的 demo 初始化。一个 Swiper 实例同时开启
+                keyboard、mousewheel、zoom、parallax 四项能力，
+                并额外提供滚轮开关按钮和双击缩放绑定。
+   作者：张敬恒 | 时间：2026-11-09 | 使用模型：DeepSeek-V4.1-Flash
+   ============================================================ */
+
+/*
+  功能名称：初始化四项能力 demo
+  作用：把官方 400-zoom 的缩放能力和 360-parallax 的视差字幕合到一个实例里，
+        再打开键盘与滚轮
+  实现思路：
+    keyboard 用对象 {enabled, onlyInViewport, pageUpDown}，只在轮播进入视口时响应；
+    mousewheel 用 sensitivity / thresholdDelta 控制灵敏度，releaseOnEdges 在首尾交还滚动；
+    zoom 设 toggle: false，避免内置双击与自定义双击重复触发；
+    parallax 为 true，配合 HTML 里的 data-swiper-parallax 让字幕产生位移
+*/
+var zjh_swDemo = new Swiper('#zjhSwDemo', {
+  loop: true,
+  speed: 750,
+  keyboard: { enabled: true, onlyInViewport: true, pageUpDown: true },
+  mousewheel: { enabled: true, sensitivity: 0.85, thresholdDelta: 25, releaseOnEdges: true },
+  zoom: { maxRatio: 2.6, minRatio: 1, toggle: false },
+  parallax: true,
+  pagination: { el: '#zjhPagDemo', clickable: true },
+  navigation: { nextEl: '#zjhNextDemo', prevEl: '#zjhPrevDemo' }
+});
+
+/*
+  功能名称：双击缩放绑定
+  作用：在照片上双击放大，再双击还原
+  实现思路：监听轮播容器的 dblclick；先用 closest 判断点击位置是否在
+            .swiper-zoom-container 内，是才调用实例的 zoom.toggle(e)，
+            这样点到字幕或空白处不会误触缩放
+*/
+document.getElementById('zjhSwDemo').addEventListener('dblclick', function (zjh_e) {
+  if (zjh_e.target.closest('.swiper-zoom-container')) {
+    zjh_swDemo.zoom.toggle(zjh_e);
+  }
+});
+
+/*
+  功能名称：滚轮开关
+  作用：一键关闭 / 开启 mousewheel，避免轮播抢走页面滚动
+  实现思路：读取实例上 mousewheel.enabled 的当前值，true 就调 disable()，
+            false 就调 enable()；按钮文案同步改成「开」或「关」，
+            同时更新右侧提示文字
+*/
+document.getElementById('zjhMwBtn').addEventListener('click', function (zjh_e) {
+  var zjh_btn = zjh_e.currentTarget;
+  if (zjh_swDemo.mousewheel.enabled) {
+    zjh_swDemo.mousewheel.disable();
+    zjh_btn.textContent = '滚轮翻页：关';
+    document.getElementById('zjhMwTip').textContent = '已关闭，页面可以正常滚动';
+  } else {
+    zjh_swDemo.mousewheel.enable();
+    zjh_btn.textContent = '滚轮翻页：开';
+    document.getElementById('zjhMwTip').textContent = '页面滚动被轮播抢占时，点这里关掉';
+  }
+});
+</script>
+</body>
+</html>
