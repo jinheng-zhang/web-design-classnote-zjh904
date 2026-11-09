@@ -112,10 +112,71 @@
 }</div>
   </div>
 
-  <!-- ==== 3 提示词 ==== -->
+  <!-- ==== 3 代码解析 ==== -->
   <div class="zjh-sec">
     <div class="zjh-sec-head">
       <span class="zjh-no">3</span>
+      <h2>代码解析<small>creativeEffect 每个参数在源码里怎么走</small></h2>
+      <span class="zjh-done">✅ 对照 effect-creative.mjs</span>
+    </div>
+
+    <p class="zjh-txt">下面逐行解释我们电影墙配置的每一个参数，以及它在 Swiper 源码里是怎么被处理的。</p>
+
+    <div class="zjh-code">/* === creativeEffect 整体结构 === */
+creativeEffect: {
+  prev: { shadow, translate, scale, rotate, opacity, origin },  // 左边退场的那张
+  next: { shadow, translate, scale, rotate, opacity, origin },  // 右边进场的那张
+  limitProgress: 1,     // 只管紧邻的 1 张，数值是"作用范围"
+  perspective: true     // 打开 3D 透视，z 轴位移才有纵深感
+}
+
+/* === 我们的电影墙配置逐行注释 === */
+creativeEffect: {
+  prev: {
+    shadow: true,                         // 给左边这张加投影，通过 boxShadow 样式实现
+    translate: ['-22%', 0, -140],         // getTranslateValue() 原样透传字符串 → 写进 style.transform
+                                         // x=-22%（相对 slide 自身宽度左移）、y=0、z=-140px（往后退）
+    scale: 0.78,                          // translate3d 里的 scale，直接写进 transform
+    rotate: [0, 0, -8],                   // rotate3d(0, 0, 1, -8deg)，Z 轴平面倾斜 -8°
+    opacity: 0.75,                        // 直接写进 style.opacity
+    origin: 'right center'                // 写进 style.transform-origin，以右边缘为基准缩放
+  },
+  next: {
+    shadow: false,                        // 右边这张不加阴影（刚进场时阴影不明显）
+    translate: ['100%', 0, 0],            // 从 slide 自身宽度的 100% 处推入，正好在画面外
+    scale: 1.12,                          // 进场时比实际大一点，有"迎面推过来"的感觉
+    opacity: 1,                           // 完全不透明
+    origin: 'left center'                 // 以左边缘为基准缩放，从画面外推进来时锚点在左
+  },
+  limitProgress: 1,
+  perspective: true
+}
+
+/* === 源码里关键函数（取自 effect-creative.mjs） === */
+function getTranslateValue(value) {
+  if (typeof value === 'string') return value;   // ← 这就是为什么百分比相对 slide 自身！
+  return `${value}px`;                             //    字符串直接透传给 CSS transform
+}
+// ... 最后 targetEl.style.transform = transform;  // targetEl = slide 本身</div>
+
+    <table class="zjh-table" style="margin-top:12px">
+      <thead>
+        <tr><th style="width:30%">我们写的配置</th><th style="width:30%">源码里怎么处理</th><th>浏览器里的效果</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>prev.translate: ['-22%', 0, -140]</code></td><td>字符串 <code>'-22%'</code> 被原样透传给 <code>style.transform</code></td><td>左边这张往左移自身宽度 22%，并后退 140px</td></tr>
+        <tr><td><code>prev.scale: 0.78</code></td><td>直接写进 <code>translate3d(0,0,0) scale(0.78)</code></td><td>缩小到 0.78 倍</td></tr>
+        <tr><td><code>prev.rotate: [0,0,-8]</code></td><td>写进 <code>rotate3d(0,0,1,-8deg)</code></td><td>平面倾斜 -8°</td></tr>
+        <tr><td><code>next.translate: ['100%',0,0]</code></td><td>字符串 <code>'100%'</code> 原样透传</td><td>下一张从画面右侧一整张宽度外推进来</td></tr>
+        <tr><td><code>origin: 'left center'</code></td><td>写进 <code>style.transformOrigin</code></td><td>变换以左边缘为基准</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ==== 4 提示词 ==== -->
+  <div class="zjh-sec">
+    <div class="zjh-sec-head">
+      <span class="zjh-no">4</span>
       <h2>两轮提示词<small>先问参数，再追问参照物</small></h2>
       <span class="zjh-done">✅ 源码核实</span>
     </div>
@@ -123,7 +184,7 @@
     <div class="zjh-rec-part" style="margin-top:0">
       <h4>提示词 A · 问参数
         <a class="zjh-pl" href="zjh_prompt.md" target="_blank" rel="noopener">📄 zjh_prompt.md</a>
-        <a class="zjh-pl" href="https://github.com/jinheng-zhang/web-design-classnote-zjh904/blob/main/zjh_prompt.md#L331-L335" target="_blank" rel="noopener">GitHub ↗</a>
+        <a class="zjh-pl" href="https://github.com/jinheng-zhang/web-design-classnote-zjh904/blob/main/zjh_prompt.md#L351-L355" target="_blank" rel="noopener">GitHub ↗</a>
       </h4>
       <div class="zjh-prompt">我要给 Swiper 轮播加一个课堂没讲的第 7 种效果 creative（自定义变换）。请打开官方示例
 swiper/demo/257-effect-creative.html，读懂 creativeEffect，回答我三件事：
@@ -139,7 +200,7 @@ swiper/demo/257-effect-creative.html，读懂 creativeEffect，回答我三件�
     <div class="zjh-rec-part">
       <h4>提示词 B · 追问参照物
         <a class="zjh-pl" href="zjh_prompt.md" target="_blank" rel="noopener">📄 zjh_prompt.md</a>
-        <a class="zjh-pl" href="https://github.com/jinheng-zhang/web-design-classnote-zjh904/blob/main/zjh_prompt.md#L357-L360" target="_blank" rel="noopener">GitHub ↗</a>
+        <a class="zjh-pl" href="https://github.com/jinheng-zhang/web-design-classnote-zjh904/blob/main/zjh_prompt.md#L377-L380" target="_blank" rel="noopener">GitHub ↗</a>
       </h4>
       <div class="zjh-prompt">你说 translate 用百分比，那这个百分比到底是相对【幻灯片自己】还是相对【外层容器】算的？
 我本地已经装了 swiper 11.0.3 源码，请直接在 swiper/modules/effect-creative.mjs 里
@@ -153,10 +214,10 @@ swiper/demo/257-effect-creative.html，读懂 creativeEffect，回答我三件�
     </div>
   </div>
 
-  <!-- ==== 4 用自己的话 ==== -->
+  <!-- ==== 5 用自己的话 ==== -->
   <div class="zjh-sec">
     <div class="zjh-sec-head">
-      <span class="zjh-no">4</span>
+      <span class="zjh-no">5</span>
       <h2>答辩两问<small>用自己的话，不看稿</small></h2>
       <span class="zjh-done">✅ 已准备</span>
     </div>
