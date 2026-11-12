@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 260" width="400" height="260" role="img">
+  <title>静夜思 · 配图</title>
+  <defs>
+    <linearGradient id="sky5" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#0b1a38"/>
+      <stop offset="1" stop-color="#1f3a63"/>
+    </linearGradient>
+  </defs>
+  <rect width="400" height="260" fill="url(#sky5)"/>
+  <circle cx="286" cy="74" r="44" fill="#fdf3c9" opacity="0.95"/>
+  <circle cx="286" cy="74" r="62" fill="#fdf3c9" opacity="0.12"/>
+  <g stroke="#0a1526" stroke-width="10" opacity="0.95">
+    <line x1="200" y1="0" x2="200" y2="260"/>
+    <line x1="400" y1="0" x2="400" y2="260"/>
+    <line x1="0" y1="126" x2="400" y2="126"/>
+  </g>
+  <rect x="0" y="228" width="400" height="32" fill="#091728"/>
+  <path d="M0 236 L120 214 L240 236 L400 218 L400 260 L0 260 Z" fill="#0d1f36"/>
+  <g fill="#fdf3c9" opacity="0.3">
+    <rect x="150" y="150" width="30" height="4"/><rect x="220" y="166" width="46" height="4"/>
+    <rect x="120" y="184" width="38" height="4"/>
+  </g>
+</svg>

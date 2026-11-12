@@ -1,0 +1,135 @@
+<!--
+  功能名称：诗词「上图下文」展示页
+  功能简介：页面为标准的上图下文结构 —— 每张卡片上方是配图，下方是标题与正文；
+            数据不在页面里写死，而是通过 fetch 向本地 Express 服务器
+            http://localhost:3005/api/poems 请求，读取 db/db.json 中 poems 的
+            pic、title、content 三个字段后动态渲染。
+  作者：张敬恒
+  时间：2026-11-12
+  使用模型：DeepSeek-V4.1-Flash
+-->
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>上图下文 · 诗词展示 · JSON 与 fetch 课堂练习</title>
+<link rel="stylesheet" href="poems-904.css">
+</head>
+<body>
+<div class="zjh-page">
+
+  <!-- ==== 页头 ==== -->
+  <div class="zjh-top">
+    <a class="zjh-back" href="index.html">← 返回课堂实践中心</a>
+    <span class="zjh-badge">高 级 网 页 设 计 · 上 图 下 文</span>
+  </div>
+
+  <h1 class="zjh-title">上图下文 · <b>诗词卡片</b></h1>
+  <p class="zjh-lead">
+    每张卡片的结构固定为：<b>上方配图</b> + <b>下方标题与正文</b>。
+    图片、标题、内容全部来自 <code>db/db.json</code> 的 <code>poems</code> 数组，
+    由 <code>http://localhost:3005/api/poems</code> 接口提供，页面本身不写死任何一条数据。
+  </p>
+
+  <div class="zjh-note">
+    <b>启动步骤：</b>进入本项目的 <code>db</code> 文件夹 → 执行 <code>node server.js</code> →
+    看到「数据服务器已启动」后刷新本页。服务器关掉时页面会给出提示，不会白屏。
+  </div>
+
+  <!-- ==== 请求状态 ==== -->
+  <div class="zjh-status" id="zjhStatus">准备请求数据…</div>
+
+  <!-- ==== 上图下文卡片容器 ==== -->
+  <div class="zjh-grid" id="zjhPoemList"></div>
+
+</div>
+
+<script>
+/* ============================================================
+   JS 整体职责：用 fetch 向 3005 端口的数据服务器取回 poems 数组，
+                再按「上图下文」的结构拼成卡片渲染到页面
+   作者：张敬恒 | 时间：2026-11-12 | 使用模型：DeepSeek-V4.1-Flash
+
+   为什么写两个 then：
+     第一次 then 拿到的是 Response 对象，只有状态码和响应头；
+     调用 res.json() 之后返回一个新 Promise，第二个 then 才是真正的数组。
+   ============================================================ */
+
+/* 接口地址：端口要和 db/server.js 里的 zjh_port（3005）一致 */
+var zjh_api = 'http://localhost:3005/api/poems';
+
+/* 页面上的两个容器 */
+var zjh_poemList = document.getElementById('zjhPoemList');
+var zjh_status = document.getElementById('zjhStatus');
+
+/*
+  功能名称：设置状态条
+  作用：把请求中 / 成功 / 失败的信息显示在页面顶部
+  实现思路：先还原基础类名，再按 zjh_kind 追加 --ok / --err 修饰类，
+            文字用 innerHTML 写入，允许带 <code> 标签
+*/
+function zjh_setStatus(zjh_text, zjh_kind) {
+  zjh_status.className = 'zjh-status';
+  if (zjh_kind === 'ok') zjh_status.classList.add('zjh-status--ok');
+  if (zjh_kind === 'err') zjh_status.classList.add('zjh-status--err');
+  zjh_status.innerHTML = zjh_text;
+}
+
+/*
+  功能名称：渲染上图下文卡片
+  作用：把 poems 数组拼成「<img> 在上、标题和正文在下」的卡片
+  实现思路：
+    1. 每张卡片依次拼 <img> → 文字区 div → <h3>标题</h3> → <p>正文</p>；
+    2. 图片地址直接用 JSON 里的 pic 字段（如 img/poem-1.svg），相对本页解析；
+    3. 先用字符串累计再一次性赋给 innerHTML，只触发一次重排。
+*/
+function zjh_render(zjh_poems) {
+  var zjh_html = '';
+  for (var zjh_i = 0; zjh_i < zjh_poems.length; zjh_i++) {
+    var zjh_item = zjh_poems[zjh_i];
+    zjh_html += '<div class="zjh-card">';
+    zjh_html += '  <img src="' + zjh_item.pic + '" alt="' + zjh_item.title + ' 配图">';
+    zjh_html += '  <div class="zjh-card-body">';
+    zjh_html += '    <h3>' + zjh_item.title + '</h3>';
+    zjh_html += '    <p>' + zjh_item.content + '</p>';
+    zjh_html += '    <span class="zjh-meta">' + zjh_item.author + '</span>';
+    zjh_html += '  </div>';
+    zjh_html += '</div>';
+  }
+  zjh_poemList.innerHTML = zjh_html;
+}
+
+/*
+  功能名称：请求并渲染
+  作用：页面加载时向 3005 端口请求 /api/poems
+  实现思路：fetch → 检查 res.ok → res.json() → 渲染；
+            任何一步出错都进 catch，清空列表并显示操作提示，避免白屏
+*/
+function zjh_loadPoems() {
+  zjh_setStatus('正在向 <code>localhost:3005</code> 请求数据…');
+
+  fetch(zjh_api)
+    .then(function (zjh_res) {
+      if (!zjh_res.ok) throw new Error('服务器返回状态码 ' + zjh_res.status);
+      return zjh_res.json();          /* 第二段：拆箱成真正的数组 */
+    })
+    .then(function (zjh_poems) {
+      zjh_render(zjh_poems);
+      zjh_setStatus('✅ 已取回 ' + zjh_poems.length + ' 条诗词，按上图下文渲染完成。', 'ok');
+    })
+    .catch(function (zjh_err) {
+      zjh_poemList.innerHTML = '<div class="zjh-empty">暂无数据</div>';
+      zjh_setStatus(
+        '❌ 请求失败：<b>服务器没有响应</b>。请确认已在 <code>db</code> 文件夹执行 ' +
+        '<code>node server.js</code>，端口为 3005。<br>浏览器报错原文：' + zjh_err.message,
+        'err'
+      );
+    });
+}
+
+/* 页面一加载就发起请求 */
+zjh_loadPoems();
+</script>
+</body>
+</html>

@@ -546,3 +546,41 @@ AI 第一次只给 `keyboard: { enabled: true }`，漏了 `onlyInBrowser`。
 - **能跑** ✔ 4 个轮播实例全部正常 · 6 件展品 · 7 种 effect（含自研 creative）· 键盘控制可用 · 零 JS 报错
 - **能讲清** ✔ 每个参数的作用与来源都能对着 Swiper 11.0.3 源码说明
 - **能现场改** ✔ 改 `autoplay.delay`、改 `creativeEffect.rotate` 的 Z 轴值即可现场验证
+
+---
+
+## 2026-11-12（JSON 与 fetch 课堂练习 · 三个课后任务）
+
+- **模型**: DeepSeek-V4.1-Flash
+- **提示词**:
+
+> `https://spontaneous-valkyrie-4e4229.netlify.app/json-fetch-lesson`，查看网页，读取内容，将wy_html等带姓名wy_的地方，改为zjh_,有wangyao_的改为zhangjingheng_,然后在上课的文件夹内新建db的文件夹，把db.json文件放入，生成前端及相关文件，最后分开完成三个课后任务
+
+---
+
+## 2026-11-12（取消 000zhangjingheng 子目录，文件平铺到项目根目录）
+
+- **模型**: DeepSeek-V4.1-Flash
+- **提示词**:
+
+> 你多建一个文件夹叫做000zhangjingheng，然后嵌套db文件夹和其他的东西，你需要按照我的截图更改，把文件夹000zhangjingheng所有东西放到web design文件夹下，而且全部更改你所写的路径，保证这个任务等网页能再次正常开启，然后说是要打开后端等操作，帮我继续做，最后完成我的prompt提示
+
+---
+
+## 2026-11-12（新增上图下文页面 + 数据服务器改用 3005 端口）
+
+- **模型**: DeepSeek-V4.1-Flash
+- **提示词**:
+
+> 帮我看下这个步骤：给我新建一个html文件，显示上图下文的结构，图片和文字通过本地启动服务器获取当前文件夹下面的db里面db.json的poems里面的图片，title和content。并给我生成server.js数据服务器文件，server.js放在db文件夹中。其中端口号为3005。完成了嘛
+
+---
+
+## 2026-11-12（提交并推送 GitHub）
+
+- **模型**: DeepSeek-V4.1-Flash
+- **提示词**:
+
+> 好的，执行吧
+
+---

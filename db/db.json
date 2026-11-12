@@ -1,0 +1,48 @@
+{
+  "poems": [
+    {
+      "title": "短歌行",
+      "content": "对酒当歌，人生几何！譬如朝露，去日苦多。",
+      "pic": "img/poem-1.svg",
+      "author": "曹操"
+    },
+    {
+      "title": "雨晴",
+      "content": "雨前初见花间蕊，雨后全无叶底花。",
+      "pic": "img/poem-2.svg",
+      "author": "王驾"
+    },
+    {
+      "title": "脊楼",
+      "content": "花近高楼伤客心，万方多难此登临。",
+      "pic": "img/poem-3.svg",
+      "author": "杜甫"
+    },
+    {
+      "title": "鹊桥仙·纤云弄巧",
+      "content": "纤云弄巧，飞星传恨，银汉迢迢暗度。",
+      "pic": "img/poem-4.svg",
+      "author": "秦观"
+    },
+    {
+      "title": "静夜思",
+      "content": "床前明月光，疑是地上霜。举头望明月，低头思故乡。",
+      "pic": "img/poem-5.svg",
+      "author": "李白"
+    },
+    {
+      "title": "登鹳雀楼",
+      "content": "白日依山尽，黄河入海流。欲穷千里目，更上一层楼。",
+      "pic": "img/poem-6.svg",
+      "author": "王之涣"
+    }
+  ],
+  "authors": [
+    { "name": "曹操", "dynasty": "东汉", "intro": "建安文学代表人物，诗风慷慨悲凉。" },
+    { "name": "王驾", "dynasty": "唐代", "intro": "晚唐诗人，擅长写景抒情。" },
+    { "name": "杜甫", "dynasty": "唐代", "intro": "诗圣，作品被称为「诗史」。" },
+    { "name": "秦观", "dynasty": "北宋", "intro": "婉约派词人，苏门四学士之一。" },
+    { "name": "李白", "dynasty": "唐代", "intro": "诗仙，浪漫主义诗歌的高峰。" },
+    { "name": "王之涣", "dynasty": "唐代", "intro": "边塞诗人，代表作《登鹳雀楼》。" }
+  ]
+}

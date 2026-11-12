@@ -1,0 +1,170 @@
+<!--
+  功能名称：JSON 与 fetch 课堂练习 · 任务二「数据我来定」
+  功能简介：db.json 的 poems 扩充到 6 条（新增《静夜思》《登鹳雀楼》），
+            server.js 增加 /api/authors 接口；本页用 Promise.all 并发取回
+            「诗词 + 作者」两份数据并分别渲染。
+  作者：张敬恒
+  时间：2026-11-12
+  使用模型：DeepSeek-V4.1-Flash
+-->
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>任务二 · 数据我来定 · JSON 与 fetch 课堂练习</title>
+<link rel="stylesheet" href="poems-904.css">
+</head>
+<body>
+<div class="zjh-page">
+
+  <!-- ==== 页头 ==== -->
+  <div class="zjh-top">
+    <a class="zjh-back" href="index.html">← 返回课堂实践中心</a>
+    <span class="zjh-badge">高 级 网 页 设 计 · JSON 与 FETCH · 任 务 二</span>
+  </div>
+
+  <h1 class="zjh-title">任务二 · <b>数据我来定</b></h1>
+  <p class="zjh-lead">
+    在 <code>db/db.json</code> 的 <code>poems</code> 数组里新增 2 条诗词，并在
+    <code>db/server.js</code> 里新增第二个接口 <code>/api/authors</code>。
+    本页用 <code>Promise.all</code> 同时请求两个接口，一次拿回两份数据。
+  </p>
+
+  <div class="zjh-note">
+    <b>两个接口都可以直接在浏览器打开验收：</b>
+    <code>http://localhost:3004/api/poems</code> 与
+    <code>http://localhost:3004/api/authors</code>，都应返回格式正确的 JSON。
+  </div>
+
+  <!-- ==== 请求状态 ==== -->
+  <div class="zjh-status" id="zjhStatus">准备并发请求两个接口…</div>
+
+  <!-- ==== 诗词区 ==== -->
+  <h2 class="zjh-sec-title">诗词列表 · 来自 /api/poems（6 条）</h2>
+  <div class="zjh-grid" id="zjhPoemList"></div>
+
+  <!-- ==== 作者区 ==== -->
+  <h2 class="zjh-sec-title">作者列表 · 来自 /api/authors（6 位）</h2>
+  <div class="zjh-authors" id="zjhAuthorList"></div>
+
+</div>
+
+<script>
+/* ============================================================
+   JS 整体职责：任务二 —— 用 Promise.all 并发请求两个接口，
+                再分别渲染诗词卡片与作者卡片
+   作者：张敬恒 | 时间：2026-11-12 | 使用模型：DeepSeek-V4.1-Flash
+
+   为什么要 Promise.all：
+     两次 fetch 互不依赖，串行写要等前一个请求结束才发后一个；
+     Promise.all 把两个 Promise 装进数组，两个请求同时发出，
+     全部兑现后回调一次，结果按传入顺序组成数组 [诗词, 作者]。
+   ============================================================ */
+
+/* 两个接口地址，端口与 db/server.js 保持一致 */
+var zjh_apiPoems = 'http://localhost:3004/api/poems';
+var zjh_apiAuthors = 'http://localhost:3004/api/authors';
+
+var zjh_poemList = document.getElementById('zjhPoemList');
+var zjh_authorList = document.getElementById('zjhAuthorList');
+var zjh_status = document.getElementById('zjhStatus');
+
+/*
+  功能名称：设置状态条
+  作用：显示请求进度、成功信息或错误提示
+  实现思路：重置 className 后按结果类型追加修饰类，用 innerHTML 写入内容
+*/
+function zjh_setStatus(zjh_text, zjh_kind) {
+  zjh_status.className = 'zjh-status';
+  if (zjh_kind === 'ok') zjh_status.classList.add('zjh-status--ok');
+  if (zjh_kind === 'err') zjh_status.classList.add('zjh-status--err');
+  zjh_status.innerHTML = zjh_text;
+}
+
+/*
+  功能名称：渲染诗词卡片
+  作用：把 /api/poems 返回的 6 条数据拼成卡片
+  实现思路：字符串累加 + 模板拼接，最后一次性写入 innerHTML
+*/
+function zjh_renderPoems(zjh_poems) {
+  var zjh_html = '';
+  for (var zjh_i = 0; zjh_i < zjh_poems.length; zjh_i++) {
+    var zjh_item = zjh_poems[zjh_i];
+    zjh_html += '<div class="zjh-card">';
+    zjh_html += '  <img src="' + zjh_item.pic + '" alt="' + zjh_item.title + ' 配图">';
+    zjh_html += '  <div class="zjh-card-body">';
+    zjh_html += '    <h3>' + zjh_item.title + '</h3>';
+    zjh_html += '    <p>' + zjh_item.content + '</p>';
+    zjh_html += '    <span class="zjh-meta">' + zjh_item.author + '</span>';
+    zjh_html += '  </div>';
+    zjh_html += '</div>';
+  }
+  zjh_poemList.innerHTML = zjh_html;
+}
+
+/*
+  功能名称：渲染作者卡片
+  作用：把 /api/authors 返回的数据拼成小卡片
+  实现思路：与诗词卡片同样的字符串累加方式，只是模板换成 name / dynasty / intro
+*/
+function zjh_renderAuthors(zjh_authors) {
+  var zjh_html = '';
+  for (var zjh_i = 0; zjh_i < zjh_authors.length; zjh_i++) {
+    var zjh_a = zjh_authors[zjh_i];
+    zjh_html += '<div class="zjh-author">';
+    zjh_html += '  <h4>' + zjh_a.name + ' <span>' + zjh_a.dynasty + '</span></h4>';
+    zjh_html += '  <p>' + zjh_a.intro + '</p>';
+    zjh_html += '</div>';
+  }
+  zjh_authorList.innerHTML = zjh_html;
+}
+
+/*
+  功能名称：并发加载两份数据（任务二核心）
+  作用：Promise.all 同时请求两个接口，等两份数据都到齐再一起渲染
+  实现思路：
+    1. 数组里放两个 Promise，每个都是 fetch(...).then(res => res.json())；
+    2. Promise.all 兑现后得到 [诗词数组, 作者数组]，用解构思想按顺序取；
+    3. 任何一个失败都会进入 catch，说明服务器没启动或接口写错。
+*/
+function zjh_loadAll() {
+  zjh_setStatus('正在并发请求 <code>/api/poems</code> 与 <code>/api/authors</code>…');
+  var zjh_t0 = Date.now();
+
+  var zjh_taskPoems = fetch(zjh_apiPoems).then(function (zjh_res) {
+    return zjh_res.json();
+  });
+  var zjh_taskAuthors = fetch(zjh_apiAuthors).then(function (zjh_res) {
+    return zjh_res.json();
+  });
+
+  Promise.all([zjh_taskPoems, zjh_taskAuthors])
+    .then(function (zjh_result) {
+      var zjh_poems = zjh_result[0];     /* 第一个 Promise 的结果 */
+      var zjh_authors = zjh_result[1];   /* 第二个 Promise 的结果 */
+
+      zjh_renderPoems(zjh_poems);
+      zjh_renderAuthors(zjh_authors);
+
+      zjh_setStatus(
+        '✅ 两份数据已并发返回：诗词 ' + zjh_poems.length + ' 条、作者 ' +
+        zjh_authors.length + ' 位，共耗时 ' + (Date.now() - zjh_t0) + ' ms。',
+        'ok'
+      );
+    })
+    .catch(function (zjh_err) {
+      zjh_poemList.innerHTML = '<div class="zjh-empty">暂无数据</div>';
+      zjh_authorList.innerHTML = '';
+      zjh_setStatus(
+        '❌ 并发请求失败：<b>服务器没有响应</b>。请在 db 文件夹执行 <code>node server.js</code> 后刷新。' +
+        '<br>浏览器报错原文：' + zjh_err.message,
+        'err'
+      );
+    });
+}
+
+zjh_loadAll();
+</script>
+</body>
+</html>

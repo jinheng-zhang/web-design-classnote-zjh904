@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 260" width="400" height="260" role="img">
+  <title>脊楼 · 配图</title>
+  <defs>
+    <linearGradient id="sky3" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#2a1c42"/>
+      <stop offset="1" stop-color="#8a6a9c"/>
+    </linearGradient>
+  </defs>
+  <rect width="400" height="260" fill="url(#sky3)"/>
+  <circle cx="92" cy="74" r="30" fill="#ffe2c4" opacity="0.75"/>
+  <g fill="#161026">
+    <rect x="24" y="176" width="52" height="84"/>
+    <rect x="86" y="146" width="40" height="114"/>
+    <rect x="136" y="192" width="62" height="68"/>
+    <rect x="208" y="128" width="46" height="132"/>
+    <rect x="264" y="164" width="54" height="96"/>
+    <rect x="328" y="186" width="52" height="74"/>
+  </g>
+  <g fill="#ffdca8" opacity="0.55">
+    <rect x="34" y="188" width="8" height="10"/><rect x="52" y="188" width="8" height="10"/>
+    <rect x="96" y="160" width="8" height="10"/><rect x="112" y="182" width="8" height="10"/>
+    <rect x="218" y="144" width="8" height="10"/><rect x="236" y="168" width="8" height="10"/>
+    <rect x="276" y="178" width="8" height="10"/><rect x="340" y="200" width="8" height="10"/>
+  </g>
+  <rect y="248" width="400" height="12" fill="#0c0716"/>
+</svg>

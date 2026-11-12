@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 260" width="400" height="260" role="img">
+  <title>短歌行 · 配图</title>
+  <defs>
+    <linearGradient id="sky1" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#081229"/>
+      <stop offset="1" stop-color="#264a7d"/>
+    </linearGradient>
+  </defs>
+  <rect width="400" height="260" fill="url(#sky1)"/>
+  <circle cx="312" cy="66" r="36" fill="#f7e3a1" opacity="0.92"/>
+  <circle cx="312" cy="66" r="52" fill="none" stroke="#f7e3a1" stroke-opacity="0.22" stroke-width="12"/>
+  <path d="M0 208 L92 132 L168 208 Z" fill="#152a4f"/>
+  <path d="M118 216 L236 118 L360 216 Z" fill="#0d1c37"/>
+  <rect y="216" width="400" height="44" fill="#091428"/>
+  <path d="M176 214 h48 v18 a14 14 0 0 1 -14 14 h-20 a14 14 0 0 1 -14 -14 z" fill="#e8c77a" opacity="0.85"/>
+  <rect x="196" y="246" width="8" height="10" fill="#e8c77a" opacity="0.85"/>
+</svg>

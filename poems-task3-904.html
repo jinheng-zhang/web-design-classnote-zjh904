@@ -1,0 +1,248 @@
+<!--
+  功能名称：JSON 与 fetch 课堂练习 · 任务三「加交互 + 现场答辩」
+  功能简介：在任务二的基础上，页面顶部加搜索框（按标题或内容过滤）与
+            「按标题长度排序」按钮，过滤与排序都在已取回的内存数据上完成，
+            不重复请求服务器；页面底部附现场答辩四问。
+  作者：张敬恒
+  时间：2026-11-12
+  使用模型：DeepSeek-V4.1-Flash
+-->
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>任务三 · 加交互 · JSON 与 fetch 课堂练习</title>
+<link rel="stylesheet" href="poems-904.css">
+</head>
+<body>
+<div class="zjh-page">
+
+  <!-- ==== 页头 ==== -->
+  <div class="zjh-top">
+    <a class="zjh-back" href="index.html">← 返回课堂实践中心</a>
+    <span class="zjh-badge">高 级 网 页 设 计 · JSON 与 FETCH · 任 务 三</span>
+  </div>
+
+  <h1 class="zjh-title">任务三 · <b>加交互</b></h1>
+  <p class="zjh-lead">
+    数据仍然来自 <code>fetch</code>；搜索和排序都在已取回的数组上做加工，
+    不重新请求服务器。输入关键字试试，再点「按标题长度排序」。
+  </p>
+
+  <!-- ==== 工具栏 ==== -->
+  <div class="zjh-tools">
+    <input class="zjh-input" id="zjhSearch" type="text" placeholder="输入关键字，搜索标题或诗句内容…">
+    <button class="zjh-btn" id="zjhSortBtn" type="button">按标题长度排序 ↑</button>
+    <span class="zjh-count" id="zjhCount">共 0 条</span>
+  </div>
+
+  <!-- ==== 请求状态 ==== -->
+  <div class="zjh-status" id="zjhStatus">准备请求数据…</div>
+
+  <!-- ==== 诗词卡片容器 ==== -->
+  <div class="zjh-grid" id="zjhPoemList"></div>
+
+  <!-- ==== 答辩四问 ==== -->
+  <div class="zjh-faq">
+    <h2 class="zjh-sec-title">现场答辩四问</h2>
+
+    <details>
+      <summary>① 为什么 fetch 要写两个 then？</summary>
+      <p>
+        因为 <code>fetch()</code> 只负责把请求发出去，它返回的 Promise 兑现时给的是
+        <b>Response 对象</b>，里面还没有业务数据。第二个 then 是等
+        <code>res.json()</code> 这个「拆箱」动作完成后再执行，这时候才拿到真正的数组。
+        少写一个 then，拿到手的就是 Response，不是数据。
+      </p>
+    </details>
+
+    <details>
+      <summary>② <code>.json()</code> 之前拿到的是什么？</summary>
+      <p>
+        拿到的是 Response 对象：只有状态码（<code>res.status</code>）、响应头
+        （<code>res.headers</code>）和几个读取响应体的方法（<code>json()</code> /
+        <code>text()</code> / <code>blob()</code>），响应体还是一条数据流，没有解析。
+        <code>.json()</code> 会读完整条流再做 <code>JSON.parse</code>，所以它只能调用一次。
+      </p>
+    </details>
+
+    <details>
+      <summary>③ CORS 是谁拦的？</summary>
+      <p>
+        是<b>浏览器</b>拦的，不是服务器拒收。浏览器发现请求的源（这里是
+        <code>file://</code> 或 <code>localhost:其他端口</code>）和接口地址
+        <code>localhost:3004</code> 不同源，就去检查响应头里有没有
+        <code>Access-Control-Allow-Origin</code>；没有就在控制台报错并把响应藏起来。
+        所以我们在 <code>server.js</code> 里加上 <code>res.set('Access-Control-Allow-Origin', '*')</code> 放行。
+      </p>
+    </details>
+
+    <details>
+      <summary>④ 如果服务器没启动，你的页面表现如何？</summary>
+      <p>
+        不会白屏。请求失败会进入 <code>.catch()</code>，页面顶部变成红色提示条，
+        写清「服务器没有响应」和 <code>node server.js</code> 的启动命令，
+        卡片区显示「暂无数据」。控制台里能看到
+        <code>net::ERR_CONNECTION_REFUSED</code>，说明是连不上端口，而不是代码写错。
+      </p>
+    </details>
+  </div>
+
+</div>
+
+<script>
+/* ============================================================
+   JS 整体职责：任务三 —— 先 fetch 取回全部诗词存进内存，
+                之后的搜索与排序只操作这份内存数组，不再请求服务器
+   作者：张敬恒 | 时间：2026-11-12 | 使用模型：DeepSeek-V4.1-Flash
+
+   数据流：
+     fetch → zjh_allPoems（原始数据，始终不改）
+           → zjh_keyword（搜索词） + zjh_sortAsc（排序方向）
+           → zjh_apply() 生成 zjh_view（视图数据） → 渲染
+   ============================================================ */
+
+var zjh_api = 'http://localhost:3004/api/poems';
+
+var zjh_poemList = document.getElementById('zjhPoemList');
+var zjh_status = document.getElementById('zjhStatus');
+var zjh_count = document.getElementById('zjhCount');
+var zjh_search = document.getElementById('zjhSearch');
+var zjh_sortBtn = document.getElementById('zjhSortBtn');
+
+/* 三份状态：原始数据、搜索词、排序方向（true = 短到长） */
+var zjh_allPoems = [];
+var zjh_keyword = '';
+var zjh_sortAsc = true;
+
+/*
+  功能名称：设置状态条
+  作用：显示请求结果
+  实现思路：先重置类名，再按类型追加修饰类，最后写入 HTML
+*/
+function zjh_setStatus(zjh_text, zjh_kind) {
+  zjh_status.className = 'zjh-status';
+  if (zjh_kind === 'ok') zjh_status.classList.add('zjh-status--ok');
+  if (zjh_kind === 'err') zjh_status.classList.add('zjh-status--err');
+  zjh_status.innerHTML = zjh_text;
+}
+
+/*
+  功能名称：渲染视图数据
+  作用：把经过搜索、排序的数组拼成卡片，并更新计数
+  实现思路：
+    1. 先用字符串累加卡片 HTML；
+    2. 数组为空时渲染「没有匹配的诗词」空状态；
+    3. 计数区同步显示当前条数 / 总条数。
+*/
+function zjh_render(zjh_view) {
+  if (zjh_view.length === 0) {
+    zjh_poemList.innerHTML = '<div class="zjh-empty">没有匹配的诗词，换个关键字试试。</div>';
+  } else {
+    var zjh_html = '';
+    for (var zjh_i = 0; zjh_i < zjh_view.length; zjh_i++) {
+      var zjh_item = zjh_view[zjh_i];
+      zjh_html += '<div class="zjh-card">';
+      zjh_html += '  <img src="' + zjh_item.pic + '" alt="' + zjh_item.title + ' 配图">';
+      zjh_html += '  <div class="zjh-card-body">';
+      zjh_html += '    <h3>' + zjh_item.title + '</h3>';
+      zjh_html += '    <p>' + zjh_item.content + '</p>';
+      zjh_html += '    <span class="zjh-meta">' + zjh_item.author + '</span>';
+      zjh_html += '  </div>';
+      zjh_html += '</div>';
+    }
+    zjh_poemList.innerHTML = zjh_html;
+  }
+  zjh_count.textContent = '当前 ' + zjh_view.length + ' 条 / 共 ' + zjh_allPoems.length + ' 条';
+}
+
+/*
+  功能名称：计算视图数据（任务三核心）
+  作用：按当前关键字过滤，再按当前方向排序，交给 zjh_render 显示
+  实现思路：
+    1. 关键字去空格；为空则整份数据参与，否则用 filter 检查
+       「标题含关键字」或「内容含关键字」，两者满足其一即保留；
+    2. 用 slice() 复制一份再 sort，避免 sort 直接改动原始数组
+       （sort 会原地修改，直接排 zjh_allPoems 会破坏原始数据）；
+    3. 排序依据是字符串的 length 差值，方向由 zjh_sortAsc 决定。
+*/
+function zjh_apply() {
+  var zjh_view = zjh_allPoems.filter(function (zjh_item) {
+    if (zjh_keyword === '') return true;
+    return zjh_item.title.indexOf(zjh_keyword) > -1 ||
+           zjh_item.content.indexOf(zjh_keyword) > -1;
+  });
+
+  zjh_view = zjh_view.slice();
+  zjh_view.sort(function (zjh_a, zjh_b) {
+    return zjh_sortAsc
+      ? zjh_a.title.length - zjh_b.title.length
+      : zjh_b.title.length - zjh_a.title.length;
+  });
+
+  zjh_render(zjh_view);
+}
+
+/*
+  功能名称：加载全部诗词
+  作用：fetch 两段式取回数组，存进 zjh_allPoems，再触发一次视图计算
+  实现思路：成功后把原始数组保存起来（后续搜索排序都基于它），
+            失败时显示红色提示并保留空状态
+*/
+function zjh_loadPoems() {
+  zjh_setStatus('正在向 <code>localhost:3004</code> 请求数据…');
+
+  fetch(zjh_api)
+    .then(function (zjh_res) {
+      if (!zjh_res.ok) throw new Error('服务器返回状态码 ' + zjh_res.status);
+      return zjh_res.json();
+    })
+    .then(function (zjh_poems) {
+      zjh_allPoems = zjh_poems;
+      zjh_apply();
+      zjh_setStatus(
+        '✅ 已取回 ' + zjh_poems.length + ' 条数据，搜索与排序都在本地完成，不会再次请求服务器。',
+        'ok'
+      );
+    })
+    .catch(function (zjh_err) {
+      zjh_allPoems = [];
+      zjh_apply();
+      zjh_setStatus(
+        '❌ 请求失败：<b>服务器没有响应</b>。请在 db 文件夹执行 <code>node server.js</code> 后刷新。' +
+        '<br>浏览器报错原文：' + zjh_err.message,
+        'err'
+      );
+    });
+}
+
+/*
+  功能名称：搜索框监听
+  作用：用户每次输入都实时过滤（input 事件，覆盖键盘输入与粘贴）
+  实现思路：读出输入值并去掉首尾空格存到 zjh_keyword，再调用 zjh_apply 重算视图
+*/
+zjh_search.addEventListener('input', function () {
+  zjh_keyword = zjh_search.value.trim();
+  zjh_apply();
+});
+
+/*
+  功能名称：排序按钮监听
+  作用：在「短到长」与「长到短」之间切换，并同步按钮文字与高亮
+  实现思路：
+    1. 点击一次把 zjh_sortAsc 取反；
+    2. 按方向改写按钮文案的箭头；
+    3. 按钮加上 zjh-btn--on 表示排序已生效，再调用 zjh_apply 重排。
+*/
+zjh_sortBtn.addEventListener('click', function () {
+  zjh_sortAsc = !zjh_sortAsc;
+  zjh_sortBtn.textContent = zjh_sortAsc ? '按标题长度排序 ↑' : '按标题长度排序 ↓';
+  zjh_sortBtn.classList.add('zjh-btn--on');
+  zjh_apply();
+});
+
+zjh_loadPoems();
+</script>
+</body>
+</html>

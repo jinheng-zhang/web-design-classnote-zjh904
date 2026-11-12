@@ -1,0 +1,14 @@
+{
+  "name": "zjh-poems-server",
+  "version": "1.0.0",
+  "description": "高级网页设计 · JSON 与 fetch 课堂练习数据服务器",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "author": "张敬恒",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.22.3"
+  }
+}

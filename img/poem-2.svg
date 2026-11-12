@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 260" width="400" height="260" role="img">
+  <title>雨晴 · 配图</title>
+  <defs>
+    <linearGradient id="sky2" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#1d4448"/>
+      <stop offset="1" stop-color="#7fa9a4"/>
+    </linearGradient>
+  </defs>
+  <rect width="400" height="260" fill="url(#sky2)"/>
+  <g stroke="#d8ece8" stroke-opacity="0.45" stroke-width="2">
+    <line x1="48" y1="20" x2="34" y2="96"/>
+    <line x1="116" y1="8" x2="102" y2="84"/>
+    <line x1="188" y1="26" x2="174" y2="102"/>
+    <line x1="256" y1="12" x2="242" y2="88"/>
+    <line x1="330" y1="30" x2="316" y2="106"/>
+  </g>
+  <path d="M0 214 C70 168 140 190 210 172 C280 154 340 176 400 158 L400 260 L0 260 Z" fill="#2d5a58"/>
+  <g fill="#f4efe2" opacity="0.9">
+    <circle cx="88" cy="196" r="6"/>
+    <circle cx="104" cy="184" r="4.5"/>
+    <circle cx="120" cy="198" r="5"/>
+    <circle cx="286" cy="190" r="6"/>
+    <circle cx="302" cy="178" r="4.5"/>
+    <circle cx="318" cy="194" r="5"/>
+  </g>
+  <path d="M0 228 C100 200 180 216 260 206 C320 198 360 210 400 202 L400 260 L0 260 Z" fill="#204441" opacity="0.9"/>
+</svg>

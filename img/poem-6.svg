@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 260" width="400" height="260" role="img">
+  <title>登鹳雀楼 · 配图</title>
+  <defs>
+    <linearGradient id="sky6" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#7c2c1c"/>
+      <stop offset="0.6" stop-color="#d9712f"/>
+      <stop offset="1" stop-color="#f6c068"/>
+    </linearGradient>
+  </defs>
+  <rect width="400" height="260" fill="url(#sky6)"/>
+  <circle cx="200" cy="150" r="46" fill="#ffe9b0" opacity="0.9"/>
+  <path d="M0 190 L78 118 L156 190 Z" fill="#5a2314" opacity="0.85"/>
+  <path d="M140 200 L246 106 L352 200 Z" fill="#41180e" opacity="0.9"/>
+  <rect y="196" width="400" height="64" fill="#2b120a"/>
+  <g fill="#1c0b06">
+    <rect x="188" y="140" width="24" height="56"/>
+    <path d="M176 140 L200 122 L224 140 Z"/>
+    <rect x="184" y="158" width="32" height="6" fill="#f0c98a" opacity="0.6"/>
+  </g>
+  <g stroke="#ffe9b0" stroke-opacity="0.35" stroke-width="2">
+    <line x1="20" y1="206" x2="120" y2="206"/>
+    <line x1="280" y1="212" x2="384" y2="212"/>
+  </g>
+</svg>

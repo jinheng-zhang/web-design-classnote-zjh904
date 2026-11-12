@@ -1,0 +1,144 @@
+<!--
+  功能名称：JSON 与 fetch 课堂练习 · 任务一「跑通全链路」
+  功能简介：用 fetch 向本地 Express 服务器请求 /api/poems，把前 4 首诗词渲染成
+            「配图 + 标题 + 内容 + 作者」卡片；服务器未启动时给出红色提示而不是白屏。
+  作者：张敬恒
+  时间：2026-11-12
+  使用模型：DeepSeek-V4.1-Flash
+-->
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>任务一 · 跑通全链路 · JSON 与 fetch 课堂练习</title>
+<link rel="stylesheet" href="poems-904.css">
+</head>
+<body>
+<div class="zjh-page">
+
+  <!-- ==== 页头 ==== -->
+  <div class="zjh-top">
+    <a class="zjh-back" href="index.html">← 返回课堂实践中心</a>
+    <span class="zjh-badge">高 级 网 页 设 计 · JSON 与 FETCH · 任 务 一</span>
+  </div>
+
+  <h1 class="zjh-title">任务一 · <b>跑通全链路</b></h1>
+  <p class="zjh-lead">
+    页面用 <code>fetch</code> 请求 <code>http://localhost:3004/api/poems</code>，
+    把服务器返回的 JSON 渲染成卡片。数据来自 <code>db/db.json</code>（共 6 条，本页只渲染前 4 条）。
+  </p>
+
+  <div class="zjh-note">
+    <b>启动步骤：</b>进入本项目的 <code>db</code> 文件夹 → 执行 <code>npm install express</code> →
+    执行 <code>node server.js</code> → 看到「数据服务器已启动」后刷新本页。
+    关掉服务器再刷新，页面会给出提示，不会白屏。
+  </div>
+
+  <!-- ==== 请求状态 ==== -->
+  <div class="zjh-status" id="zjhStatus">准备请求数据…</div>
+
+  <!-- ==== 诗词卡片容器 ==== -->
+  <div class="zjh-grid" id="zjhPoemList"></div>
+
+</div>
+
+<script>
+/* ============================================================
+   JS 整体职责：任务一 —— 用 fetch 的「两段式」流程取回诗词数据并渲染
+   作者：张敬恒 | 时间：2026-11-12 | 使用模型：DeepSeek-V4.1-Flash
+
+   两段式说明：
+     第一次 .then 拿到的 res 是 Response 对象（只有状态码、响应头，没有数据）；
+     必须再调用 res.json()，它返回一个新 Promise，第二个 .then 才拿到真正的数组。
+   ============================================================ */
+
+/* 接口地址：端口要和 db/server.js 里的 zjh_port 一致 */
+var zjh_api = 'http://localhost:3004/api/poems';
+
+/* 页面上的两个容器 */
+var zjh_poemList = document.getElementById('zjhPoemList');
+var zjh_status = document.getElementById('zjhStatus');
+
+/*
+  功能名称：设置状态条
+  作用：把请求进度 / 成功 / 失败的信息显示在页面顶部
+  实现思路：先清掉三种状态类，再按 zjh_kind（ok / err / 空）挂上对应类名，
+            用 innerHTML 写入提示文字（允许塞 <code> 标签）
+*/
+function zjh_setStatus(zjh_text, zjh_kind) {
+  zjh_status.className = 'zjh-status';
+  if (zjh_kind === 'ok') zjh_status.classList.add('zjh-status--ok');
+  if (zjh_kind === 'err') zjh_status.classList.add('zjh-status--err');
+  zjh_status.innerHTML = zjh_text;
+}
+
+/*
+  功能名称：渲染诗词列表
+  作用：把接口返回的数组拼成卡片 HTML，一次性写进容器
+  实现思路：
+    1. 用一个字符串变量 zjh_html 累计卡片结构，用模板字符串（反引号 + ${}）取值；
+    2. 拼完再赋值给 innerHTML，只触发一次重排，比循环 appendChild 更省；
+    3. 图片路径直接用 JSON 里的 pic 字段（img/1.svg 相对本页解析）。
+*/
+function zjh_renderPoems(zjh_poems) {
+  var zjh_html = '';
+  for (var zjh_i = 0; zjh_i < zjh_poems.length; zjh_i++) {
+    var zjh_item = zjh_poems[zjh_i];
+    zjh_html += '<div class="zjh-card">';
+    zjh_html += '  <img src="' + zjh_item.pic + '" alt="' + zjh_item.title + ' 配图">';
+    zjh_html += '  <div class="zjh-card-body">';
+    zjh_html += '    <h3>' + zjh_item.title + '</h3>';
+    zjh_html += '    <p>' + zjh_item.content + '</p>';
+    zjh_html += '    <span class="zjh-meta">' + zjh_item.author + '</span>';
+    zjh_html += '  </div>';
+    zjh_html += '</div>';
+  }
+  zjh_poemList.innerHTML = zjh_html;
+}
+
+/*
+  功能名称：请求并加载诗词（任务一核心）
+  作用：fetch → 第一次 then 转 JSON → 第二次 then 渲染 → catch 兜底
+  实现思路：
+    * fetch 只发请求，返回的 Promise 兑现值是 Response；
+    * res.json() 读取响应体并 JSON.parse，返回新 Promise；
+    * catch 里针对「服务器没启动」给出操作提示，避免页面空白一片。
+*/
+function zjh_loadPoems() {
+  zjh_setStatus('正在向 <code>localhost:3004</code> 请求数据…');
+
+  fetch(zjh_api)
+    .then(function (zjh_res) {
+      /* 第一段：此时只拿到响应头，业务数据还在响应体里 */
+      if (!zjh_res.ok) {
+        throw new Error('服务器返回状态码 ' + zjh_res.status);
+      }
+      return zjh_res.json();          /* 第二段：拆箱成真正的数组 */
+    })
+    .then(function (zjh_poems) {
+      /* 任务一只需要前 4 条，第 5、6 条是任务二新增的数据 */
+      var zjh_firstFour = zjh_poems.slice(0, 4);
+      zjh_renderPoems(zjh_firstFour);
+      zjh_setStatus(
+        '✅ 已取回 ' + zjh_poems.length + ' 条数据，本页渲染前 ' + zjh_firstFour.length + ' 条。',
+        'ok'
+      );
+    })
+    .catch(function (zjh_err) {
+      /* 兜底：服务器没启动 / 端口不对 / 跨域被拦，都会走到这里 */
+      zjh_poemList.innerHTML = '<div class="zjh-empty">暂无数据</div>';
+      zjh_setStatus(
+        '❌ 请求失败：<b>服务器没有响应</b>。请确认已在该目录的 db 文件夹执行 ' +
+        '<code>node server.js</code>，并访问 <code>http://localhost:3004/api/poems</code> 能看到 JSON。' +
+        '<br>浏览器报错原文：' + zjh_err.message,
+        'err'
+      );
+    });
+}
+
+/* 页面打开即发起请求 */
+zjh_loadPoems();
+</script>
+</body>
+</html>

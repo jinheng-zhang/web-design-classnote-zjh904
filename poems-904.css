@@ -1,0 +1,249 @@
+/* ============================================================
+   功能名称：JSON 与 fetch 课堂练习 · 公共样式
+   功能简介：三个课后任务页（poems-task1/2/3-904.html）共用的版式：
+             页头 + 状态条 + 诗词卡片网格 + 工具栏（任务三搜索/排序）
+   作者：张敬恒 | 时间：2026-11-12 | 使用模型：DeepSeek-V4.1-Flash
+   ============================================================ */
+
+:root {
+  --zjh-bg: #f6f7fb;
+  --zjh-card: #ffffff;
+  --zjh-ink: #1f2937;
+  --zjh-sub: #6b7280;
+  --zjh-brand: #2b6cb0;
+  --zjh-accent: #e8890c;
+  --zjh-line: #e5e7eb;
+  --zjh-err: #b91c1c;
+  --zjh-errbg: #fef2f2;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  padding: 0 16px 56px;
+  background: var(--zjh-bg);
+  color: var(--zjh-ink);
+  font-family: "Microsoft YaHei", "PingFang SC", system-ui, sans-serif;
+  line-height: 1.7;
+}
+
+/* ==== 页头 ==== */
+.zjh-page { max-width: 1040px; margin: 0 auto; }
+
+.zjh-top {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  padding: 26px 0 14px;
+  border-bottom: 1px solid var(--zjh-line);
+  margin-bottom: 22px;
+}
+
+.zjh-back {
+  display: inline-block;
+  padding: 6px 14px;
+  border: 1px solid var(--zjh-brand);
+  border-radius: 999px;
+  color: var(--zjh-brand);
+  font-size: 13px;
+  text-decoration: none;
+  transition: .2s;
+}
+.zjh-back:hover { background: var(--zjh-brand); color: #fff; }
+
+.zjh-badge {
+  margin-left: auto;
+  font-size: 12px;
+  letter-spacing: 2px;
+  color: var(--zjh-sub);
+}
+
+.zjh-title { font-size: 26px; margin: 8px 0 6px; }
+.zjh-title b { color: var(--zjh-brand); }
+
+.zjh-lead {
+  margin: 0 0 18px;
+  font-size: 14.5px;
+  color: var(--zjh-sub);
+}
+
+.zjh-lead code {
+  background: #eef2f7;
+  padding: 1px 6px;
+  border-radius: 4px;
+  color: #2c5282;
+  font-size: 13px;
+}
+
+/* ==== 要求 / 说明块 ==== */
+.zjh-note {
+  background: #fff8ec;
+  border-left: 4px solid var(--zjh-accent);
+  border-radius: 6px;
+  padding: 12px 16px;
+  font-size: 14px;
+  color: #6b4a12;
+  margin-bottom: 22px;
+}
+
+/* ==== 状态条 ==== */
+.zjh-status {
+  border-radius: 8px;
+  padding: 12px 16px;
+  font-size: 14px;
+  margin-bottom: 18px;
+  background: #eef4fb;
+  color: #2c5282;
+}
+.zjh-status--ok { background: #ecfdf5; color: #047857; }
+.zjh-status--err {
+  background: var(--zjh-errbg);
+  color: var(--zjh-err);
+  border: 1px solid #fecaca;
+}
+.zjh-status b { font-weight: 700; }
+.zjh-status code {
+  background: rgba(0, 0, 0, .06);
+  padding: 1px 5px;
+  border-radius: 3px;
+}
+
+/* ==== 卡片网格 ==== */
+.zjh-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 18px;
+}
+
+.zjh-card {
+  background: var(--zjh-card);
+  border: 1px solid var(--zjh-line);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 10px rgba(15, 23, 42, .05);
+  transition: transform .2s, box-shadow .2s;
+}
+.zjh-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 22px rgba(15, 23, 42, .1);
+}
+
+.zjh-card img {
+  display: block;
+  width: 100%;
+  height: 148px;
+  object-fit: cover;
+  background: #dbe3ee;
+}
+
+.zjh-card-body { padding: 14px 16px 16px; }
+
+.zjh-card h3 {
+  margin: 0 0 6px;
+  font-size: 17px;
+  color: #1a365d;
+}
+
+.zjh-card p {
+  margin: 0 0 10px;
+  font-size: 13.5px;
+  color: #4b5563;
+}
+
+.zjh-meta {
+  display: inline-block;
+  font-size: 12px;
+  padding: 2px 10px;
+  border-radius: 999px;
+  background: #eef2f7;
+  color: var(--zjh-brand);
+}
+
+/* ==== 工具栏（任务三） ==== */
+.zjh-tools {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 18px;
+}
+
+.zjh-input {
+  flex: 1 1 240px;
+  min-width: 180px;
+  padding: 10px 14px;
+  font-size: 14px;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  outline: none;
+  background: #fff;
+}
+.zjh-input:focus { border-color: var(--zjh-brand); box-shadow: 0 0 0 3px rgba(43, 108, 176, .12); }
+
+.zjh-btn {
+  padding: 10px 18px;
+  font-size: 14px;
+  border: 1px solid var(--zjh-brand);
+  border-radius: 8px;
+  background: #fff;
+  color: var(--zjh-brand);
+  cursor: pointer;
+  transition: .2s;
+}
+.zjh-btn:hover { background: var(--zjh-brand); color: #fff; }
+.zjh-btn--on { background: var(--zjh-brand); color: #fff; }
+
+.zjh-count { font-size: 13px; color: var(--zjh-sub); }
+
+/* ==== 作者列表（任务二） ==== */
+.zjh-authors {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 12px;
+}
+.zjh-author {
+  background: #fff;
+  border: 1px solid var(--zjh-line);
+  border-radius: 10px;
+  padding: 12px 14px;
+  font-size: 13.5px;
+}
+.zjh-author h4 { margin: 0 0 4px; font-size: 15px; color: #1a365d; }
+.zjh-author span { color: var(--zjh-accent); font-size: 12px; }
+.zjh-author p { margin: 4px 0 0; color: var(--zjh-sub); font-size: 13px; }
+
+/* ==== 分节标题 ==== */
+.zjh-sec-title {
+  font-size: 17px;
+  margin: 30px 0 12px;
+  padding-left: 10px;
+  border-left: 4px solid var(--zjh-brand);
+}
+
+/* ==== 答辩问答 ==== */
+.zjh-faq { margin-top: 34px; }
+.zjh-faq details {
+  background: #fff;
+  border: 1px solid var(--zjh-line);
+  border-radius: 10px;
+  padding: 12px 16px;
+  margin-bottom: 10px;
+}
+.zjh-faq summary {
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 14.5px;
+  color: #1a365d;
+}
+.zjh-faq details[open] summary { color: var(--zjh-brand); }
+.zjh-faq p { margin: 10px 0 0; font-size: 14px; color: #374151; }
+
+/* ==== 空状态 ==== */
+.zjh-empty {
+  padding: 40px 0;
+  text-align: center;
+  color: var(--zjh-sub);
+  font-size: 14px;
+}
